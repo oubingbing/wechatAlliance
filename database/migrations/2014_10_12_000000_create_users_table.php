@@ -14,7 +14,6 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-
             $table->bigIncrements('id');
 
             $table->bigInteger('app_id')->index()->comment('小程序id');
@@ -40,7 +39,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();
             $table->softDeletes();
-
         });
     }
 
