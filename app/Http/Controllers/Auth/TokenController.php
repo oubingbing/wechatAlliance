@@ -10,7 +10,7 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Service\Token;
+use App\Http\Service\TokenService;
 use App\Http\Service\UserService;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +45,7 @@ class TokenController extends Controller
                 $user = $userLogin->createWeChatUser($openId,$userInfo);
             }
 
-            $tokenCreate = new Token();
+            $tokenCreate = new TokenService();
 
             $token = $tokenCreate->getWecChatToken($user);
 

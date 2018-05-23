@@ -4,7 +4,7 @@ namespace App\Http\Service;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class Token
+class TokenService
 {
     public function getWecChatToken($user)
     {
@@ -12,11 +12,5 @@ class Token
 
         return $token;
     }
-
-    public function refreshWeChatToken()
-    {
-
-    }
-
 
 }
