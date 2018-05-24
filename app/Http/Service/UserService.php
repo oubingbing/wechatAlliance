@@ -24,10 +24,11 @@ class UserService
      *
      * @return mixed
      */
-    public function createWeChatUser($openId, $data)
+    public function createWeChatUser($openId, $data,$appId)
     {
         $result = User::create([
             User::FIELD_ID_OPENID => $openId,
+            User::FIELD_ID_APP    => $appId,
             User::FIELD_NICKNAME  => $data['nickName'],
             User::FIELD_GENDER    => $data['gender'] ? $data['gender'] : 0,
             User::FIELD_AVATAR    => $data['avatarUrl'],

@@ -67,6 +67,9 @@ class MatchLoveService
     public function builder($user,$type,$just)
     {
         $this->builder = MatchLove::query()->with(['user'])
+            ->whereHas(MatchLove::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->when($type,function ($query)use($user,$type){
                 if($type == 2){
                     $query->whereHas('follows',function ($query)use($user,$type){

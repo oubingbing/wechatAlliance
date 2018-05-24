@@ -15,7 +15,7 @@
         "predis/predis": "^1.1",
         "qiniu/php-sdk": "^7.2",
         "sentry/sentry-laravel": "^0.8.0",
-        "tymon/jwt-auth": "0.5.*",
+        "tymon/jwt-auth": "1.0.0-rc.1",
         "workerman/gateway-worker": "^3.0",
         "workerman/gatewayclient": "^3.0"
     },

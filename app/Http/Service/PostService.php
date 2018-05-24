@@ -67,6 +67,9 @@ class PostService
     public function builder($user, $type, $just)
     {
         $this->builder = Post::query()->with(['poster', 'praises', 'comments'])
+            ->whereHas(Post::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->when($type, function ($query) use ($user, $type) {
                 if ($type == 2) {
                     $query->whereHas('follows', function ($query) use ($user, $type) {
@@ -130,6 +133,9 @@ class PostService
     public function getPostList($user, $time = null)
     {
         $posts = Post::with(['poster', 'praises', 'comments'])
+            ->whereHas(Post::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->where(Post::FIELD_ID_COLLEGE, $user->{User::FIELD_ID_COLLEGE})
             ->when($time, function ($query) use ($time) {
                 return $query->where(Post::FIELD_CREATED_AT, '>', $time);

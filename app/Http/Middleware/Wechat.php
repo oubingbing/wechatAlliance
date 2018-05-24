@@ -7,8 +7,9 @@ use App\Jobs\UserLogs;
 use App\Models\User;
 use Closure;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
-class Wechat
+class Wechat extends BaseMiddleware
 {
     /**
      * @param $request
@@ -18,6 +19,7 @@ class Wechat
      */
     public function handle($request, Closure $next)
     {
+
         try {
             if (! $user = JWTAuth::parseToken()->authenticate()) {
                 throw new ApiException('无权限用户',4004);
@@ -30,9 +32,9 @@ class Wechat
             throw new ApiException('token缺失',5000);
         }
 
-        $user = User::where(User::FIELD_ID_OPENID,$user->{User::FIELD_ID_OPENID})->first();
+        //$user = User::where(User::FIELD_ID_OPENID,$user->{User::FIELD_ID_OPENID})->first();
 
-        dispatch((new UserLogs($user))->onQueue('record_visit_log'));
+        //dispatch((new UserLogs($user))->onQueue('record_visit_log'));
 
         $request->offsetSet('user',$user);
 

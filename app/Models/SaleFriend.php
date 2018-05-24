@@ -70,6 +70,8 @@ class SaleFriend extends BaseModel
     /** 性别-未知生物 */
     const ENUM_GENDER_UNKNOWN = 3;
 
+    const REL_USER = 'poster';
+
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
     ];

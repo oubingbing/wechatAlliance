@@ -15,13 +15,7 @@ use Carbon\Carbon;
 
 class ChatService
 {
-    protected $chatMessage;
     protected $chatList;
-
-    public function __construct(ChatRepository $chatRepository)
-    {
-        $this->chatMessage = $chatRepository;
-    }
 
     /**
      * 发送好友消息

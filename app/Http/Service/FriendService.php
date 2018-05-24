@@ -16,15 +16,6 @@ use App\Models\Friend;
 
 class FriendService
 {
-    protected $friend;
-    protected $chat;
-
-    public function __construct(FriendRepository $friendRepository, ChatRepository $chatRepository)
-    {
-        $this->friend = $friendRepository;
-        $this->chat   = $chatRepository;
-    }
-
     /**
      * 新增好友
      *

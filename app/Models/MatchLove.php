@@ -79,6 +79,8 @@ class MatchLove extends BaseModel
     /** 匹配成功 */
     const ENUM_STATUS_SUCCESS = 2;
 
+    const REL_USER = 'user';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_OWNER,

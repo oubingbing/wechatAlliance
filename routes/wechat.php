@@ -12,7 +12,6 @@
 */
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\TokenController;
 use App\Http\Controllers\QiNiuController;
 use App\Http\Wechat\ChatController;
 use App\Http\Wechat\CommentController;
@@ -35,12 +34,6 @@ $api->version('v1', function ($api) {
 
             /** 登录 */
             $api->post('/login', LoginController::class . '@login');
-
-            /** 获取微信token */
-            $api->post('/token', TokenController::class . '@createToken');
-
-            /** 刷新微信token */
-            $api->get('/refresh_token', TokenController::class . '@refreshToken');
 
         });
 

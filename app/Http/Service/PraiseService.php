@@ -23,20 +23,6 @@ use App\Models\User;
 
 class PraiseService
 {
-    protected $post;
-    protected $sale;
-    protected $match;
-    protected $praise;
-    protected $comment;
-
-    public function __construct(PostRepository $postRepository, CommentRepository $commentRepository, MatchLoveRepository $matchLoveRepository, PraiseRepository $praiseRepository, SaleFriendRepository $saleFriendRepository)
-    {
-        $this->post             = $postRepository;
-        $this->sale             = $saleFriendRepository;
-        $this->match            = $matchLoveRepository;
-        $this->praiseRepository = $praiseRepository;
-        $this->comment          = $commentRepository;
-    }
 
     /**
      * 点赞
@@ -159,19 +145,19 @@ class PraiseService
         $userId = '';
         switch ($type) {
             case Praise::ENUM_OBJ_TYPE_POST:
-                $obj    = $this->post->getPostById($objId);
+                $obj    = Post::find($objId);
                 $userId = $obj->{Post::FIELD_ID_POSTER};
                 break;
             case Praise::ENUM_OBJ_TYPE_SALE_FRIEND:
-                $obj    = $this->sale->getSaleFriendById($objId);
+                $obj    = SaleFriend::find($objId);
                 $userId = $obj->{SaleFriend::FIELD_ID_OWNER};
                 break;
             case Praise::ENUM_OBJ_TYPE_MATCH_LOVE:
-                $obj    = $this->match->getMatchLoveById($objId);
+                $obj    = MatchLove::find($objId);
                 $userId = $obj->{MatchLove::FIELD_ID_OWNER};
                 break;
             case  Praise::ENUM_OBJ_TYPE_COMMENT:
-                $obj    = $this->comment->getCommentById($objId);
+                $obj    = Comment::find($objId);
                 $userId = $obj->{Comment::FIELD_ID_COMMENTER};
                 break;
         }

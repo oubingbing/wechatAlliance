@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable,SoftDeletes;
 
@@ -15,6 +16,9 @@ class User extends Authenticatable
 
     /** field nickname 用户昵称 */
     const FIELD_NICKNAME = 'nickname';
+
+    /** Field app_id 小程序ID */
+    const FIELD_ID_APP = 'app_id';
 
     /** field email 邮箱 */
     const FIELD_EMAIL = 'email';
@@ -83,6 +87,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         self::FIELD_NICKNAME,
+        self::FIELD_ID_APP,
         self::FIELD_EMAIL,
         self::FIELD_PASSWORD,
         self::FIELD_MOBILE,
@@ -98,6 +103,26 @@ class User extends Authenticatable
         self::FIELD_STATUS,
         self::FIELD_ID_COLLEGE
     ];
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
      * The attributes that should be hidden for arrays.

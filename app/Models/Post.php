@@ -60,6 +60,8 @@ class Post extends BaseModel
     /** 匿名 */
     const ENUM_PRIVATE = 1;
 
+    const REL_USER = 'poster';
+
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
     ];

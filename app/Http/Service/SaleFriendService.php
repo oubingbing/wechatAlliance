@@ -70,6 +70,9 @@ class SaleFriendService
     public function builder($user,$type,$just)
     {
         $this->builder = SaleFriend::query()
+            ->whereHas(SaleFriend::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->with(['poster','comments'])
             ->when($type,function ($query)use($user,$type){
                 if($type == 2){
