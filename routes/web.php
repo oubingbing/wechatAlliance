@@ -11,7 +11,6 @@ Route::get('/contact',function (){
     return view('gateway.contact');
 });
 Route::get('/about',function (){
-    \Log::info('about我们');
     return view('gateway.about');
 });
 

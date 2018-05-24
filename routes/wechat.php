@@ -28,8 +28,6 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
 
-    Log::info('我到了路由');
-
     $api->group(['prefix' => 'wechat'], function ($api) {
 
 

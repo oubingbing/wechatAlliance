@@ -47,6 +47,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        Log::info('登录构造器');
         $this->middleware('guest')->except('logout');
         $this->tokenService = app(TokenService::class);
     }
