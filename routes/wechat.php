@@ -22,15 +22,20 @@ use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
 use App\Http\Wechat\SaleFriendController;
 use App\Http\Wechat\UserController;
+use Illuminate\Support\Facades\Log;
 
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
 
+    Log::info('我到了路由');
+
     $api->group(['prefix' => 'wechat'], function ($api) {
 
 
         $api->group(['prefix' => 'auth', 'middleware' => 'before'], function ($api) {
+
+            Log::info('我到了登录路由');
 
             /** 登录 */
             $api->post('/login', LoginController::class . '@login');

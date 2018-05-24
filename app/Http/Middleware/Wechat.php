@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Jobs\UserLogs;
 use App\Models\User;
 use Closure;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
@@ -19,6 +20,7 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
+        Log::info('我到了wechat中间件');
 
         try {
             if (! $user = JWTAuth::parseToken()->authenticate()) {

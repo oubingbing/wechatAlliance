@@ -59,6 +59,7 @@ class LoginController extends Controller
      */
     public function Login()
     {
+        Log::info('登录');
         $type = request()->input('type');
         $code = request()->input('code');
         $userInfo = request()->input('user_info');
