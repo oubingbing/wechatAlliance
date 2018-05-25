@@ -28,7 +28,7 @@ class AddPaginationLinksToResponse
      */
     public function handle(ResponseWasMorphed $event)
     {
-        /*if($event->content instanceof View)
+        if($event->content instanceof View)
             return;
         $response = array();
         $data = $event->content;
@@ -46,6 +46,6 @@ class AddPaginationLinksToResponse
                 'power_by'=>'yezi'
             ]
         ];
-        $event->content = $response;*/
+        $event->content = $response;
     }
 }
