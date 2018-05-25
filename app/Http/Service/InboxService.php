@@ -43,7 +43,7 @@ class InboxService
      * @return mixed
      * @throws ApiException
      */
-    public function send($fromId, $toId, $objId, $content, $objType, $actionType, $postAt)
+    public function send($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0)
     {
         $fromUser = User::query()->find($fromId);
         $toUser   = User::query()->find($toId);
@@ -65,10 +65,9 @@ class InboxService
             Inbox::FIELD_CONTENT     => $content,
             Inbox::FIELD_OBJ_TYPE    => $objType,
             Inbox::FIELD_ACTION_TYPE => $actionType,
-            Inbox::FIELD_POST_AT     => $postAt
+            Inbox::FIELD_POST_AT     => $postAt,
+            Inbox::FIELD_PRIVATE     => $private
         ]);
-
-        //todo 发送环信消息
 
         return $result;
     }

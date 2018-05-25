@@ -49,7 +49,7 @@ class Inbox extends BaseModel
     /** field deleted_at */
     const FIELD_DELETED_AT = 'deleted_at';
 
-    /** field private 是否匿名,默认否 */
+    /** field private 是否匿名1,默认否0 */
     const FIELD_PRIVATE = 'private';
 
     /** 表白墙 */

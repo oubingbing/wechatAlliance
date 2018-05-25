@@ -33,8 +33,6 @@ $api->version('v1', function ($api) {
 
         $api->group(['prefix' => 'auth', 'middleware' => 'before'], function ($api) {
 
-            Log::info('我到了登录路由');
-
             /** 登录 */
             $api->post('/login', LoginController::class . '@login');
 
