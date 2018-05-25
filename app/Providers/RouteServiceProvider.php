@@ -40,6 +40,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapWeChatRoutes();
+
+        $this->mapAdminRoutes();
     }
 
     /**
@@ -79,5 +81,15 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWeChatRoutes(){
         Route::namespace($this->namespace)
             ->group(base_path('routes/wechat.php'));
+    }
+
+    /**
+     * 后台管理路由
+     *
+     * @author yezi
+     */
+    protected function mapAdminRoutes(){
+        Route::namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
     }
 }

@@ -142,6 +142,15 @@ class InboxService
         return $result;
     }
 
+    /**
+     * 标记消息为已读
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param null $objType
+     * @return mixed
+     */
     public function readInbox($userId, $objType = null)
     {
         $result = Inbox::query()

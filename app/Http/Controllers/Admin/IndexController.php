@@ -1,12 +1,16 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: xuxiaodao
- * Date: 2017/11/28
- * Time: 下午4:39
- */
-class IndexController
+
+namespace App\Http\Controllers\Admin;
+
+
+use App\Http\Controllers\Controller;
+
+class IndexController extends Controller
 {
+    public function login()
+    {
+        return view('admin.login');
+    }
 
 }

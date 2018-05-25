@@ -13,7 +13,7 @@ class CreateAdminUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_users', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('username')->comment('用户微信昵称');
