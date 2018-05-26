@@ -29,6 +29,8 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url('login') }}">登录</a></li>
+                    <li><a href="{{ url('register') }}">注册</a></li>
                     <li><a href="{{ url('contact') }}">联系</a></li>
                     <li><a href="{{ url('about') }}">关于我</a></li>
                 </ul>

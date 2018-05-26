@@ -7,7 +7,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', '校园小情书') }}</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ asset('css/font.css') }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/xadmin.css') }}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{ asset('lib/layui/layui.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ asset('js/xadmin.js') }}"></script>
 
     <script>
         window.Laravel = {!! json_encode([

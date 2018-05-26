@@ -17,11 +17,12 @@ class CreateAdminUsersTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('username')->comment('用户微信昵称');
+            $table->jsonb('avatar')->nullalbe()->comment('用户头像');
             $table->string('email')->unique()->index()->comment('邮箱');
             $table->string('password')->nullable()->comment('预留账号密码');
             $table->string('mobile')->nullable()->index()->comment('预留手机号码字段');
 
-            $table->tinyInteger('status')->default(0)->comment('用户状态');
+            $table->tinyInteger('status')->default(0)->comment('用户状态，0未激活，1=已激活');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

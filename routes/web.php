@@ -30,3 +30,8 @@ Route::get('bind','IM\IndexController@bindSocket');
 Route::post('send','IM\IndexController@sendSocket');
 
 
+
+Auth::routes();
+Route::get('/home', function () {
+    return view('gateway.home');
+});

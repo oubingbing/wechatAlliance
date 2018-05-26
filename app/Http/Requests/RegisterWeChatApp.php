@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisteGuardUser extends FormRequest
+class RegisterWeChatApp extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class RegisteGuardUser extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => 'required|unique:guard_users',
-            'nickname' => 'required',
+            //
         ];
     }
 }
