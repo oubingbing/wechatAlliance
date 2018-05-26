@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Register;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {

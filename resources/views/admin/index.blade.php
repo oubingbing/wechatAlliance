@@ -24,7 +24,7 @@
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
               <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
               <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-              <dd><a href="./login.html">退出</a></dd>
+              <dd><a href="{{asset('logout')}}">退出</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item to-index"><a href="/">前台首页</a></li>
@@ -268,4 +268,14 @@
     </div>
     <!-- 底部结束 -->
 </body>
+<script>
+    $(function  () {
+        $("#logout-button").on("click",function(){
+            $.post("{{asset('/logout')}}", {}, function (res) {
+                console.log(res);
+                window.location.href = "{{route('login')}}";
+            });
+        });
+    });
+</script>
 @stop

@@ -34,7 +34,7 @@ $api->version('v1', function ($api) {
         $api->group(['prefix' => 'auth', 'middleware' => 'before'], function ($api) {
 
             /** 登录 */
-            $api->post('/login', LoginController::class . '@login');
+            $api->post('/login', LoginController::class . '@apiLogin');
 
         });
 

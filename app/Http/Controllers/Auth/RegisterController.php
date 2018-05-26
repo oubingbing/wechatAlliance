@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -67,5 +69,38 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * 激活账号
+     *
+     * @author yezi
+     *
+     * @return obj
+     */
+    public function active()
+    {
+        $token = request()->input('token');
+
+        if(!$token){
+            abort(404);
+        }
+
+        $result = Admin::query()
+            ->where(Admin::FIELD_ACTIVE_TOKEN,$token)
+            ->where(Admin::FIELD_STATUS,Admin::ENUM_STATUS_SLEEP)
+            ->first();
+        if(!$result){
+            abort('404');
+        }
+
+        if(Carbon::now()->gt(Carbon::parse($result->{Admin::FIELD_TOKEN_EXPIRE}))){
+            return redirect('login');
+        }else{
+            $result->{Admin::FIELD_STATUS} = Admin::ENUM_STATUS_ACTIVATED;
+            $result->{Admin::FIELD_TOKEN_EXPIRE} = Carbon::now();
+            $result->save();
+            return view('auth.active');
+        }
     }
 }

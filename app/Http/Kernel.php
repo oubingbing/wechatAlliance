@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\After;
+use App\Http\Middleware\AuthUser;
 use App\Http\Middleware\Before;
 use App\Http\Middleware\Wechat;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -62,6 +63,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'wechat' => Wechat::class,
         'after' => After::class,
-        'before' => Before::class
+        'before' => Before::class,
+        'authUser'=>AuthUser::class
     ];
 }

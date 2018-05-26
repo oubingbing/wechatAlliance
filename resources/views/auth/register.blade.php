@@ -39,6 +39,14 @@
                     $.post("{{route('register')}}",fields,function(res){
                         if(res.code === 500){
                             layer.msg(res.message)
+                        }else{
+                            if(res.code === 201){
+                                layer.msg(res.message,function () {
+                                    window.location.href = "{{route('login')}}";
+                                })
+                            }else{
+                                layer.msg(res.message)
+                            }
                         }
                     });
 

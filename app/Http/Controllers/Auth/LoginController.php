@@ -5,16 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\TokenService;
-use App\Models\User;
 use App\Models\WechatApp;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -36,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    //protected $redirectTo = '/admin';
     protected $weChatLoginUrl = "https://api.weixin.qq.com/sns/jscode2session";
     protected $tokenService;
 
@@ -47,7 +43,6 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        Log::info('登录构造器');
         $this->middleware('guest')->except('logout');
         $this->tokenService = app(TokenService::class);
     }
@@ -59,7 +54,7 @@ class LoginController extends Controller
      *
      * @return mixed
      */
-    public function Login()
+    public function apiLogin()
     {
         $type = request()->input('type');
         $code = request()->input('code');
