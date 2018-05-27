@@ -21,6 +21,8 @@ class CreateTalbeAppsTable extends Migration
             $table->string('app_secret')->comment('小程序的密钥');
             $table->string('alliance_key')->index()->comment('联盟给的身份标识，接口需要传递这个key');
 
+            $table->string('college_id')->index()->nullable()->comment('学校');
+
             $table->tinyInteger('status')->default(1)->comment('小程序的状态，1=正常，2=非法');
 
             $table->timestamp('created_at')->nullable()->index();

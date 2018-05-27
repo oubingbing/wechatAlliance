@@ -2,12 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Admin;
-use App\Models\AdminApps;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AuthUser
+class CreateApp
 {
     /**
      * Handle an incoming request.
@@ -19,12 +17,6 @@ class AuthUser
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-
-        $app = AdminApps::query()->where(AdminApps::FIELD_ID_ADMIN,$user->id)->first();
-        if(!$app){
-            //新建APP
-            return redirect('admin/create_app');
-        }
 
         $request->offsetSet('user',$user);
 

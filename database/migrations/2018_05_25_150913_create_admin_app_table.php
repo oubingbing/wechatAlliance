@@ -14,8 +14,14 @@ class CreateAdminAppTable extends Migration
     public function up()
     {
         Schema::create('admin_apps', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->bigIncrements('id');
+
+            $table->bigInteger('admin_id')->index()->comment('管理员id');
+            $table->bigInteger('admin_app_id')->index()->comment('微信小程序id');
+
+            $table->timestamp('created_at')->nullable()->index();
+            $table->timestamp('updated_at')->nullable()->index();
+            $table->softDeletes();
         });
     }
 

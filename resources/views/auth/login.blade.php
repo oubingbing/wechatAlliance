@@ -4,7 +4,7 @@
     <body class="login-bg">
 
     <div class="login layui-anim layui-anim-up">
-        <div class="message">小情书-管理登录</div>
+        <div class="message">小情书 - 后台登录</div>
         <div id="darkbannerwrap"></div>
 
         <form method="post" class="layui-form">
@@ -32,7 +32,7 @@
                         }else{
                             if(res.code === 200){
                                 layer.msg(res.message,function () {
-                                    window.location.href = "/admin";
+                                    window.location.href = res.data;
                                 })
                             }else{
                                 layer.msg(res.message)
