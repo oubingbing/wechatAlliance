@@ -24,3 +24,5 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['guest',
 
 Route::get('/active','Auth\RegisterController@active');
 Route::get('/logout','Auth\LoginController@logout')->middleware(['guest','web']);
+
+Route::get('colleges','Controller@colleges');

@@ -25,9 +25,7 @@ class AppController extends Controller
      */
     public function createApp()
     {
-        $college = Colleges::query()->take(20)->get([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
-
-        return view('admin.app.create',['colleges'=>$college]);
+        return view('admin.app.create');
     }
 
     public function store(Request $request)

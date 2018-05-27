@@ -1,5 +1,4 @@
 @extends('layouts/admin')
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <link href="{{ asset('css/jquery-editable-select.css') }}" rel="stylesheet">
 @section('content')
     <body class="login-bg">
@@ -20,9 +19,7 @@
             <hr class="hr15">
             <div class="layui-input-inline" style="width: 100%">
                 <select name="college" id="select-college">
-                    @foreach($colleges as $college)
-                        <option >{{ $college->name }}</option>
-                    @endforeach
+                        <option v-for="(item,index) in colleges">@{{ item }}</option>
                 </select>
             </div>
             <hr class="hr15">
@@ -31,14 +28,11 @@
         </form>
         <div><span>我们将保护您的小程序信息不被泄露</span></div>
     </div>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
     <script src="{{ asset('js/jquery-editable-select.js') }}"></script>
     <script>
         $(function  () {
-
-            $("#select-college").change(function(){
-                console.log('log');
-            });
-
             $('#select-college').editableSelect({
                 effects: 'slide'
             });
@@ -71,6 +65,33 @@
                     return false;
                 });
             });
+        })
+    </script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                colleges:[],
+                name:'yezi'
+            },
+            mounted:function () {
+                this.getColleges();
+            },
+            methods: {
+                getColleges:function () {
+                    //this.colleges = [1,2,3,4]//可以更新视图
+                    var _this = this;
+
+                    axios.get("{{ asset('colleges') }}").then( response=> {
+
+                        //this.colleges = [1,2,3,4]//不可以更新视图
+                        _this.colleges = [1,2,3,4];//不可以更新视图
+
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            }
         })
     </script>
     </body>
