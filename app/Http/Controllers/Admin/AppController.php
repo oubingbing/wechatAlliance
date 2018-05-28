@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Models\Colleges;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -28,13 +28,22 @@ class AppController extends Controller
         return view('admin.app.create');
     }
 
+    /**
+     * 新建小程序
+     *
+     * @author 叶子
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function store(Request $request)
     {
+        $user = $request->get('user');
         $appName = $request->input('app_name');
         $appKey = $request->input('app_key');
         $appSecret = $request->input('app_secret');
         $mobile = $request->input('mobile');
-        $college = $request->input('college');
+        $collegeId = $request->input('college_id');
 
         $appService = app(AppService::class);
 
@@ -43,7 +52,7 @@ class AppController extends Controller
             return webResponse($valid['message'],500);
         }
 
-        $college = Colleges::query()->find($college);
+        $college = Colleges::query()->where(Colleges::FIELD_ID,$collegeId)->first();
         if(!$college){
             return webResponse('学校不存！',500);
         }
@@ -53,11 +62,22 @@ class AppController extends Controller
             return webResponse('手机号码格式错误',500);
         }
 
-        $result = $appService->create($appName,$appKey,$appSecret,$mobile,$college);
-        if($result){
-            return webResponse('新建成功！',200);
-        }else{
-            return webResponse('新建失败！',500);
+        try {
+            \DB::beginTransaction();
+
+            $domain = env('WECHAT_DOMAIN');
+            $result = $appService->create($appName,$appKey,$appSecret,$mobile,$collegeId,$domain);
+            if($result){
+                $appService->connectAdminWithApp($result,$user);
+
+                \DB::commit();
+                return webResponse('新建成功！',200,'/admin');
+            }else{
+                return webResponse('新建失败！',500);
+            }
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return webResponse($e,500);
         }
     }
 }

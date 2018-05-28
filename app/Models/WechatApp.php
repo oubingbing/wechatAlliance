@@ -29,6 +29,9 @@ class WechatApp extends BaseModel
     /** Field alliance_key 联盟的key */
     const FIELD_ALLIANCE_KEY = 'alliance_key';
 
+    /** Field domain 小程序的接口域名 */
+    const FIELD_DOMAIN = 'domain';
+
     /** Field college_id 学校id */
     const FIELD_ID_COLLEGE = 'college_id';
 
@@ -42,7 +45,8 @@ class WechatApp extends BaseModel
         self::FIELD_APP_SECRET,
         self::FIELD_ALLIANCE_KEY,
         self::FIELD_ID_COLLEGE,
-        self::FIELD_MOBILE
+        self::FIELD_MOBILE,
+        self::FIELD_DOMAIN
     ];
 
 }

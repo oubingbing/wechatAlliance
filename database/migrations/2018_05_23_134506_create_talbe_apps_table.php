@@ -20,8 +20,10 @@ class CreateTalbeAppsTable extends Migration
             $table->string('app_key')->index()->comment('小程序的APP key');
             $table->string('app_secret')->comment('小程序的密钥');
             $table->string('alliance_key')->index()->comment('联盟给的身份标识，接口需要传递这个key');
+            $table->string('domain')->comment('小程序的接口域名');
+            $table->string('mobile')->comment('联系人手机号码');
 
-            $table->string('college_id')->index()->nullable()->comment('学校');
+            $table->bigInteger('college_id')->index()->nullable()->comment('学校');
 
             $table->tinyInteger('status')->default(1)->comment('小程序的状态，1=正常，2=非法');
 

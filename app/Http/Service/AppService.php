@@ -9,6 +9,7 @@
 namespace App\Http\Service;
 
 
+use App\Models\AdminApps;
 use App\Models\WechatApp;
 
 class AppService
@@ -46,8 +47,21 @@ class AppService
             return ['valid'=>true,'message'=>'success'];
         }
     }
-    
-    public function create($appName,$appKey,$appSecret,$mobile,$college)
+
+    /**
+     * 新建小程序
+     *
+     * @author yezi
+     *
+     * @param $appName
+     * @param $appKey
+     * @param $appSecret
+     * @param $mobile
+     * @param $college
+     * @param $domain
+     * @return mixed
+     */
+    public function create($appName,$appKey,$appSecret,$mobile,$college,$domain)
     {
         $result = WechatApp::create([
             WechatApp::FIELD_NAME => $appName,
@@ -55,10 +69,30 @@ class AppService
             WechatApp::FIELD_APP_SECRET => $appSecret,
             WechatApp::FIELD_ID_COLLEGE => $college,
             WechatApp::FIELD_MOBILE => $mobile,
-            WechatApp::FIELD_ALLIANCE_KEY => str_random(16)
+            WechatApp::FIELD_ALLIANCE_KEY => str_random(16),
+            WechatApp::FIELD_DOMAIN=>$domain
         ]);
 
         return $result;
+    }
+
+    /**
+     * 管理用户和小程序
+     *
+     * @author yezi
+     *
+     * @param $app
+     * @param $user
+     * @return mixed
+     */
+    public function connectAdminWithApp($app,$user)
+    {
+        $adminApps = AdminApps::create([
+            AdminApps::FIELD_ID_ADMIN=>$user->id,
+            AdminApps::FIELD_ID_ADMIN_APP=>$app->id
+        ]);
+
+        return $adminApps;
     }
 
 }
