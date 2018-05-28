@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public function colleges()
     {
-        $colleges = Colleges::query()->take(20)->get([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
+        $colleges = Colleges::query()->get([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
 
         return webResponse('ok',200,$colleges);
     }

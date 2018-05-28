@@ -1,5 +1,4 @@
 @extends('layouts/admin')
-<link href="{{ asset('css/jquery-editable-select.css') }}" rel="stylesheet">
 @section('content')
     <body class="login-bg">
 
@@ -18,80 +17,60 @@
             <input name="mobile" lay-verify="required" placeholder="管理员手机号码（必填）"  type="text" class="layui-input">
             <hr class="hr15">
             <div class="layui-input-inline" style="width: 100%">
-                <select name="college" id="select-college">
-                        <option v-for="(item,index) in colleges">@{{ item }}</option>
-                </select>
+                <v-select label="name" ref="select" :options="colleges" name="college" v-model="selected"></v-select>
             </div>
             <hr class="hr15">
-            <input value="新建" lay-submit lay-filter="login" style="width:100%;background: #EE7600" type="submit">
+            <input value="新建" lay-submit lay-filter="login" style="width:100%;background: #EE7600" @click="setCollegeId" type="submit">
             <hr class="hr20" >
         </form>
         <div><span>我们将保护您的小程序信息不被泄露</span></div>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
-    <script src="{{ asset('js/jquery-editable-select.js') }}"></script>
+    <script src="https://cdn.bootcss.com/vue-select/2.4.0/vue-select.js"></script>
     <script>
         $(function  () {
-            $('#select-college').editableSelect({
-                effects: 'slide'
-            });
-
             layui.use('form', function(){
                 var form = layui.form;
                 //监听提交
                 form.on('submit(login)', function(data){
                     var fields = data.field;
 
-                    if(fields.password_confirmation !== fields.password){
-                        layer.msg('两次输入密码不一致！');
-                        return false;
-                    }
-
-                    $.post("{{ asset('admin/create_app') }}",fields,function(res){
-                        if(res.code === 500){
-                            layer.msg(res.message)
-                        }else{
-                            if(res.code === 201){
-                                layer.msg(res.message,function (res) {
-                                    window.location.href = res.data;
-                                })
-                            }else{
-                                layer.msg(res.message)
-                            }
-                        }
-                    });
-
+                    console.log(fields);
                     return false;
                 });
             });
         })
     </script>
     <script>
+        Vue.component('v-select', VueSelect.VueSelect);
+
         var app = new Vue({
             el: '#app',
             data: {
                 colleges:[],
-                name:'yezi'
+                college_id:null,
+                selected:{id:0,'name':"请选择学校"}
             },
-            mounted:function () {
+            created:function () {
                 this.getColleges();
             },
             methods: {
                 getColleges:function () {
-                    //this.colleges = [1,2,3,4]//可以更新视图
-                    var _this = this;
-
                     axios.get("{{ asset('colleges') }}").then( response=> {
-
-                        //this.colleges = [1,2,3,4]//不可以更新视图
-                        _this.colleges = [1,2,3,4];//不可以更新视图
-
+                        response.data.data.map(item=>{
+                            this.colleges.push(item);
+                        });
                     }).catch(function (error) {
                         console.log(error);
                     });
+                },
+                setCollegeId:function() {
+                    this.college_id = this.selected.id;
+                    console.log(this.selected.id);
+                    layer.msg(this.college_id)
                 }
-            }
+            },
         })
     </script>
     </body>
