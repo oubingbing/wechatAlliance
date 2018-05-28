@@ -10,6 +10,7 @@ namespace App\Http\Service;
 
 
 use App\Models\AdminApps;
+use App\Models\Colleges;
 use App\Models\WechatApp;
 
 class AppService
@@ -89,10 +90,31 @@ class AppService
     {
         $adminApps = AdminApps::create([
             AdminApps::FIELD_ID_ADMIN=>$user->id,
-            AdminApps::FIELD_ID_ADMIN_APP=>$app->id
+            AdminApps::FIELD_ID_APP=>$app->id
         ]);
 
         return $adminApps;
+    }
+
+    /**
+     * 根据用户ID获取小程序的注册信息
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getAppByUserId($userId)
+    {
+        $result = WechatApp::query()
+            ->with([WechatApp::REL_COLLEGE=>function($query){
+                $query->select([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
+            }])
+            ->whereHas(WechatApp::REL_ADMIN_APP,function ($query)use($userId){
+            $query->where(AdminApps::FIELD_ID_ADMIN,$userId);
+        })->get();
+
+        return $result;
     }
 
 }

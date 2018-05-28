@@ -21,12 +21,12 @@ class AdminApps extends BaseModel
     const FIELD_ID_ADMIN = 'admin_id';
 
     /** Field admin_app_id 微信小程序id */
-    const FIELD_ID_ADMIN_APP = 'admin_app_id';
+    const FIELD_ID_APP = 'app_id';
 
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_ADMIN,
-        self::FIELD_ID_ADMIN_APP
+        self::FIELD_ID_APP
     ];
 
 }

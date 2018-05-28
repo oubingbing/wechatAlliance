@@ -25,7 +25,7 @@ class CreateTalbeAppsTable extends Migration
 
             $table->bigInteger('college_id')->index()->nullable()->comment('学校');
 
-            $table->tinyInteger('status')->default(1)->comment('小程序的状态，1=正常，2=非法');
+            $table->tinyInteger('status')->default(1)->comment('小程序的状态，1=待审核，2=正常上线，3=微信审核中，4=下线');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

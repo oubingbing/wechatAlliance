@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Models\Colleges;
+use App\Models\WechatApp;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -79,5 +80,21 @@ class AppController extends Controller
             \DB::rollBack();
             return webResponse($e,500);
         }
+    }
+
+    /**
+     * 小程序的信息
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function appInfo()
+    {
+        $user = request()->get('user');
+
+        $result = app(AppService::class)->getAppByUserId($user->id);
+
+        return $result;
     }
 }

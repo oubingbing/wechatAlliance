@@ -13,6 +13,7 @@ use App\Models\User;
 
 class UserService
 {
+    private $builder;
 
     /**
      * 新增用户
@@ -41,6 +42,26 @@ class UserService
         ]);
 
         return $result;
+    }
+
+    public function queryBuilder($appId)
+    {
+        $builder = User::query()->where(User::FIELD_ID_APP,$appId);
+
+        $this->builder = $builder;
+        return $builder;
+    }
+
+    public function sort($orderBy)
+    {
+        $this->builder->where($orderBy['order_by'],$orderBy['sort']);
+
+        return $this;
+    }
+
+    public function done()
+    {
+        return $this->builder;
     }
 
 }

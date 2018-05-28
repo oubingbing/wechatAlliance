@@ -38,6 +38,18 @@ class WechatApp extends BaseModel
     /** Field mobile 联系人手机号码 */
     const FIELD_MOBILE = 'mobile';
 
+    /** status 待审核 */
+    const ENUM_STATUS_TO_BE_AUDIT = 1;
+    /** status 正常上线*/
+    const ENUM_STATUS_ON_LINE = 2;
+    /** status 微信审核中 */
+    const ENUM_STATUS_WE_CHAT_AUDIT = 3;
+    /** status 下线 */
+    const ENUM_STATUS_CLOSED = 1;
+
+    const REL_ADMIN_APP = 'adminApp';
+    const REL_COLLEGE = 'college';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_NAME,
@@ -48,5 +60,15 @@ class WechatApp extends BaseModel
         self::FIELD_MOBILE,
         self::FIELD_DOMAIN
     ];
+
+    public function adminApp()
+    {
+        return $this->hasMany(AdminApps::class,self::FIELD_ID,AdminApps::FIELD_ID_APP);
+    }
+
+    public function college()
+    {
+        return $this->belongsTo(Colleges::class,self::FIELD_ID_COLLEGE,Colleges::FIELD_ID);
+    }
 
 }
