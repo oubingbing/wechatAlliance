@@ -94,9 +94,17 @@ class AppController extends Controller
     {
         $user = request()->get('user');
 
-        $result = app(AppService::class)->getAppByUserId($user->id);
+        $app = $user->app();
+        $app->status_string = collect([
+            WechatApp::ENUM_STATUS_TO_BE_AUDIT=>"审核中",
+            WechatApp::ENUM_STATUS_ON_LINE=>"运行中",
+            WechatApp::ENUM_STATUS_WE_CHAT_AUDIT=>"微信审核中",
+            WechatApp::ENUM_STATUS_CLOSED=>"已下线",
+        ])->get((integer)$app->{WechatApp::FIELD_STATUS});
 
-        return $result;
+        $app->college = Colleges::query()->where(Colleges::FIELD_ID,$app->{WechatApp::FIELD_ID_COLLEGE})->value(Colleges::FIELD_NAME);
+
+        return webResponse('ok',200,$app);
     }
 
     /**

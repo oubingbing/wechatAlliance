@@ -48,7 +48,7 @@ class WechatApp extends BaseModel
     /** status 微信审核中 */
     const ENUM_STATUS_WE_CHAT_AUDIT = 3;
     /** status 下线 */
-    const ENUM_STATUS_CLOSED = 1;
+    const ENUM_STATUS_CLOSED = 4;
 
     const REL_ADMIN_APP = 'adminApp';
     const REL_COLLEGE = 'college';

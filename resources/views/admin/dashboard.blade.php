@@ -1,9 +1,9 @@
 @extends('layouts/admin')
 @section('content')
     <div class="x-body layui-anim layui-anim-up" id="app">
-        <blockquote class="layui-elem-quote">你好：{{$user->username}} 今日是个好日子</blockquote>
+        <blockquote class="layui-elem-quote">你好：{{$user->username}}</blockquote>
         <fieldset class="layui-elem-field">
-            <legend>数据统计</legend>
+            <legend>用户数据统计</legend>
             <div class="layui-field-box">
                 <div class="layui-col-md12">
                     <div class="layui-card">
@@ -40,6 +40,36 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>小程序信息</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                    <tr>
+                        <th>名称</th>
+                        <td>@{{ app_name }}</td></tr>
+                    <tr>
+                        <th>状态</th>
+                        <td style="color: orangered">@{{ app_status_string }}</td></tr>
+                    <tr>
+                        <th>学校</th>
+                        <td>@{{ college }}</td></tr>
+                    <tr>
+                        <th>联盟ID</th>
+                        <td>@{{  alliance_key }}</td></tr>
+                    <tr>
+                        <th>app_key</th>
+                        <td>@{{ app_key }}</td></tr>
+                    <tr>
+                        <th>app_secret</th>
+                        <td>@{{ app_secret }}</td></tr>
+                    <tr>
+                        <th>接口域名</th>
+                        <td>@{{ domain }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
     </div>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
@@ -49,10 +79,19 @@
             data: {
                 new_user:'-',
                 visit_user:'-',
-                all_user:'-'
+                all_user:'-',
+                app_name:'-',
+                app_status_string:'-',
+                app_status:'-',
+                app_key:'-',
+                app_secret:'-',
+                alliance_key:'-',
+                domain:'-',
+                college:'-'
             },
             created:function () {
                 this.getUserInfo();
+                this.getAppInfo();
                 console.log('我是数据'+this.new_user);
             },
             methods:{
@@ -63,6 +102,24 @@
                             this.new_user = res.data.new_user;
                             this.visit_user = res.data.visit_user;
                             this.all_user = res.data.all_user;
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                getAppInfo:function () {
+                    axios.get("{{ asset('admin/app') }}").then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            this.app_name = res.data.name;
+                            this.app_status_string = res.data.status_string;
+                            this.app_key = res.data.app_key;
+                            this.app_secret = res.data.app_secret;
+                            this.alliance_key = res.data.alliance_key;
+                            this.domain = res.data.domain;
+                            this.college = res.data.college;
                         }else{
                             console.log('error:'+res);
                         }

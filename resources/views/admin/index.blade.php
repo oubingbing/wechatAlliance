@@ -264,7 +264,7 @@
     <!-- 中部结束 -->
     <!-- 底部开始 -->
     <div class="footer">
-        <div class="copyright">Copyright ©2017 x-admin v2.3 All Rights Reserved</div>  
+        <div class="copyright">@2016-2018 校园小情书 | 粤ICP备16004706号-1</div>
     </div>
     <!-- 底部结束 -->
 </body>
