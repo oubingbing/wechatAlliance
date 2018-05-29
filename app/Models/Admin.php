@@ -74,7 +74,9 @@ class Admin extends Authenticatable
 
     public function app()
     {
-        return $this->hasOne(AdminApps::class,self::FIELD_ID,AdminApps::FIELD_ID_APP);
+        $appId = AdminApps::query()->where(AdminApps::FIELD_ID_ADMIN,$this->id)->value(AdminApps::FIELD_ID_APP);
+        $app = WechatApp::find($appId);
+        return $app;
     }
 
 }

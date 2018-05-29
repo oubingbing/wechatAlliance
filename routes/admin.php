@@ -13,6 +13,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['guest',
         Route::get('/app','AppController@appInfo');
         /** 用户列表 */
         Route::get('wechat_users','UserController@allUsers');
+        /** 用户统计 */
+        Route::get('user_statistics','UserController@userStatistics');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

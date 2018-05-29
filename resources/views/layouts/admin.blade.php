@@ -15,6 +15,8 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="{{ asset('lib/layui/layui.js') }}" charset="utf-8"></script>
     <script type="text/javascript" src="{{ asset('js/xadmin.js') }}"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
