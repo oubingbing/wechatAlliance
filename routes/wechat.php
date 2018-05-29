@@ -17,6 +17,7 @@ use App\Http\Wechat\ChatController;
 use App\Http\Wechat\CommentController;
 use App\Http\Wechat\FollowController;
 use App\Http\Wechat\InboxController;
+use App\Http\Wechat\IndexController;
 use App\Http\Wechat\MatchLoveController;
 use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
@@ -30,6 +31,7 @@ $api->version('v1', function ($api) {
 
     $api->group(['prefix' => 'wechat'], function ($api) {
 
+        $api->get('/config',IndexController::class . '@config');
 
         $api->group(['prefix' => 'auth', 'middleware' => 'before'], function ($api) {
 
