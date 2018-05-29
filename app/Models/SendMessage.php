@@ -11,9 +11,9 @@ namespace App\Models;
 
 use Carbon\Carbon;
 
-class MessageCode extends BaseModel
+class SendMessage extends BaseModel
 {
-    const TABLE_NAME = 'message_codes';
+    const TABLE_NAME = 'send_messages';
     protected $table = self::TABLE_NAME;
 
     /** Field id */
