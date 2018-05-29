@@ -44,6 +44,7 @@ class PostController extends Controller
         $location = request()->input('location');
         $private = request()->input('private');
         $topic = request()->input('username');
+        $mobile = request()->input('mobile');
 
         try {
             \DB::beginTransaction();
@@ -53,6 +54,14 @@ class PostController extends Controller
             }
 
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);
+            if($mobile){
+                $checkMobile = validMobile($mobile);
+                if($checkMobile){
+                    //发送短信
+                }else{
+                    throw new ApiException('不是一个有效的手机号码！', 6000);
+                }
+            }
 
             \DB::commit();
         } catch (Exception $e) {

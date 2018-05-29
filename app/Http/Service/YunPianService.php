@@ -9,20 +9,28 @@
 namespace App\Http\Service;
 
 
-use GuzzleHttp\Client;
-
 class YunPianService
 {
-    protected $singleUrl = 'https://sms.yunpian.com/v2/sms/single_send.json';
-    protected $multiUrl = 'https://sms.yunpian.com/V2/sms/multi_send.json';
-    protected $apikey = '2f6b2eb5362ccad5d260e7e130f0c880';
+    protected $singleUrl;
+    protected $multiUrl;
+    protected $apikey;
     protected $httpClient;
 
     public function __construct()
     {
-        $this->httpClient = new Client();
+        $this->singleUrl = env('YUN_PIAN_SINGLE_URL');
+        $this->multiUrl = env('YUN_PIAN_MULTI');
+        $this->apikey = env('YUN_PIAN_KEY');
     }
-    
+
+    public function sendMessage($appName,$mobile,$messageType='表白帖子')
+    {
+        $mobile = '13425144866';
+        $content = "【小情书】您收到一条$messageType，进入微信搜索小程序$appName，进入后搜索您的手机号码，即可查看";
+
+        $result = app(YunPianService::class)->sendSingle($mobile,$content);
+    }
+
     /**
      * 发送单条短信
      * @author yezi
@@ -38,9 +46,53 @@ class YunPianService
             return ['success'=>false, 'statusCode'=>500, 'responseData'=>['msg'=>'内容不能为空']];
 
         $data = ['mobile'=>$mobile,'text'=>$content,'apikey'=>$this->apikey];
-        $result = $this->httpClient->request('POST', $this->singleUrl, $data);
+
+        $result = $this->send($this->singleUrl, $data);
 
         return $result;
+    }
+
+    /**
+     * 执行发送消息
+     *
+     * @author yezi
+     *
+     * @param $url
+     * @param $postData
+     * @return mixed|string
+     */
+    public function send($url,$postData){
+        $ch = curl_init();
+        /* 设置验证方式 */
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Accept:text/plain;charset=utf-8',
+            'Content-Type:application/x-www-form-urlencoded',
+            'charset=utf-8'
+        ));
+        /* 设置返回结果为流 */
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        /* 设置超时时间*/
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        /* 设置通信方式 */
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt ($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+        $retry=0;
+        // 若执行失败则重试
+        do{
+            $output = curl_exec($ch);
+            $retry++;
+        }while((curl_errno($ch) !== 0) && $retry<3);
+        if (curl_errno($ch) !== 0) {
+            curl_close($ch);
+            return curl_error($ch);
+        }
+        $output = trim($output, "\xEF\xBB\xBF");
+
+        curl_close($ch);
+        return json_decode($output,true);
     }
 
 }
