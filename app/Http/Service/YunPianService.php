@@ -26,7 +26,7 @@ class YunPianService
     public function sendMessage($appName,$mobile,$messageType='表白帖子')
     {
         $mobile = '13425144866';
-        $content = "【小情书】您收到一条$messageType，进入微信搜索小程序$appName，进入后搜索您的手机号码，即可查看";
+        $content = "【恋言网】您收到一条表白帖子，微信搜索小程序小情书，进入后搜索您的手机号码，即可查看";
 
         $result = app(YunPianService::class)->sendSingle($mobile,$content);
     }

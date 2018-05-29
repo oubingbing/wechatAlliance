@@ -34,6 +34,8 @@ class UserVisitLog extends Model
     /** field deleted_at */
     const FIELD_DELETED_AT = 'deleted_at';
 
+    const REL_USER = 'user';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_USER,
@@ -42,4 +44,9 @@ class UserVisitLog extends Model
         self::FIELD_UPDATED_AT,
         self::FIELD_DELETED_AT
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,self::FIELD_ID_USER,User::FIELD_ID);
+    }
 }

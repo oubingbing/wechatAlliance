@@ -11,8 +11,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Service\PaginateService;
 use App\Http\Service\UserService;
+use App\Models\Admin;
 use App\Models\AdminApps;
+use App\Models\User;
+use App\Models\UserVisitLog;
 use App\Models\WechatApp;
+use Carbon\Carbon;
 
 class UserController
 {
@@ -60,6 +64,37 @@ class UserController
         });
 
         return $userList;
+    }
+
+    /**
+     * 用户统计
+     * 
+     * @author yezi
+     * 
+     * @return array
+     */
+    public function userStatistics()
+    {
+        $user = request()->input('user');
+
+        $appId = AdminApps::query()->where(AdminApps::FIELD_ID_ADMIN,$user->id)->value(AdminApps::FIELD_ID_APP);
+
+        $newUserCount = User::query()
+            ->where(User::FIELD_ID_APP,$appId)
+            ->whereIn(User::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
+            ->count(User::FIELD_ID);
+        
+        $visitUserCount = UserVisitLog::query()
+            ->whereHas(UserVisitLog::REL_USER,function ($query){
+                $query->whereIn(UserVisitLog::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()]);
+            })
+            ->where(User::FIELD_ID_APP,$appId)
+            ->count(User::FIELD_ID);
+
+        return [
+            'new_user'=>$newUserCount,
+            'visit_user'=>$visitUserCount
+        ];
     }
 
 }
