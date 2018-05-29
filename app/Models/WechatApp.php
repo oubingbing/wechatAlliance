@@ -38,6 +38,9 @@ class WechatApp extends BaseModel
     /** Field mobile 联系人手机号码 */
     const FIELD_MOBILE = 'mobile';
 
+    /** Field status 小程序状态 */
+    const FIELD_STATUS = 'status';
+
     /** status 待审核 */
     const ENUM_STATUS_TO_BE_AUDIT = 1;
     /** status 正常上线*/
@@ -58,7 +61,8 @@ class WechatApp extends BaseModel
         self::FIELD_ALLIANCE_KEY,
         self::FIELD_ID_COLLEGE,
         self::FIELD_MOBILE,
-        self::FIELD_DOMAIN
+        self::FIELD_DOMAIN,
+        self::FIELD_STATUS
     ];
 
     public function adminApp()

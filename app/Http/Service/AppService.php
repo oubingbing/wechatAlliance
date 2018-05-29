@@ -117,4 +117,84 @@ class AppService
         return $result;
     }
 
+    /**
+     * 开启微信审核模式
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return int
+     */
+    public function WeChatAuditModel($appId)
+    {
+        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_WE_CHAT_AUDIT);
+
+        return $result;
+    }
+
+    /**
+     * 上线模式
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return int
+     */
+    public function onlineModel($appId)
+    {
+        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_ON_LINE);
+
+        return $result;
+    }
+
+    /**
+     * 关闭应用
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return int
+     */
+    public function closeModel($appId)
+    {
+        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_CLOSED);
+
+        return $result;
+    }
+
+    /**
+     * 根据应用ID更新状态
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @param $status
+     * @return int
+     */
+    public function updateStatus($appId,$status)
+    {
+        $result = WechatApp::query()->where(WechatApp::FIELD_ID,$appId)->update([WechatApp::FIELD_STATUS=>$status]);
+
+        return $result;
+    }
+
+    /**
+     * 用户是否可以切换应用模式
+     *
+     * @author yezi
+     *
+     * @param $app
+     * @return array
+     */
+    public function canSwitchModel($app)
+    {
+        $status = $app->{WechatApp::FIELD_STATUS};
+        if($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT || $status === WechatApp::ENUM_STATUS_CLOSED){
+            $errorString = ($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT?'应用未审核通过，不允许切换模式！':'应用处于下线状态，不允许切换模式！');
+            return ['status'=>false,'message'=>$errorString];
+        }else{
+            return ['status'=>true,'message'=>'ok'];
+        }
+    }
+
 }

@@ -44,14 +44,31 @@ class UserService
         return $result;
     }
 
+    /**
+     * 新建查询构造器
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return $this
+     */
     public function queryBuilder($appId)
     {
         $builder = User::query()->where(User::FIELD_ID_APP,$appId);
 
         $this->builder = $builder;
+
         return $builder;
     }
 
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @return $this
+     */
     public function sort($orderBy)
     {
         $this->builder->where($orderBy['order_by'],$orderBy['sort']);
@@ -59,6 +76,13 @@ class UserService
         return $this;
     }
 
+    /**
+     * 返回查询构造器
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function done()
     {
         return $this->builder;

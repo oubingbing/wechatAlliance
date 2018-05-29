@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
+use App\Models\Admin;
 use App\Models\Colleges;
 use App\Models\WechatApp;
 use Illuminate\Http\Request;
@@ -96,5 +97,65 @@ class AppController extends Controller
         $result = app(AppService::class)->getAppByUserId($user->id);
 
         return $result;
+    }
+
+    /**
+     * 切换到微信审核模式
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function weChatAudit()
+    {
+        $user = request()->input('user');
+        $app = $user->{Admin::REL_APP};
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        $appService = app(AppService::class);
+
+        $checkResult = $appService->canSwitchModel($app);
+        if(!$checkResult['status']){
+            return webResponse($checkResult['message'],500);
+        }
+
+        $result = $appService->WeChatAuditModel($app->{WechatApp::FIELD_ID});
+        if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+            return webResponse('开启微信审核模式成功！',200);
+        }else{
+            return webResponse('开启微信审核模式失败！',500);
+        }
+    }
+
+    /**
+     * 恢复正常状态
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function online()
+    {
+        $user = request()->input('user');
+        $app = $user->{Admin::REL_APP};
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        $appService = app(AppService::class);
+
+        $checkResult = $appService->canSwitchModel($app);
+        if(!$checkResult['status']){
+            return webResponse($checkResult['message'],500);
+        }
+
+        $result = $appService->onlineModel($app->{WechatApp::FIELD_ID});
+        if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_ON_LINE){
+            return webResponse('恢复正常状态成功！',200);
+        }else{
+            return webResponse('恢复成长状态失败！',500);
+        }
     }
 }

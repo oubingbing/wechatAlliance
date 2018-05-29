@@ -54,6 +54,8 @@ class Admin extends Authenticatable
 
     const USER_AVATAR = 'http://image.kucaroom.com/boy.png';
 
+    const REL_APP = 'app';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_USER_NAME,
@@ -69,5 +71,10 @@ class Admin extends Authenticatable
     protected $casts = [
         self::FIELD_AVATAR => 'array',
     ];
+
+    public function app()
+    {
+        return $this->hasOne(AdminApps::class,self::FIELD_ID,AdminApps::FIELD_ID_APP);
+    }
 
 }

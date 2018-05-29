@@ -33,7 +33,7 @@ class UserController
      *
      * @author yezi
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function userList()
     {
