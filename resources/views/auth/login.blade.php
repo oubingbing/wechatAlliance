@@ -31,9 +31,10 @@
                             layer.msg(res.message)
                         }else{
                             if(res.code === 200){
-                                layer.msg(res.message,function () {
+                                layer.msg(res.message);
+                                setTimeout(function () {
                                     window.location.href = res.data;
-                                })
+                                },1000)
                             }else{
                                 layer.msg(res.message)
                             }
