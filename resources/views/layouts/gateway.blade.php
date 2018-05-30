@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>小情书联盟</title>
+    <title>小情书</title>
     <link rel="shortcut icon" href="{{ asset('img/logo.jfif') }}" type="image/x-icon">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 

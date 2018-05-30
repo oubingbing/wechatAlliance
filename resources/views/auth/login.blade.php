@@ -4,7 +4,7 @@
     <body class="login-bg">
 
     <div class="login layui-anim layui-anim-up">
-        <div class="message">小情书 - 后台登录</div>
+        <div class="message"><a href="{{ asset('/home') }}" style="color: white;">小情书 - 后台登录</a></div>
         <div id="darkbannerwrap"></div>
 
         <form method="post" class="layui-form">
