@@ -58,7 +58,7 @@ class UserService
 
         $this->builder = $builder;
 
-        return $builder;
+        return $this;
     }
 
     /**
@@ -69,9 +69,9 @@ class UserService
      * @param $orderBy
      * @return $this
      */
-    public function sort($orderBy)
+    public function sort($orderBy,$sortBy)
     {
-        $this->builder->where($orderBy['order_by'],$orderBy['sort']);
+        $this->builder->orderBy($orderBy,$sortBy);
 
         return $this;
     }

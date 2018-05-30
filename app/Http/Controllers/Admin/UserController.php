@@ -27,9 +27,10 @@ class UserController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function users()
+    public function index()
     {
-        return view('user.index');
+        $users = User::paginate(15);
+        return view('admin.user.index',['users'=>$users]);
     }
 
     /**
@@ -42,7 +43,7 @@ class UserController
     public function userList()
     {
         $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $pageSize = request()->input('page_size', 20);
         $pageNumber = request()->input('page_number', 1);
         $orderBy = request()->input('order_by', 'created_at');
         $sortBy = request()->input('sort_by', 'desc');
@@ -59,11 +60,16 @@ class UserController
 
         $userList = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
 
+            $item['gender'] = collect([
+                User::ENUM_GENDER_BOY=>'男',
+                User::ENUM_GENDER_GIRL=>'女',
+                User::ENUM_GENDER_UN_KNOW=>'未知生物',
+            ])->get((string)$item[User::FIELD_GENDER],'未知生物');
             return $item;
 
         });
 
-        return $userList;
+        return webResponse('ok',200,$userList);
     }
 
     /**

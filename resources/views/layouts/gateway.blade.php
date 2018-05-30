@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', '校园小情书') }}</title>
+    <title>小情书联盟</title>
     <link rel="shortcut icon" href="{{ asset('img/logo.jfif') }}" type="image/x-icon">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -24,15 +24,22 @@
     <nav class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">{{ config('app.name', '校园小情书') }}</a>
+                <a class="navbar-brand" href="/">情书联盟</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ url('login') }}">登录</a></li>
-                    <li><a href="{{ url('register') }}">注册</a></li>
+                    @if (\Auth::check())
+                    <li><a href="{{ url('/admin') }}">控制台</a></li>
+                    @else
+                        <li><a href="{{ url('login') }}">登录</a></li>
+                        <li><a href="{{ url('register') }}">注册</a></li>
+                    @endif
                     <li><a href="{{ url('contact') }}">联系</a></li>
                     <li><a href="{{ url('about') }}">关于我</a></li>
+                        @if (\Auth::check())
+                            <li><a href="{{ asset('/logout') }}">退出</a></li>
+                        @endif
                 </ul>
             </div>
         </div>

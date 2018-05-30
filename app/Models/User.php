@@ -79,6 +79,12 @@ class User extends Authenticatable implements JWTSubject
     /** 用户激活状态 */
     const ENUM_STATUS_ACTIVITY = 1;
 
+    /** gender-男 */
+    const ENUM_GENDER_BOY = 1;
+    /** gender-女 */
+    const ENUM_GENDER_GIRL = 2;
+    /** gender 未知 */
+    const ENUM_GENDER_UN_KNOW = 0;
 
     /**
      * The attributes that are mass assignable.
