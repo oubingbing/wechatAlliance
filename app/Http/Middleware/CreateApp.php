@@ -16,7 +16,7 @@ class CreateApp
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         $request->offsetSet('user',$user);
 

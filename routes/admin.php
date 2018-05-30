@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['guest','web','auth']], function () {
+Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','auth']], function () {
 
     Route::group(['middleware'=>['authUser']], function () {
         /** 后台首页 */

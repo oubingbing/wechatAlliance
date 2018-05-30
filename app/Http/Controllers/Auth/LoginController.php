@@ -48,6 +48,16 @@ class LoginController extends Controller
     }
 
     /**
+     * 默认是admin guard
+     *
+     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard|mixed
+     */
+    protected function guard()
+    {
+        return Auth::guard('admin');
+    }
+
+    /**
      * 登录
      *
      * @author yezi
