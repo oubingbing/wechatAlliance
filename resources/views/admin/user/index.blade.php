@@ -20,11 +20,7 @@
                 <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
             </form>
         </div>
-        <xblock>
-            <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-            <button class="layui-btn" onclick="x_admin_show('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-            <span class="x-right" style="line-height:40px">共有数据：{{count($users)}} 条</span>
-        </xblock>
+        <blockquote class="layui-elem-quote">共有数据：@{{total}} 条</blockquote>
         <table class="layui-table">
             <thead>
             <tr>
@@ -91,7 +87,9 @@
                         var res = response.data;
                         if(res.code === 200){
                             this.users = res.data.page_data;
+                            this.total = res.data.page_data.length;
                             console.log('数据'+this.users);
+                            console.log('总数'+this.total);
                         }else{
                             console.log('error:'+res);
                         }
