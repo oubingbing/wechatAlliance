@@ -117,23 +117,36 @@ class AppController extends Controller
     public function weChatAudit()
     {
         $user = request()->input('user');
-        $app = $user->{Admin::REL_APP};
+        $app = $user->app();
         if(!$app){
             return webResponse('应用不存在！',500);
         }
 
-        $appService = app(AppService::class);
-
-        $checkResult = $appService->canSwitchModel($app);
-        if(!$checkResult['status']){
-            return webResponse($checkResult['message'],500);
+        if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_ON_LINE){
+            return webResponse('小程序当前状态不是正常模式，无法切换到审核模式',500);
         }
+        try{
+            \DB::beginTransaction();
 
-        $result = $appService->WeChatAuditModel($app->{WechatApp::FIELD_ID});
-        if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
-            return webResponse('开启微信审核模式成功！',200);
-        }else{
-            return webResponse('开启微信审核模式失败！',500);
+            $appService = app(AppService::class);
+
+            $checkResult = $appService->canSwitchModel($app);
+            if(!$checkResult['status']){
+                return webResponse($checkResult['message'],500);
+            }
+
+            $result = $appService->WeChatAuditModel($app->{WechatApp::FIELD_ID});
+            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+                \DB::commit();
+                return webResponse('开启微信审核模式成功！',200);
+            }else{
+                \DB::commit();
+                return webResponse('开启微信审核模式失败！',500);
+            }
+
+        }catch (Exception $e){
+            \DB::rollBack();
+            return webResponse($e,500);
         }
     }
 
@@ -147,23 +160,37 @@ class AppController extends Controller
     public function online()
     {
         $user = request()->input('user');
-        $app = $user->{Admin::REL_APP};
+        $app = $user->app();
         if(!$app){
             return webResponse('应用不存在！',500);
         }
 
-        $appService = app(AppService::class);
-
-        $checkResult = $appService->canSwitchModel($app);
-        if(!$checkResult['status']){
-            return webResponse($checkResult['message'],500);
+        if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+            return webResponse('小程序当前状态不是审核模式，无法切换到正常模式',500);
         }
 
-        $result = $appService->onlineModel($app->{WechatApp::FIELD_ID});
-        if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_ON_LINE){
-            return webResponse('恢复正常状态成功！',200);
-        }else{
-            return webResponse('恢复成长状态失败！',500);
+        $appService = app(AppService::class);
+
+        try{
+            \DB::beginTransaction();
+
+            $checkResult = $appService->canSwitchModel($app);
+            if(!$checkResult['status']){
+                return webResponse($checkResult['message'],500);
+            }
+
+            $result = $appService->onlineModel($app->{WechatApp::FIELD_ID});
+            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_ON_LINE){
+                \DB::commit();
+                return webResponse('恢复正常状态成功！',200);
+            }else{
+                \DB::commit();
+                return webResponse('恢复成长状态失败！',500);
+            }
+
+        }catch (Exception $e){
+            \DB::rollBack();
+            return webResponse($e,500);
         }
     }
 }

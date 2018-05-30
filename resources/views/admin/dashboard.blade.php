@@ -50,12 +50,14 @@
                         <td>@{{ app_name }}</td></tr>
                     <tr>
                         <th>状态</th>
-                        <td style="color: orangered">@{{ app_status_string }}</td></tr>
+                        <td style="color: orangered">
+                            @{{ app_status_string }} <button class="layui-btn layui-btn-danger" v-if="open_audit_status" v-on:click="openAudit">开启审核模式</button><button class="layui-btn" v-if="close_audit_status" v-on:click="closeAudit">关闭审核模式</button>
+                        </td></tr>
                     <tr>
                         <th>学校</th>
                         <td>@{{ college }}</td></tr>
                     <tr>
-                        <th>联盟ID</th>
+                        <th>alliance_key</th>
                         <td>@{{  alliance_key }}</td></tr>
                     <tr>
                         <th>app_key</th>
@@ -80,14 +82,16 @@
                 new_user:'-',
                 visit_user:'-',
                 all_user:'-',
-                app_name:'-',
-                app_status_string:'-',
-                app_status:'-',
-                app_key:'-',
-                app_secret:'-',
-                alliance_key:'-',
-                domain:'-',
-                college:'-'
+                app_name:'',
+                app_status_string:'',
+                app_status:'',
+                app_key:'',
+                app_secret:'',
+                alliance_key:'',
+                domain:'',
+                college:'',
+                open_audit_status:false,
+                close_audit_status:false
             },
             created:function () {
                 this.getUserInfo();
@@ -95,6 +99,11 @@
                 console.log('我是数据'+this.new_user);
             },
             methods:{
+                /**
+                 * 获取用户信息
+                 *
+                 * @author 叶子
+                 */
                 getUserInfo:function () {
                     axios.get("{{ asset('admin/user_statistics') }}").then( response=> {
                         var res = response.data;
@@ -109,6 +118,11 @@
                         console.log(error);
                     });
                 },
+                /**
+                 * 获取APP信息
+                 *
+                 * @author 叶子
+                 */
                 getAppInfo:function () {
                     axios.get("{{ asset('admin/app') }}").then( response=> {
                         var res = response.data;
@@ -120,6 +134,15 @@
                             this.alliance_key = res.data.alliance_key;
                             this.domain = res.data.domain;
                             this.college = res.data.college;
+
+                            if(res.data.status === 2){
+                                this.open_audit_status = true;
+                            }else{
+                                if(res.data.status === 3) {
+                                    this.close_audit_status = true;
+                                }
+                            }
+
                         }else{
                             console.log('error:'+res);
                         }
@@ -127,6 +150,36 @@
                         console.log(error);
                     });
                 },
+                openAudit:function () {
+                    axios.patch("{{ asset('admin/open_audit') }}").then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            layer.msg(res.message);
+                            this.open_audit_status = false;
+                            this.close_audit_status = true;
+                            this.app_status_string = '微信审核中';
+                        }else{
+                            layer.msg(res.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                closeAudit:function () {
+                    axios.patch("{{ asset('admin/close_audit') }}").then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            layer.msg(res.message);
+                            this.open_audit_status = true;
+                            this.close_audit_status = false;
+                            this.app_status_string = '运行中';
+                        }else{
+                            layer.msg(res.message);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
             },
         });
     </script>

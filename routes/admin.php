@@ -15,6 +15,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['guest',
         Route::get('wechat_users','UserController@allUsers');
         /** 用户统计 */
         Route::get('user_statistics','UserController@userStatistics');
+        /** 切换到微信审核模式 */
+        Route::patch('open_audit','AppController@weChatAudit');
+        /** 恢复正常模式 */
+        Route::patch('close_audit','AppController@online');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

@@ -173,7 +173,9 @@ class AppService
      */
     public function updateStatus($appId,$status)
     {
-        $result = WechatApp::query()->where(WechatApp::FIELD_ID,$appId)->update([WechatApp::FIELD_STATUS=>$status]);
+        $result = WechatApp::query()->find($appId);
+        $result->{WechatApp::FIELD_STATUS} = $status;
+        $result->save();
 
         return $result;
     }
