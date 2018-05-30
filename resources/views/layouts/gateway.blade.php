@@ -29,7 +29,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    @if (\Auth::check())
+                    @if (\Auth::guard('admin')->check())
                     <li><a href="{{ url('/admin') }}">控制台</a></li>
                     @else
                         <li><a href="{{ url('login') }}">登录</a></li>
@@ -37,7 +37,7 @@
                     @endif
                     <li><a href="{{ url('contact') }}">联系</a></li>
                     <li><a href="{{ url('about') }}">关于我</a></li>
-                        @if (\Auth::check())
+                        @if (\Auth::guard('admin')->check())
                             <li><a href="{{ asset('/logout') }}">退出</a></li>
                         @endif
                 </ul>
