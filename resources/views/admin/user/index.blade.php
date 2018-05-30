@@ -1,6 +1,8 @@
 @extends('layouts/admin')
 @section('content')
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">首页</a>
@@ -56,8 +58,6 @@
             </el-pagination>
         </div>
     </div>
-    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
         new Vue({
             el: '#app',
