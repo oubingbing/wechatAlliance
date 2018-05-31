@@ -24,11 +24,12 @@
     <nav class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">情书联盟</a>
+                <a class="navbar-brand" href="/">小情书联盟</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url('/home') }}">首页</a></li>
                     @if (\Auth::guard('admin')->check())
                     <li><a href="{{ url('/admin') }}">控制台</a></li>
                     @else
