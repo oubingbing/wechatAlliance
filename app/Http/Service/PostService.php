@@ -14,6 +14,8 @@ use App\Models\Colleges;
 use App\Models\Follow;
 use App\Models\Post;
 use App\Models\User;
+use Carbon\Carbon;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class PostService
 {
@@ -170,6 +172,10 @@ class PostService
                 'created_at' => $poster->created_at,
                 'gender'     => $poster->gender
             ];
+
+
+            Carbon::setLocale('zh');
+            $post[Post::FIELD_CREATED_AT] = Carbon::parse($post[Post::FIELD_CREATED_AT])->diffForHumans();
 
             $post['follow'] = app(FollowService::class)->checkFollow($user->id, $post['id'], Follow::ENUM_OBJ_TYPE_POST) ? true : false;
 
