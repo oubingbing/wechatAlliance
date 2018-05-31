@@ -43,7 +43,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6b8;</i>
+                    <i class="iconfont">&#xe696;</i>
                     <cite>表白墙</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
@@ -59,7 +59,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6b8;</i>
+                    <i class="iconfont">&#xe696;</i>
                     <cite>卖舍友</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
@@ -75,7 +75,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6b8;</i>
+                    <i class="iconfont">&#xe696;</i>
                     <cite>暗恋匹配</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>

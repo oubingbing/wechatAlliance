@@ -101,6 +101,10 @@ class LoginController extends Controller
             throw new ApiException('不是有效的key',6000);
         }
 
+        if($weChatApp->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            throw new ApiException('小程序处于审核中，无法使用后台服务！',6001);
+        }
+
         $weChatAppId = $weChatApp->{WechatApp::FIELD_APP_KEY};
         $secret = $weChatApp->{WechatApp::FIELD_APP_SECRET};
 

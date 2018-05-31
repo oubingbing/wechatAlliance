@@ -37,6 +37,7 @@
                     @endif
                     <li><a href="{{ url('contact') }}">联系</a></li>
                     <li><a href="{{ url('about') }}">关于我</a></li>
+                    <li><a href="https://www.jianshu.com/p/6f3091d4193c" target="_blank">部署教程</a></li>
                         @if (\Auth::guard('admin')->check())
                             <li><a href="{{ asset('/logout') }}">退出</a></li>
                         @endif

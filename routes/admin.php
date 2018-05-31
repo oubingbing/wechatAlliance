@@ -39,3 +39,6 @@ Route::get('/logout','Auth\LoginController@logout')->middleware(['guest','web'])
 
 /** 获取学校资料 */
 Route::get('colleges','Controller@colleges');
+
+/** 部署教程 */
+Route::get('deploy','Admin\AppController@deployStep');

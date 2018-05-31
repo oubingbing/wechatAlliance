@@ -10,9 +10,9 @@
             {{ csrf_field() }}
             <input name="app_name" v-model="app_name" placeholder="小程序名字（必须和你的小程序名字一致）"  type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
-            <input name="app_key" v-model="app_key" placeholder="APP_KEY（必填）"  type="text" lay-verify="required" class="layui-input email" >
+            <input name="app_key" v-model="app_key" placeholder="app_key（必填）"  type="text" lay-verify="required" class="layui-input email" >
             <hr class="hr15">
-            <input name="app_secret" v-model="app_secret" lay-verify="required" placeholder="App_secret（必填）"  type="text" class="layui-input">
+            <input name="app_secret" v-model="app_secret" lay-verify="required" placeholder="app_secret（必填）"  type="text" class="layui-input">
             <hr class="hr15">
             <input name="mobile" v-model="mobile" lay-verify="required" placeholder="管理员手机号码（必填）"  type="text" class="layui-input">
             <hr class="hr15">
@@ -20,7 +20,7 @@
                 <v-select label="name" ref="select" :options="colleges" name="college" v-model="selected"></v-select>
             </div>
             <hr class="hr15">
-            <input value="新建" lay-submit lay-filter="login" style="width:100%;background: #EE7600" @click="createApp" type="submit">
+            <input value="提交" lay-submit lay-filter="login" style="width:100%;background: #EE7600" @click="createApp" type="submit">
             <hr class="hr20" >
         </form>
         <div><span>我们将保护您的小程序信息不被泄露</span></div>
