@@ -59,6 +59,11 @@ class AppController extends Controller
             return webResponse('学校不存！',500);
         }
 
+        $appCollege = WechatApp::query()->where(WechatApp::FIELD_ID_COLLEGE,$collegeId)->first();
+        if($appCollege){
+            return webResponse('您选择的学校已被注册！',500);
+        }
+
         $validMobile = validMobile($mobile);
         if(!$validMobile){
             return webResponse('手机号码格式错误',500);
