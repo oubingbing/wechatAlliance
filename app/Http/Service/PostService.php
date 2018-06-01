@@ -213,4 +213,28 @@ class PostService
         return $post;
     }
 
+    /**
+     * 搜索被表白的人
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @param $topic
+     * @return mixed
+     */
+    public function searchTopic($user,$topic)
+    {
+        $appId = $user->{User::FIELD_ID_APP};
+
+        $result = Post::query()->with(['poster', 'praises', 'comments'])->whereHas(Post::REL_USER,function ($query)use($appId){
+            $query->where(User::FIELD_ID_APP,$appId);
+        })->where(Post::FIELD_TOPIC,$topic)->get();
+
+        $result = collect($result)->map(function ($item)use($user){
+            return $this->formatSinglePost($item, $user);
+        });
+
+        return $result;
+    }
+
 }

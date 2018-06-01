@@ -194,4 +194,28 @@ class SaleFriendService
         }
     }
 
+    /**
+     * 搜索被卖的人
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @param $topic
+     * @return mixed
+     */
+    public function searchFriend($user,$topic)
+    {
+        $appId = $user->{User::FIELD_ID_APP};
+
+        $result = SaleFriend::query()->with(['poster','comments'])->whereHas(SaleFriend::REL_USER,function ($query)use($appId){
+            $query->where(User::FIELD_ID_APP,$appId);
+        })->where(SaleFriend::FIELD_NAME,$topic)->get();
+
+        $result = collect($result)->map(function ($item)use($user){
+            return $this->formatSingle($item,$user);
+        });
+
+        return $result;
+    }
+
 }

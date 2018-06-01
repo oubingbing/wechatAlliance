@@ -40,7 +40,7 @@ $api->version('v1', function ($api) {
 
         });
 
-        $api->group(['middleware' => ['wechat', 'after', 'before']], function ($api) {
+        $api->group(['middleware' => ['wechat']], function ($api) {
 
             /** 获取用户信息 */
             $api->get('/user/{id}', UserController::class . '@user');
@@ -152,6 +152,9 @@ $api->version('v1', function ($api) {
 
             /** 取消关注 */
             $api->put('/cancel/{id}/follow/{type}', FollowController::class . '@cancelFollow');
+
+            /** 搜索 */
+            $api->get('/search',IndexController::class . '@search');
 
         });
 
