@@ -19,7 +19,7 @@
             </div>
             <h3>叶子</h3>
             <p>一个想创造美好事物的人儿</p>
-            <a href="https://github.com/oubingbing" class="github">https://github.com/oubingbing</a>
+            <a href="https://github.com/oubingbing" class="github" target="_blank">https://github.com/oubingbing</a>
         </div>
     </div>
 @stop
