@@ -60,7 +60,7 @@
                         <th>alliance_key</th>
                         <td>@{{  alliance_key }}</td></tr>
                     <tr>
-                        <th>app_key</th>
+                        <th>app_id</th>
                         <td>@{{ app_key }}</td></tr>
                     <tr>
                         <th>app_secret</th>
