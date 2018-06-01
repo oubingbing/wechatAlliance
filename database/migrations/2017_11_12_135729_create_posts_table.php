@@ -20,7 +20,7 @@ class CreatePostsTable extends Migration
 
             $table->integer('college_id')->index()->nullable()->comment('所属学校');
 
-            $table->longText('content')->comment('贴子的内容');
+            $table->longText('content')->nullable()->comment('贴子的内容');
 
             $table->jsonb('attachments')->nullable()->comment('贴子的附件,例如图片');
 
