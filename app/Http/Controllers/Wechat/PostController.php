@@ -49,7 +49,7 @@ class PostController extends Controller
         try {
             \DB::beginTransaction();
 
-            if (empty($content)) {
+            if (empty($content) && empty($imageUrls)) {
                 throw new ApiException('内容不能为空', 6000);
             }
 
