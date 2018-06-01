@@ -39,7 +39,7 @@ class PostController extends Controller
     public function store()
     {
         $user = request()->input('user');
-        $content = request()->input('content');
+        $content = request()->input('content','');
         $imageUrls = request()->input('attachments');
         $location = request()->input('location');
         $private = request()->input('private');
