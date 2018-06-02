@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Models\Admin;
 use App\Models\Colleges;
+use App\Models\User;
 use App\Models\WechatApp;
 use Illuminate\Http\Request;
 
@@ -211,5 +212,26 @@ class AppController extends Controller
     public function deployStep()
     {
         return view('admin.app.deploy');
+    }
+
+    public function serService()
+    {
+        $user = request()->get('user');
+        $serviceId = request()->get('service_id');
+        $app = $user->app();
+
+        if(!$serviceId){
+            return webResponse('客服不能为空！',500);
+        }
+
+        $service = User::query()->where(User::FIELD_ID_APP,$app->id)->where(User::FIELD_ID,$serviceId)->first();
+        if(!$service){
+            return webResponse('该客服不存在！',500);
+        }
+
+        $app->{WechatApp::FIELD_ID_SERVICE} = $serviceId;
+        $app->save();
+
+        return webResponse('设置客服成功',200);
     }
 }

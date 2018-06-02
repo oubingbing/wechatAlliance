@@ -47,6 +47,7 @@ class UserController
         $orderBy = request()->input('order_by', 'created_at');
         $sortBy = request()->input('sort_by', 'desc');
         $filter = request()->input('filter');
+        $app = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
@@ -57,13 +58,16 @@ class UserController
 
         $query = app(UserService::class)->queryBuilder($appId)->sort($orderBy, $sortBy)->done();
 
-        $userList = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
+        $userList = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user,$app) {
 
             $item['gender'] = collect([
                 User::ENUM_GENDER_BOY=>'男',
                 User::ENUM_GENDER_GIRL=>'女',
                 User::ENUM_GENDER_UN_KNOW=>'未知生物',
             ])->get((string)$item[User::FIELD_GENDER],'未知生物');
+
+            $item['service'] = ($item->id == $app->{WechatApp::FIELD_ID_SERVICE}) ? true : false;
+
             return $item;
 
         });

@@ -24,6 +24,7 @@ class CreateTalbeAppsTable extends Migration
             $table->string('mobile')->comment('联系人手机号码');
 
             $table->bigInteger('college_id')->index()->nullable()->comment('学校');
+            $table->bigInteger('service_id')->index()->nullable()->comment('客服id,users表的id');
 
             $table->tinyInteger('status')->default(1)->comment('小程序的状态，1=待审核，2=正常上线，3=微信审核中，4=下线');
 

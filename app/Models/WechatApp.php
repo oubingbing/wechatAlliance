@@ -35,6 +35,9 @@ class WechatApp extends BaseModel
     /** Field college_id 学校id */
     const FIELD_ID_COLLEGE = 'college_id';
 
+    /** Field service_id 客服id */
+    const FIELD_ID_SERVICE = 'service_id';
+
     /** Field mobile 联系人手机号码 */
     const FIELD_MOBILE = 'mobile';
 
@@ -62,7 +65,8 @@ class WechatApp extends BaseModel
         self::FIELD_ID_COLLEGE,
         self::FIELD_MOBILE,
         self::FIELD_DOMAIN,
-        self::FIELD_STATUS
+        self::FIELD_STATUS,
+        self::FIELD_ID_SERVICE
     ];
 
     public function adminApp()

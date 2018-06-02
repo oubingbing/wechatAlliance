@@ -21,6 +21,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::patch('close_audit','AppController@online');
         /** 用户列表 */
         Route::get('user/index','UserController@index');
+        /** 设置客服 */
+        Route::post('/set_service','AppController@serService');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

@@ -18,6 +18,13 @@ class IndexController extends Controller
         return view('admin.dashboard',['user'=>$user]);
     }
 
+    /**
+     * 进入管理后台首页
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $user = request()->get('user');

@@ -46,6 +46,15 @@ class IndexController extends Controller
         return $result;
     }
 
+    public function service()
+    {
+        $user = request()->input('user');
+
+        $serviceId = WechatApp::query()->where(WechatApp::FIELD_ID,$user->{User::FIELD_ID_APP})->value(WechatApp::FIELD_ID_SERVICE);
+
+        return $serviceId;
+    }
+
     /**
      * 搜索
      *

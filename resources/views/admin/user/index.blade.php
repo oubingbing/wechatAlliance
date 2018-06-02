@@ -33,6 +33,7 @@
                 <th>省</th>
                 <th>市</th>
                 <th>创建时间</th>
+                <th>操作</th>
             </thead>
             <tbody>
                 <tr v-for="user in users">
@@ -43,6 +44,10 @@
                     <td>@{{ user.province }}</td>
                     <td>@{{ user.city }}</td>
                     <td>@{{ user.created_at }}</td>
+                    <td class="td-manage">
+                        <button v-if="user.service" class="layui-btn">客服</button>
+                        <button v-else class="layui-btn layui-btn-danger" v-on:click="setService(user.id)">设置为客服</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -72,6 +77,24 @@
                 console.log('用户首页');
             },
             methods:{
+                setService:function (e) {
+                    axios.post("{{ asset("admin/set_service") }}",{
+                        service_id:e
+                    }).then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            layer.msg(res.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+                },
                 handleCurrentChange:function (e) {
                     console.log(e);
                     this.current_page = e;

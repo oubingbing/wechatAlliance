@@ -156,6 +156,9 @@ $api->version('v1', function ($api) {
             /** 搜索 */
             $api->get('/search',IndexController::class . '@search');
 
+            /** 获取小程序的客服 */
+            $api->get('/service',IndexController::class . '@service');
+
         });
 
     });
