@@ -117,6 +117,9 @@ class MatchLoveController extends Controller
         }
 
         $query = MatchLove::query()->with(['user'])
+            ->whereHas(MatchLove::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->where(MatchLove::FIELD_CREATED_AT,'>=',$time)
             ->when($user->{User::FIELD_ID_COLLEGE},function ($query)use($user){
                 return $query->where(MatchLove::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});;

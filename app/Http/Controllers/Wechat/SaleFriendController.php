@@ -106,6 +106,9 @@ class SaleFriendController extends Controller
         $time = request()->input('time');
 
         $query = SaleFriend::query()
+            ->whereHas(SaleFriend::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
             ->with(['poster','comments'])
             ->where(SaleFriend::FIELD_CREATED_AT,'>=',$time)
             ->orderBy(SaleFriend::FIELD_CREATED_AT,'desc');
