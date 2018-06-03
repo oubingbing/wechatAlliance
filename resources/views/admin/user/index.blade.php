@@ -101,21 +101,18 @@
                     this.getUsers();
                 },
                 getUsers:function () {
-                    axios.get("{{ asset('admin/wechat_users') }}",{
-                        page_size:this.page_size,
-                        page_number:this.current_page,
-                        order_by:'created_at',
-                        sort_by:'desc'
-                    }).then( response=> {
-                        var res = response.data;
-                        if(res.code === 200){
-                            this.users = res.data.page_data;
-                            this.total = res.data.page_data.length;
-                            console.log('数据'+this.users);
-                            console.log('总数'+this.total);
-                        }else{
-                            console.log('error:'+res);
-                        }
+                    var url = "{{ asset("admin/wechat_users") }}";
+                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc')
+                            .then( response=> {
+                                var res = response.data;
+                                if(res.code === 200){
+                                    this.users = res.data.page_data;
+                                    this.total = res.data.page.total_items;
+                                    console.log('数据'+this.users);
+                                    console.log('总数'+this.total);
+                                }else{
+                                    console.log('error:'+res);
+                                }
                     }).catch(function (error) {
                         console.log(error);
                     });

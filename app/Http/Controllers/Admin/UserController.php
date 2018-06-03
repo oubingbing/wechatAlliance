@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Service\PaginateService;
 use App\Http\Service\UserService;
-use App\Models\Admin;
 use App\Models\AdminApps;
 use App\Models\User;
 use App\Models\UserVisitLog;

@@ -59,7 +59,8 @@ class PaginateService
                 'size'        => $perPage,
                 'number'      => $currentPage,
                 'total-pages' => $lastPage,
-                'total-items' => $total
+                'total-items' => $total,
+                'total_items' => $total,
             ],
             'page_data' => $items
         ];
