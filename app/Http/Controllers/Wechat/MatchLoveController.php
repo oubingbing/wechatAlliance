@@ -162,7 +162,7 @@ class MatchLoveController extends Controller
     {
         $user = request()->input('user');
 
-        $result = MatchLove::where(MatchLove::FIELD_ID,$id)->where(MatchLove::FIELD_ID_OWNER,$user->id)->delete();
+        $result = MatchLove::where(MatchLove::FIELD_ID,$id)->delete();
 
         return $result;
     }

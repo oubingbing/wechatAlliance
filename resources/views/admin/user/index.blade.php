@@ -1,6 +1,8 @@
 @extends('layouts/admin')
 @section('content')
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+    </style>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <div class="x-nav">
@@ -32,6 +34,8 @@
                 <th>国家</th>
                 <th>省</th>
                 <th>市</th>
+                <th>客服</th>
+                <th>超管</th>
                 <th>创建时间</th>
                 <th>操作</th>
             </thead>
@@ -43,10 +47,13 @@
                     <td>@{{ user.country }}</td>
                     <td>@{{ user.province }}</td>
                     <td>@{{ user.city }}</td>
+                    <td>@{{ user.service?'客服':'' }}</td>
+                    <td>@{{ user.type == 2?'超管':''}}</td>
                     <td>@{{ user.created_at }}</td>
-                    <td class="td-manage">
-                        <button v-if="user.service" class="layui-btn">客服</button>
-                        <button v-else class="layui-btn layui-btn-danger" v-on:click="setService(user.id)">设置为客服</button>
+                    <td class="td-manage" style="float: left">
+                            <button v-if="!user.service" class="layui-btn layui-btn-danger" v-on:click="setService(user.id)">设置为客服</button>
+                            <button v-if="user.type == 1" class="layui-btn" v-on:click="setSupervise(user.id)">设置超管</button>
+                            <button v-if="user.type == 2" class="layui-btn layui-btn-danger" v-on:click="removeSupervise(user.id)">取消超管</button>
                     </td>
                 </tr>
             </tbody>
@@ -77,6 +84,40 @@
                 console.log('用户首页');
             },
             methods:{
+                setSupervise:function (e) {
+                    axios.post("{{ asset("admin/set_supervise") }}",{
+                        supervise_id:e
+                    }).then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            layer.msg(res.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                removeSupervise:function (e) {
+                    axios.post("{{ asset("admin/remove_service") }}",{
+                        supervise_id:e
+                    }).then( response=> {
+                        var res = response.data;
+                        if(res.code === 200){
+                            layer.msg(res.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
                 setService:function (e) {
                     axios.post("{{ asset("admin/set_service") }}",{
                         service_id:e
@@ -93,7 +134,6 @@
                     }).catch(function (error) {
                         console.log(error);
                     });
-
                 },
                 handleCurrentChange:function (e) {
                     console.log(e);

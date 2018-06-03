@@ -73,6 +73,8 @@ class User extends Authenticatable implements JWTSubject
 
     /** 微信用户 */
     const ENUM_TYPE_WE_CHAT_USER = 1;
+    /** 超级管理员 */
+    const ENUM_TYPE_SUPERVISE = 2;
 
     /** 用户初始状态 */
     const ENUM_STATUS_INIT = 0;

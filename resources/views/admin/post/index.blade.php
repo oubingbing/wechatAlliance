@@ -93,6 +93,10 @@
             justify-content: center;
         }
 
+        .praise-nickname{
+            margin-right: 20px;
+        }
+
         .praise-avatar img{
             width: 30px;
             height: 30px;
@@ -118,6 +122,19 @@
         .comment-item .reply{
             color: #1E9FFF;
         }
+
+        .more-image{
+            display: flex;
+            flex-direction: row;
+            flex-wrap:wrap;
+        }
+
+        .more-image img{
+            width: 130px;
+            height: 130px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
     </style>
     <div class="x-nav">
       <span class="layui-breadcrumb">
@@ -141,27 +158,30 @@
         <blockquote class="layui-elem-quote">共有数据：@{{total}} 条</blockquote>
 
         <div class="post-container">
-            <div class="post-item">
+            <div class="post-item" v-for="post in posts">
                 <div class="item-left">
-                    <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIRSkNHofic4wB9oyZrFBybUGjozW4DKtGJYWTWORATffxUtFLt1Cm3ibP0YVtfRicERVhsSickhgZic2w/132" alt="">
+                    <img v-bind:src="post.poster.avatar" >
                 </div>
                 <div class="item-right">
-                    <div class="nickname item-right-sub">昵称</div>
-                    <div class="content item-right-sub">好喜欢你</div>
+                    <div class="nickname item-right-sub">@{{ post.poster.nickname }}</div>
+                    <div class="content item-right-sub" v-if="post.topic != '无' " style="color: #1E9FFF"># @{{ post.topic }} #</div>
+                    <div class="content item-right-sub">@{{ post.content }}</div>
                     <div class="img-container item-right-sub">
-                        <div class="single-image">
-                            <img class="image-item"
-                                 src="https://wx.qlogo.cn/mmopen/vi_32/EHFN09PmqQkzFcKla2X9duOtnGE6l8rgiceMMbicVH3cus7szSN7kuE18BR0Gjh6fn1yZIzFaicnBmeIeg5SH6AmQ/132">
+                        <div class="single-image" v-if="post.attachments.length == 1">
+                            <img class="image-item" v-bind:src="imageUrl+post.attachments[0]">
+                        </div>
+                        <div class="more-image" v-if="post.attachments.length > 1">
+                            <img class="image-item" v-for="image in post.attachments" v-bind:src="imageUrl+image">
                         </div>
                     </div>
-                    <div class="created-time item-right-sub">两小时前</div>
+                    <div class="created-time item-right-sub">@{{ post.created_at }}</div>
                     <div class="comment-container">
                         <div class="praise">
-                            <div class="praise-item">
+                            <div class="praise-item" v-for="praise in post.praises">
                                 <div class="praise-avatar">
-                                    <img src="https://wx.qlogo.cn/mmopen/vi_32/EHFN09PmqQkzFcKla2X9duOtnGE6l8rgiceMMbicVH3cus7szSN7kuE18BR0Gjh6fn1yZIzFaicnBmeIeg5SH6AmQ/132" alt="">
+                                    <img v-bind:src="praise.avatar" alt="">
                                 </div>
-                                <div class="praise-nickname">叶子</div>
+                                <div class="praise-nickname">@{{ praise.nickname }}</div>
                             </div>
                         </div>
                         <div class="comment">
@@ -191,10 +211,11 @@
         new Vue({
             el: '#app',
             data: {
-                users:[],
+                posts:[],
                 total:0,
                 page_size:20,
-                current_page:1
+                current_page:1,
+                imageUrl:'http://image.kucaroom.com/'
             },
             created:function () {
                 this.getUsers();
@@ -214,6 +235,8 @@
                         sort_by:'desc'
                     }).then( response=> {
                         var res = response.data;
+                        this.posts = res.data.page_data;
+                        this.total = res.data.page.total_items;
                         console.log(res);
                     }).catch(function (error) {
                         console.log(error);

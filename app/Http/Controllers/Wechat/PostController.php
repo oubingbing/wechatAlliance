@@ -166,7 +166,7 @@ class PostController extends Controller
             throw new ApiException('404', null, '60001');
         }
 
-        $result = Post::where(Post::FIELD_ID, $id)->where(Post::FIELD_ID_POSTER, $user->{User::FIELD_ID})->delete();
+        $result = Post::where(Post::FIELD_ID, $id)->delete();
 
         return $result;
     }

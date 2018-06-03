@@ -153,7 +153,7 @@ class SaleFriendController extends Controller
     {
         $user = request()->input('user');
 
-        $result = SaleFriend::where(SaleFriend::FIELD_ID,$id)->where(SaleFriend::FIELD_ID_OWNER,$user->id)->delete();
+        $result = SaleFriend::where(SaleFriend::FIELD_ID,$id)->delete();
 
         return $result;
     }

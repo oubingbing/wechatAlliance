@@ -199,6 +199,13 @@ class PostService
                 $post['can_chat']   = true;
             }
 
+            if($post['can_delete'] == false){
+                //是否是超管
+                if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+                    $post['can_delete'] = true;
+                }
+            }
+
             $post['show_college'] = false;
             $post['college']      = null;
             if (!$user->{User::FIELD_ID_COLLEGE}) {

@@ -163,6 +163,13 @@ class MatchLoveService
             $matchLove['can_chat']   = true;
         }
 
+        if($matchLove['can_delete'] == false){
+            //是否是超管
+            if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+                $matchLove['can_delete'] = true;
+            }
+        }
+
 
         $matchLove['show_college'] = false;
         $matchLove['college'] = null;

@@ -23,6 +23,10 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::get('user/index','UserController@index');
         /** 设置客服 */
         Route::post('/set_service','AppController@serService');
+        /** 设置超管 */
+        Route::post('/set_supervise','AppController@setSupervise');
+        /** 设置超管 */
+        Route::post('/remove_service','AppController@removeService');
         /** 后台表白墙视图 */
         Route::get('/post/index','PostController@index');
         /** 后台表白墙帖子列表 */

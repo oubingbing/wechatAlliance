@@ -234,4 +234,46 @@ class AppController extends Controller
 
         return webResponse('设置客服成功',200);
     }
+
+    public function setSupervise()
+    {
+        $user = request()->get('user');
+        $serviceId = request()->get('supervise_id');
+        $app = $user->app();
+
+        if(!$serviceId){
+            return webResponse('用户不能为空！',500);
+        }
+
+        $service = User::query()->where(User::FIELD_ID_APP,$app->id)->where(User::FIELD_ID,$serviceId)->first();
+        if(!$service){
+            return webResponse('该用户不存在！',500);
+        }
+
+        $service->{User::FIELD_TYPE} = User::ENUM_TYPE_SUPERVISE;
+        $service->save();
+
+        return webResponse('设置超管成功',200);
+    }
+
+    public function removeService()
+    {
+        $user = request()->get('user');
+        $serviceId = request()->get('supervise_id');
+        $app = $user->app();
+
+        if(!$serviceId){
+            return webResponse('用户不能为空！',500);
+        }
+
+        $service = User::query()->where(User::FIELD_ID_APP,$app->id)->where(User::FIELD_ID,$serviceId)->first();
+        if(!$service){
+            return webResponse('该用户不存在！',500);
+        }
+
+        $service->{User::FIELD_TYPE} = User::ENUM_TYPE_WE_CHAT_USER;
+        $service->save();
+
+        return webResponse('取消超管成功',200);
+    }
 }

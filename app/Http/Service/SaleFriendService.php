@@ -167,7 +167,7 @@ class SaleFriendService
     public function canDeleteSaleFriend($saleFriend, $user)
     {
         $poster = $saleFriend['poster'];
-        if ($poster->id == $user->id) {
+        if ($poster->id == $user->id || $user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE) {
             return true;
         } else {
             return false;
