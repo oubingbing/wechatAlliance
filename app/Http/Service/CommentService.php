@@ -122,9 +122,9 @@ class CommentService
         $commenter = User::find($comment['commenter_id']);
 
         //格式化卖舍友评论
-        /*if ($comment['obj_type'] == Comment::ENUM_OBJ_TYPE_SALE_FRIEND) {
+        if ($comment['obj_type'] == Comment::ENUM_OBJ_TYPE_SALE_FRIEND) {
             $this->formatBatchComments($comment->subComments, $user);
-        }*/
+        }
 
         $nickname = $commenter->{User::FIELD_NICKNAME};
 
