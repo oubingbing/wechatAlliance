@@ -176,13 +176,6 @@ class CommentService
             $comment['can_delete'] = false;
         }
 
-        if($comment['can_delete'] == false){
-            //是否是超管
-            if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
-                $comment['can_delete'] = true;
-            }
-        }
-
         return $comment;
     }
 
