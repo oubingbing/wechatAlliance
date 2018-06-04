@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Exceptions\ApiException;
 use App\Jobs\UserLogs;
 use App\Models\User;
+use Carbon\Carbon;
 use Closure;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
@@ -33,7 +34,8 @@ class Wechat extends BaseMiddleware
 
         //$user = User::where(User::FIELD_ID_OPENID,$user->{User::FIELD_ID_OPENID})->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP})->first();
 
-        dispatch((new UserLogs($user))->onQueue('record_visit_log'));
+        $job = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
+        dispatch($job)->onQueue('record_visit_log');
 
         $request->offsetSet('user',$user);
 
