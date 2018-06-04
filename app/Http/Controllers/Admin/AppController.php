@@ -235,6 +235,13 @@ class AppController extends Controller
         return webResponse('设置客服成功',200);
     }
 
+    /**
+     * 设置超管
+     *
+     * @auhtor yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setSupervise()
     {
         $user = request()->get('user');
@@ -256,6 +263,13 @@ class AppController extends Controller
         return webResponse('设置超管成功',200);
     }
 
+    /**
+     * 取消超管
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function removeService()
     {
         $user = request()->get('user');

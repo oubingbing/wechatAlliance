@@ -11,21 +11,21 @@
                             <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                                 <div carousel-item="">
                                     <ul class="layui-row layui-col-space10 layui-this">
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs2" style="text-align: center">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>新增人数</h3>
+                                                <h3>今日新增人数</h3>
                                                 <p>
                                                     <cite>@{{new_user}}</cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs2" style="text-align: center">
                                             <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>浏览人数</h3>
+                                                <h3>今日浏览人数</h3>
                                                 <p>
                                                     <cite>@{{ visit_user }}</cite></p>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs2">
+                                        <li class="layui-col-xs2" style="text-align: center">
                                             <a href="javascript:;" class="x-admin-backlog-body">
                                                 <h3>总人数</h3>
                                                 <p>

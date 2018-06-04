@@ -89,19 +89,20 @@ class UserController
 
         $newUserCount = User::query()
             ->where(User::FIELD_ID_APP,$appId)
-            ->whereIn(User::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
+            ->whereBetween(User::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
             ->count(User::FIELD_ID);
         
         $visitUserCount = UserVisitLog::query()
             ->whereHas(UserVisitLog::REL_USER,function ($query)use($appId){
                 $query->where(User::FIELD_ID_APP,$appId);
             })
-            ->whereIn(UserVisitLog::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
-            ->count(UserVisitLog::FIELD_ID);
+            ->whereBetween(UserVisitLog::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
+            ->distinct(UserVisitLog::FIELD_ID_USER)
+            ->pluck(UserVisitLog::FIELD_ID_USER);
 
         $allUser = User::query()->where(User::FIELD_ID_APP,$appId)->count(User::FIELD_ID);
 
-        return webResponse('ok',200,['new_user'=>$newUserCount, 'visit_user'=>$visitUserCount,'all_user'=>$allUser]);
+        return webResponse('ok',200,['new_user'=>$newUserCount, 'visit_user'=>count($visitUserCount),'all_user'=>$allUser]);
     }
 
 }
