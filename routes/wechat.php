@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\QiNiuController;
 use App\Http\Wechat\ChatController;
 use App\Http\Wechat\CommentController;
+use App\Http\Wechat\CompareFaceController;
 use App\Http\Wechat\FollowController;
 use App\Http\Wechat\InboxController;
 use App\Http\Wechat\IndexController;
@@ -158,6 +159,9 @@ $api->version('v1', function ($api) {
 
             /** 获取小程序的客服 */
             $api->get('/service',IndexController::class . '@service');
+
+            /** 情侣脸比对 */
+            $api->post('compare_face',CompareFaceController::class . '@store');
 
         });
 
