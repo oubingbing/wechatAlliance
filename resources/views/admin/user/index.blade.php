@@ -91,9 +91,7 @@
                         var res = response.data;
                         if(res.code === 200){
                             layer.msg(res.message);
-                            setTimeout(function () {
-                                window.location.reload();
-                            },1500)
+                            this.getUsers();
                         }else{
                             console.log('error:'+res);
                         }
@@ -101,6 +99,10 @@
                         console.log(error);
                     });
                 },
+                /**
+                 * 移除超管
+                 * @param e
+                 */
                 removeSupervise:function (e) {
                     axios.post("{{ asset("admin/remove_service") }}",{
                         supervise_id:e
@@ -108,9 +110,7 @@
                         var res = response.data;
                         if(res.code === 200){
                             layer.msg(res.message);
-                            setTimeout(function () {
-                                window.location.reload();
-                            },1500)
+                            this.getUsers();
                         }else{
                             console.log('error:'+res);
                         }
@@ -125,9 +125,7 @@
                         var res = response.data;
                         if(res.code === 200){
                             layer.msg(res.message);
-                            setTimeout(function () {
-                                window.location.reload();
-                            },1500)
+                            this.getUsers();
                         }else{
                             console.log('error:'+res);
                         }

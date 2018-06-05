@@ -31,6 +31,9 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::get('/post/index','PostController@index');
         /** 后台表白墙帖子列表 */
         Route::get('/post/list','PostController@postList');
+        /** 删除表白墙评论 */
+        Route::delete('/delete/{id}/comment','PostController@delete');
+
     });
 
     Route::group(['middleware'=>['createApp']], function () {

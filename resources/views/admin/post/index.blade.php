@@ -19,6 +19,9 @@
             display: flex;
             flex-direction: row;
             padding: 10px;
+            border-top-style:solid;
+            border-width:1px;
+            border-color: #F5F5F5;
         }
         .post-item .item-left{
             width: 15%;
@@ -107,15 +110,16 @@
         .comment-container .comment{
             width: 100%;
             display: flex;
-            flex-direction: row;
-            border-top-style:solid;
-            border-width:1px;
-            border-color: darkgrey;
-            margin-top: 5px;
-            padding-top: 5px;
+            flex-direction: column;
         }
 
         .comment .comment-item{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-item .item{
             width: 100%;
         }
 
@@ -175,7 +179,7 @@
                         </div>
                     </div>
                     <div class="created-time item-right-sub">@{{ post.created_at }}</div>
-                    <div class="comment-container">
+                    <div class="comment-container" v-if="post.comments.length>0 || post.praises.length>0">
                         <div class="praise">
                             <div class="praise-item" v-for="praise in post.praises">
                                 <div class="praise-avatar">
@@ -184,11 +188,19 @@
                                 <div class="praise-nickname">@{{ praise.nickname }}</div>
                             </div>
                         </div>
-                        <div class="comment">
-                            <div class="comment-item">
-                                <span class="nickname">叶子</span>
-                                <span class="reply">回复</span>
-                                <span>你好帅呀水电费水电费第三方第三方第三方士大夫地方大幅度舒服啥地方水电费第三方第三方对方水电费水电费第三方第三方都是</span>
+                        <div v-if="post.comments.length>0 && post.praises.length>0" style="border-top-style:solid;border-width:1px;border-color: darkgray;margin-top: 5px;margin-bottom: 5px;"></div>
+                        <div class="comment" v-if="post.comments">
+                            <div class="comment-item" v-for="comment in post.comments" v-on:click="deleteComment(post.id,comment.id)">
+                                <div class="item" v-if="!comment.ref_comment">
+                                    <span class="nickname" >@{{comment.commenter.nickname}}：</span>
+                                    <span>@{{comment.content}}</span>
+                                </div>
+                                <div class="item" v-if="comment.ref_comment">
+                                    <span class="nickname" >@{{comment.commenter.nickname}}</span>
+                                    <span class="reply">回复</span>
+                                    <span class="nickname">@{{comment.ref_comment.refCommenter.nickname}}</span>
+                                    <span>@{{comment.content}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -218,25 +230,63 @@
                 imageUrl:'http://image.kucaroom.com/'
             },
             created:function () {
-                this.getUsers();
+                this.getPosts();
                 console.log('用户首页');
             },
             methods:{
+                /**
+                 * 删除评论
+                 */
+                deleteComment:function (obj_id,comment_id) {
+
+                    var _this = this;
+
+                    layer.confirm('确认要删除吗？',function(index){
+
+                        var url = "/admin/delete/"+comment_id+"/comment";
+
+                        axios.delete(url).then( response=> {
+
+                            var res = response.data;
+                            if(res.code === 200){
+                                layer.msg('删除成功！');
+                                _this.getPosts();
+                            }else{
+                                console.log('error:'+res);
+                            }
+
+                            console.log(res);
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
+
+                    });
+                },
+                /**
+                 * 监听分页
+                 */
                 handleCurrentChange:function (e) {
                     console.log(e);
                     this.current_page = e;
-                    this.getUsers();
+                    this.getPosts();
                 },
-                getUsers:function () {
-                    axios.get("{{ asset('admin/post/list') }}",{
+                /**
+                 * 获取一个帖子列表
+                 */
+                getPosts:function () {
+                    var _this = this;
+                    var url = "{{ asset('admin/post/list') }}";
+
+                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc',{
                         page_size:this.page_size,
                         page_number:this.current_page,
                         order_by:'created_at',
                         sort_by:'desc'
                     }).then( response=> {
                         var res = response.data;
-                        this.posts = res.data.page_data;
-                        this.total = res.data.page.total_items;
+                        _this.posts = res.data.page_data;
+                        _this.total = res.data.page.total_items;
                         console.log(res);
                     }).catch(function (error) {
                         console.log(error);

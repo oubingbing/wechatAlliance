@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PostService;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 
@@ -55,4 +56,24 @@ class PostController extends Controller
         return webResponse('ok',200,$posts);
     }
 
+    /**
+     * 删除评论
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     * @throws ApiException
+     */
+    public function delete($id)
+    {
+        $user = request()->input('user');
+
+        if(empty($id)){
+            return webResponse('404',500);
+        }
+
+        $result = Comment::where(Comment::FIELD_ID,$id)->delete();
+        return webResponse('ok',200,$result);
+    }
 }
