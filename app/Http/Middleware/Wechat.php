@@ -32,11 +32,6 @@ class Wechat extends BaseMiddleware
             throw new ApiException('token缺失',5000);
         }
 
-        //$user = User::where(User::FIELD_ID_OPENID,$user->{User::FIELD_ID_OPENID})->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP})->first();
-
-        $job = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
-        dispatch($job)->onQueue('record_visit_log');
-
         $request->offsetSet('user',$user);
 
         return $next($request);

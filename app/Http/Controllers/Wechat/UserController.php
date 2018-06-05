@@ -5,8 +5,10 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Jobs\UserLogs;
 use App\Models\Colleges;
 use App\Models\User;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -48,6 +50,10 @@ class UserController extends Controller
     public function school()
     {
         $user = request()->input('user');
+
+        //该接口已废弃，所以用来进行用户浏览记录接口
+        $job = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
+        dispatch($job)->onQueue('record_visit_log');
 
         $college = $user->college;
 
