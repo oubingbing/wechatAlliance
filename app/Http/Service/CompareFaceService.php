@@ -26,7 +26,7 @@ class CompareFaceService
         $emptyRect = true;
         foreach ($rectData as $rect){
             if($rect != 0){
-                $emptyRectA = false;
+                $emptyRect = false;
             }
         }
 
