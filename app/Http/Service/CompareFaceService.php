@@ -72,11 +72,11 @@ class CompareFaceService
         if($compareResult['confidence'] >= 0 &&$compareResult['confidence'] < 1){
             $keyWorld = '半毛钱脸';
             $level = 0;
-            $message = '很严肃的告诉你，你们没有半毛钱关系！';
+            $message = '很严肃的告诉你，你们血缘上没有半毛钱关系！';
         }elseif($compareResult['confidence'] >= 1 && $compareResult['confidence'] < 10){
             $keyWorld = '路人脸';
             $level = 1;
-            $message = '很愉快的告诉你，你们没有血缘关系！';
+            $message = '很愉快的告诉你，你们绝对不会是同父异母的兄弟姐妹！';
         }elseif($compareResult['confidence'] >= 10 && $compareResult['confidence'] < 20){
             $keyWorld = '标准情侣脸';
             $level = 2;
@@ -110,7 +110,8 @@ class CompareFaceService
         return [
             'key_world'=>$keyWorld,
             'level'=>$level,
-            'message'=>$message
+            'message'=>$message,
+            'confidence'=>$compareResult['confidence']
         ];
     }
 
