@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Service\QiNiuService;
 
 class IndexController extends Controller
 {
@@ -31,6 +29,20 @@ class IndexController extends Controller
         $app = $user->app();
 
         return view('admin.index',['user'=>$user,'app'=>$app]);
+    }
+
+    /**
+     * 获取七牛上传凭证
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function getUploadToken()
+    {
+        $token = app(QiNiuService::class)->uploadToken();
+
+        return webResponse('ok',200,$token);
     }
 
 }

@@ -88,6 +88,22 @@
                     </li >
                 </ul>
             </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6b8;</i>
+                    <cite>话题讨论</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{{ asset('admin/topic') }}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>话题列表</cite>
+
+                        </a>
+                    </li >
+                </ul>
+            </li>
         </ul>
       </div>
     </div>

@@ -33,7 +33,20 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::get('/post/list','PostController@postList');
         /** 删除表白墙评论 */
         Route::delete('/delete/{id}/comment','PostController@delete');
-
+        /** 话题主页 */
+        Route::get('/topic','TopicController@index');
+        /** 新建话题 */
+        Route::get('/topic/create','TopicController@createView');
+        /** 获取七牛token */
+        Route::get('/upload_token','IndexController@getUploadToken');
+        /** 新建话题 */
+        Route::post('/topic/create','TopicController@store');
+        /** 话题列表 */
+        Route::get('/topic/list','TopicController@topicList');
+        /** 上架话题 */
+        Route::patch('/topic/{id}/up','TopicController@upTopic');
+        /** 下架话题 */
+        Route::patch('/topic/{id}/down','TopicController@downTopic');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

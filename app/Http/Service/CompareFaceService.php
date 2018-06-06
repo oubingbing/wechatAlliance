@@ -82,7 +82,7 @@ class CompareFaceService
             $level = 2;
             $message = '你们的情侣脸指数跟（赵又廷、高圆圆）（黄晓明、杨颖）差不多。';
         }elseif ($compareResult['confidence'] >= 20 && $compareResult['confidence'] < 30){
-            $keyWorld = '七年情侣脸';
+            $keyWorld = '高级情侣脸';
             $level = 3;
             $message = '你们在一起的时间越长，就会越像对方，就像邓超和孙俪那样。';
         }elseif ($compareResult['confidence'] >= 30 && $compareResult['confidence'] < 46){

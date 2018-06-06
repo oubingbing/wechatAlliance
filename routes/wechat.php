@@ -23,6 +23,7 @@ use App\Http\Wechat\MatchLoveController;
 use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
 use App\Http\Wechat\SaleFriendController;
+use App\Http\Wechat\TopicController;
 use App\Http\Wechat\UserController;
 use Illuminate\Support\Facades\Log;
 
@@ -162,6 +163,9 @@ $api->version('v1', function ($api) {
 
             /** 情侣脸比对 */
             $api->post('compare_face',CompareFaceController::class . '@store');
+
+            /** 获取上架话题 */
+            $api->get('/topic',TopicController::class . '@topic');
 
         });
 
