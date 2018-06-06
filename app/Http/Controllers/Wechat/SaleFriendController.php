@@ -94,7 +94,8 @@ class SaleFriendController extends Controller
         $query = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
 
         $saleFriends = app(PaginateService::class)->paginate($query,$pageParams, '*',function($saleFriend)use($user){
-            return $this->saleFriendLogic->formatSingle($saleFriend,$user);
+            $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
+            return $saleFriend;
         });
 
         return $saleFriends;
