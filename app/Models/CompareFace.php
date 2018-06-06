@@ -11,7 +11,7 @@ namespace App\Models;
 
 class CompareFace extends BaseModel
 {
-    const TABLE_NAME = 'compare_face';
+    const TABLE_NAME = 'compare_faces';
     protected $table = self::TABLE_NAME;
 
     /** Field id */
