@@ -75,4 +75,16 @@ class Topic extends BaseModel
         self::FIELD_STATUS
     ];
 
+    /**
+     * 贴子评论
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_TOPIC);
+    }
+
 }

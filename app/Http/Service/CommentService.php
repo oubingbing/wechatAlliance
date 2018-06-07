@@ -18,6 +18,7 @@ use App\Models\Comment;
 use App\Models\MatchLove;
 use App\Models\Post;
 use App\Models\SaleFriend;
+use App\Models\Topic;
 use App\Models\User;
 
 class CommentService
@@ -122,7 +123,7 @@ class CommentService
         $commenter = User::find($comment['commenter_id']);
 
         //格式化卖舍友评论
-        if ($comment['obj_type'] == Comment::ENUM_OBJ_TYPE_SALE_FRIEND) {
+        if ($comment['obj_type'] == Comment::ENUM_OBJ_TYPE_SALE_FRIEND || $comment['obj_type'] == Comment::ENUM_OBJ_TYPE_TOPIC) {
             $this->formatBatchComments($comment->subComments, $user);
         }
 
@@ -205,6 +206,10 @@ class CommentService
             case  Comment::ENUM_OBJ_TYPE_COMMENT:
                 $obj    = Comment::find($objId);
                 $userId = $obj->{Comment::FIELD_ID_COMMENTER};
+                break;
+            case  Comment::ENUM_OBJ_TYPE_TOPIC:
+                $obj    = Topic::find($objId);
+                $userId = $obj->{Topic::FIELD_ID_USER};
                 break;
         }
 

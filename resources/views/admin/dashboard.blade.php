@@ -72,9 +72,9 @@
                     <tr>
                         <th>小程序二维码</th>
                         <td>
-                            <div v-if="attachments.qr_code"><img v-bind:src="imageUrl+attachments.qr_code" alt="" style="width: 90px;height: 90px;margin-bottom: 10px"></div>
+                            <div v-if="attachments"><img v-bind:src="imageUrl+attachments.qr_code" alt="" style="width: 90px;height: 90px;margin-bottom: 10px"></div>
                             <el-upload
-                                    v-if="attachments.length == 0"
+                                    v-if="attachments"
                                     :action="upLoadDomain"
                                     class="upload-demo"
                                     :on-remove="handleRemove"
@@ -120,7 +120,7 @@
                 close_audit_status:false,
                 upLoadDomain:'https://up-z2.qbox.me',
                 appImageUrl:'',
-                attachments:'',
+                attachments:[],
                 imageUrl:'http://image.kucaroom.com/'
             },
             created:function () {

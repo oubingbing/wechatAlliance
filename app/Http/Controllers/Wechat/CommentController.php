@@ -41,13 +41,14 @@ class CommentController extends Controller
     public function store()
     {
         $user = request()->input('user');
-        $commenterId = $user->{User::FIELD_ID};
-        $collegeId = $user->{User::FIELD_ID_COLLEGE};
         $objId = request()->input('obj_id');
         $content = request()->input('content');
         $type = request()->input('type');
         $refCommentId = request()->input('ref_comment_id',null);
         $attachments = request()->input('attachments',null);
+
+        $commenterId = $user->{User::FIELD_ID};
+        $collegeId = $user->{User::FIELD_ID_COLLEGE};
 
         $objData = $this->comment->getObjUserId($type,$objId);
         $objUserId = $objData['userId'];
@@ -74,7 +75,10 @@ class CommentController extends Controller
 
             $result = $this->comment->saveComment($commenterId, $objId, $content, $type, $refCommentId, $attachments, $collegeId);
 
-            $this->inbox->send($fromId,$toId,$result->id,$content,$objType,$actionType,$postAt);
+            //如果评论对象是话题就不需要投递消息盒子
+            if($type != Comment::ENUM_OBJ_TYPE_TOPIC){
+                $this->inbox->send($fromId,$toId,$result->id,$content,$objType,$actionType,$postAt);
+            }
 
             $this->comment->incrementComment($type,$objId);
 
