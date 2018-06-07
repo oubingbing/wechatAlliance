@@ -78,9 +78,9 @@ class CompareFaceService
             $level = 1;
             $message = '很愉快的告诉你，你们绝对不会是同父异母的兄弟姐妹！';
         }elseif($compareResult['confidence'] >= 10 && $compareResult['confidence'] < 20){
-            $keyWorld = '标准情侣脸';
+            $keyWorld = '情侣脸';
             $level = 2;
-            $message = '你们的情侣脸指数跟（赵又廷、高圆圆）（黄晓明、杨颖）差不多。';
+            $message = '你们的情侣脸指数跟（赵又廷、高圆圆）（黄晓明、杨颖）差不多，是标准的情侣脸。';
         }elseif ($compareResult['confidence'] >= 20 && $compareResult['confidence'] < 30){
             $keyWorld = '高级情侣脸';
             $level = 3;
@@ -111,7 +111,7 @@ class CompareFaceService
             'key_world'=>$keyWorld,
             'level'=>$level,
             'message'=>$message,
-            'confidence'=>$compareResult['confidence']
+            'confidence'=>round($compareResult['confidence'],1)
         ];
     }
 

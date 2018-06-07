@@ -162,7 +162,7 @@ $api->version('v1', function ($api) {
             $api->get('/service',IndexController::class . '@service');
 
             /** 情侣脸比对 */
-            $api->post('compare_face',CompareFaceController::class . '@store');
+            $api->post('/compare_face',CompareFaceController::class . '@store');
 
             /** 获取上架话题 */
             $api->get('/topic',TopicController::class . '@topic');

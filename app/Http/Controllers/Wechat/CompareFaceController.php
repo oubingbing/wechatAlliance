@@ -31,15 +31,16 @@ class CompareFaceController extends Controller
         $yourFace = request()->input('your_face');
         $hisFace = request()->input('his_face');
 
-        if(!$yourFace || $hisFace){
+        if(empty($yourFace) || empty($hisFace)){
             throw new ApiException('照片不能为空',500);
         }
 
         $compareService = app(CompareFaceService::class);
 
         $compareResult = app(Http::class)->compareFace($yourFace,$hisFace);
+
         if($compareResult){
-            if($compareResult['errno' == 0]){
+            if($compareResult['errno'] == 0){
                 $emptyRectA = $compareService->checkEmptyRect($compareResult['rectA']);
                 $emptyRectB = $compareService->checkEmptyRect($compareResult['rectB']);
 
@@ -59,7 +60,7 @@ class CompareFaceController extends Controller
                 $result = $compareService->create($user->id,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
                 if($result){
                     $report = $compareService->report($compareResult);
-                    return webResponse('比对成功！',200,$report);
+                    return $report;
                 }else{
                     throw new ApiException('比对失败，请稍后再试！',500);
                 }
