@@ -9,6 +9,7 @@
 namespace App\Http\Wechat;
 
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Models\Topic;
 use App\Models\User;
@@ -31,6 +32,18 @@ class TopicController extends Controller
             ->where(Topic::FIELD_STATUS,Topic::ENUM_STATUS_UP)
             ->orderBy(Topic::FIELD_CREATED_AT,'DESC')
             ->first();
+
+        return $topic;
+    }
+
+    public function topicDetail($id)
+    {
+        $user = request()->input('user');
+
+        $topic = Topic::query()->find($id);
+        if(!$topic){
+            throw new ApiException('话题不存在',500);
+        }
 
         return $topic;
     }

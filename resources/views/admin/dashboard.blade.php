@@ -1,5 +1,6 @@
 @extends('layouts/admin')
 @section('content')
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <div class="x-body layui-anim layui-anim-up" id="app">
         <blockquote class="layui-elem-quote">你好：{{$user->username}}</blockquote>
         <fieldset class="layui-elem-field">
@@ -68,6 +69,30 @@
                     <tr>
                         <th>接口域名</th>
                         <td>@{{ domain }}</td></tr>
+                    <tr>
+                        <th>小程序二维码</th>
+                        <td>
+                            <div v-if="attachments.qr_code"><img v-bind:src="imageUrl+attachments.qr_code" alt="" style="width: 90px;height: 90px;margin-bottom: 10px"></div>
+                            <el-upload
+                                    v-if="attachments.length == 0"
+                                    :action="upLoadDomain"
+                                    class="upload-demo"
+                                    :on-remove="handleRemove"
+                                    :on-success="uploadSuccess"
+                                    list-type="picture">
+                                <el-button size="small" type="primary">点击上传</el-button>
+                            </el-upload>
+                            <el-upload
+                                    v-else
+                                    :action="upLoadDomain"
+                                    class="upload-demo"
+                                    :on-remove="handleRemove"
+                                    :on-success="uploadSuccess"
+                                    list-type="picture">
+                                <el-button size="small" type="primary">修改二维吗</el-button>
+                            </el-upload>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -75,6 +100,7 @@
     </div>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
         var app = new Vue({
             el: '#app',
@@ -91,12 +117,16 @@
                 domain:'',
                 college:'',
                 open_audit_status:false,
-                close_audit_status:false
+                close_audit_status:false,
+                upLoadDomain:'https://up-z2.qbox.me',
+                appImageUrl:'',
+                attachments:'',
+                imageUrl:'http://image.kucaroom.com/'
             },
             created:function () {
+                this.getUploadToken();
                 this.getUserInfo();
                 this.getAppInfo();
-                console.log('我是数据'+this.new_user);
             },
             methods:{
                 /**
@@ -134,6 +164,7 @@
                             this.alliance_key = res.data.alliance_key;
                             this.domain = res.data.domain;
                             this.college = res.data.college;
+                            this.attachments = res.data.attachments;
 
                             if(res.data.status === 2){
                                 this.open_audit_status = true;
@@ -179,7 +210,47 @@
                     }).catch(function (error) {
                         console.log(error);
                     });
-                }
+                },
+                /**
+                 * 移除图片
+                 */
+                handleRemove:function (file) {
+                    this.appImageUrl = '';
+                },
+                /**
+                 * 监听上传成功回调
+                 * @param res
+                 */
+                uploadSuccess:function (res) {
+                    this.appImageUrl = res.key;
+
+                    axios.patch('/admin/update_qr_code',{image:this.appImageUrl})
+                        .then( response=> {
+                            var res = response.data;
+                            console.log(res);
+                            if(res.code == 200){
+                                this.attachments = res.data.attachments;
+                                layer.msg('修改成功！');
+                            }else{
+                                layer.msg('修改失败！');
+                            }
+
+                        }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                /**
+                 * 获取七牛token
+                 */
+                getUploadToken:function () {
+                    axios.get("{{ asset('/admin/upload_token') }}")
+                        .then( response=> {
+                            this.upLoadDomain = this.upLoadDomain+'?token='+response.data.data;
+                            console.log(this.upLoadDomain);
+                        }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
             },
         });
     </script>

@@ -290,4 +290,28 @@ class AppController extends Controller
 
         return webResponse('取消超管成功',200);
     }
+
+    /**
+     * 修改小程序二维码
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function updateImage()
+    {
+        $user = request()->get('user');
+        $qrCode = request()->input('image');
+
+        $app = $user->app();
+        $attachments = $app->{WechatApp::FIELD_ATTACHMENTS};
+        $attachments['qr_code'] = $qrCode;
+        $app->{WechatApp::FIELD_ATTACHMENTS} = $attachments;
+        $result = $app->save();
+        if($result){
+            return webResponse('修改成功！',200,$app);
+        }else{
+            return webResponse('修改失败！',200,$app);
+        }
+    }
 }

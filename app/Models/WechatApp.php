@@ -29,6 +29,9 @@ class WechatApp extends BaseModel
     /** Field alliance_key 联盟的key */
     const FIELD_ALLIANCE_KEY = 'alliance_key';
 
+    /** Field attachments 小程序相关图片 */
+    const FIELD_ATTACHMENTS = 'attachments';
+
     /** Field domain 小程序的接口域名 */
     const FIELD_DOMAIN = 'domain';
 
@@ -56,6 +59,10 @@ class WechatApp extends BaseModel
     const REL_ADMIN_APP = 'adminApp';
     const REL_COLLEGE = 'college';
 
+    protected $casts = [
+        self::FIELD_ATTACHMENTS => 'array',
+    ];
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_NAME,
@@ -66,7 +73,8 @@ class WechatApp extends BaseModel
         self::FIELD_MOBILE,
         self::FIELD_DOMAIN,
         self::FIELD_STATUS,
-        self::FIELD_ID_SERVICE
+        self::FIELD_ID_SERVICE.
+        self::FIELD_ATTACHMENTS
     ];
 
     public function adminApp()
