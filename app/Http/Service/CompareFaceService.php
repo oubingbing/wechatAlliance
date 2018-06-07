@@ -69,11 +69,11 @@ class CompareFaceService
     public function report($compareResult)
     {
         $level = 1;
-        if($compareResult['confidence'] >= 0 &&$compareResult['confidence'] < 1){
+        if($compareResult['confidence'] >= 0 &&$compareResult['confidence'] < 3){
             $keyWorld = '半毛钱脸';
             $level = 0;
             $message = '很严肃的告诉你，你们血缘上没有半毛钱关系！';
-        }elseif($compareResult['confidence'] >= 1 && $compareResult['confidence'] < 10){
+        }elseif($compareResult['confidence'] >= 3 && $compareResult['confidence'] < 10){
             $keyWorld = '路人脸';
             $level = 1;
             $message = '很愉快的告诉你，你们绝对不会是同父异母的兄弟姐妹！';
