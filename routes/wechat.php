@@ -165,7 +165,7 @@ $api->version('v1', function ($api) {
             $api->post('/compare_face',CompareFaceController::class . '@store');
 
             /** 获取上架话题 */
-            $api->get('/topic',TopicController::class . '@topic');
+            $api->get('/topic/{id}',TopicController::class . '@topicDetail');
 
         });
 

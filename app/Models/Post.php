@@ -127,7 +127,7 @@ class Post extends BaseModel
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID);
+        return $this->hasMany(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_POST);
     }
 
     public function follows()

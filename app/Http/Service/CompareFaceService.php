@@ -69,11 +69,11 @@ class CompareFaceService
     public function report($compareResult)
     {
         $level = 1;
-        if($compareResult['confidence'] >= 0 &&$compareResult['confidence'] < 1){
+        if($compareResult['confidence'] >= 0 &&$compareResult['confidence'] < 3){
             $keyWorld = '半毛钱脸';
             $level = 0;
             $message = '很严肃的告诉你，你们血缘上没有半毛钱关系！';
-        }elseif($compareResult['confidence'] >= 1 && $compareResult['confidence'] < 10){
+        }elseif($compareResult['confidence'] >= 3 && $compareResult['confidence'] < 10){
             $keyWorld = '路人脸';
             $level = 1;
             $message = '很愉快的告诉你，你们绝对不会是同父异母的兄弟姐妹！';
@@ -82,7 +82,7 @@ class CompareFaceService
             $level = 2;
             $message = '你们的情侣脸指数跟（赵又廷、高圆圆）（黄晓明、杨颖）差不多，是标准的情侣脸。';
         }elseif ($compareResult['confidence'] >= 20 && $compareResult['confidence'] < 30){
-            $keyWorld = '高级情侣脸';
+            $keyWorld = '七年情侣脸';
             $level = 3;
             $message = '你们在一起的时间越长，就会越像对方，就像邓超和孙俪那样。';
         }elseif ($compareResult['confidence'] >= 30 && $compareResult['confidence'] < 46){

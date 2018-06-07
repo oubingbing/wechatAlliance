@@ -60,6 +60,8 @@ class Comment extends BaseModel
     const ENUM_OBJ_TYPE_MATCH_LOVE = 3;
     /** obj_type 评论 */
     const ENUM_OBJ_TYPE_COMMENT = 4;
+    /** obj_type 话题 */
+    const ENUM_OBJ_TYPE_TOPIC = 5;
 
     /** type-评论表白墙 */
     const ENUM_COMMENT_POST_TYPE = 1;

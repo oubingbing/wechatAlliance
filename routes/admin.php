@@ -47,6 +47,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::patch('/topic/{id}/up','TopicController@upTopic');
         /** 下架话题 */
         Route::patch('/topic/{id}/down','TopicController@downTopic');
+        /** 修改小程序序二维码 */
+        Route::patch('/update_qr_code','AppController@updateImage');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

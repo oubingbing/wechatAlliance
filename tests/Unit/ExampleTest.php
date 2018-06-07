@@ -33,4 +33,33 @@ class ExampleTest extends TestCase
 
         dd($result);
     }
+
+    public function testRand()
+    {
+        $arr = [
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0]
+        ];
+        $tempArr = $arr;
+
+        //模拟随机点开花木兰拼图
+        for ($i = 1 ; $i <= 360 ; $i++){
+            foreach ($tempArr as $firstKey => $firstItem){
+                foreach ($firstItem as $secondKey => $secondItem){
+                    if($secondItem == 1){
+                        unset($tempArr[$firstKey][$secondKey]);
+                    }
+                }
+            }
+            $one_index = array_rand($tempArr);
+            $two_index = array_rand($arr[$one_index]);
+
+            $arr[$one_index][$two_index] = 1;
+        }
+
+    }
 }
