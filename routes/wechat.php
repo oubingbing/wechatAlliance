@@ -164,8 +164,11 @@ $api->version('v1', function ($api) {
             /** 情侣脸比对 */
             $api->post('/compare_face',CompareFaceController::class . '@store');
 
-            /** 获取上架话题 */
+            /** 获取话题详情 */
             $api->get('/topic/{id}',TopicController::class . '@topicDetail');
+
+            /** 获取上架话题 */
+            $api->get('/topic',TopicController::class . '@topic');
 
         });
 
