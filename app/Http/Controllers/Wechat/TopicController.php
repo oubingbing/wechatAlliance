@@ -106,7 +106,16 @@ class TopicController extends Controller
             ->orderBy($orderBy,$sortBy);
 
         $comments = app(PaginateService::class)->paginate($query,$pageParams, '*',function($comment)use($user){
-            return app(CommentService::class)->formatSingleComments($comment, $user);
+            $comment = app(CommentService::class)->formatSingleComments($comment, $user);
+
+            if($comment['can_delete'] == false){
+                //是否是超管
+                if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+                    $comment['can_delete'] = true;
+                }
+            }
+            
+            return $comment;
         });
 
         return $comments;
@@ -126,7 +135,18 @@ class TopicController extends Controller
             ->get();
 
         $comments = collect($comments)->map(function ($comment)use($user){
-            return app(CommentService::class)->formatSingleComments($comment, $user);
+            $comment = app(CommentService::class)->formatSingleComments($comment, $user);
+
+            if($comment['can_delete'] == false){
+                //是否是超管
+                if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+                    $comment['can_delete'] = true;
+                }
+            }
+
+            dd($comment);
+
+            return $comment;
         });
 
         return $comments;
