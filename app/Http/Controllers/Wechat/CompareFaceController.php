@@ -44,17 +44,12 @@ class CompareFaceController extends Controller
                 $emptyRectA = $compareService->checkEmptyRect($compareResult['rectA']);
                 $emptyRectB = $compareService->checkEmptyRect($compareResult['rectB']);
 
-                $emptyError = '';
                 if($emptyRectA){
-                    $emptyError .= '左图无人脸！';
+                    throw new ApiException('左图无人脸！',500);
                 }
 
                 if($emptyRectB){
-                    $emptyError .= '右图无人脸！';
-                }
-
-                if($emptyRectA || $emptyRectB){
-                    throw new ApiException($emptyError,500);
+                    throw new ApiException('右图无人脸！',500);
                 }
 
                 $result = $compareService->create($user->id,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
