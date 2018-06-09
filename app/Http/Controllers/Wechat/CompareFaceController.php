@@ -46,11 +46,11 @@ class CompareFaceController extends Controller
 
                 $emptyError = '';
                 if($emptyRectA){
-                    $emptyError .= '图一没有检测到人脸';
+                    $emptyError .= '左图无人脸！';
                 }
 
                 if($emptyRectB){
-                    $emptyError .= '图二没有检测到人脸';
+                    $emptyError .= '右图无人脸！';
                 }
 
                 if($emptyRectA || $emptyRectB){
