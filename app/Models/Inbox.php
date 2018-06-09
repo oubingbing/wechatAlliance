@@ -62,11 +62,15 @@ class Inbox extends BaseModel
     const ENUM_OBJ_TYPE_COMMENT = 4;
     /** 赞 */
     const ENUM_OBJ_TYPE_PRAISE = 5;
+    /** 聊天 */
+    const ENUM_OBJ_TYPE_CHAT = 6;
 
     /** 评论对象 */
     const ENUM_ACTION_TYPE_COMMENT = 1;
     /** 点赞对象 */
     const ENUM_ACTION_TYPE_PRAISE = 2;
+    /** 私信 */
+    const ENUM_ACTION_TYPE_CHAT = 3;
 
     /** 不匿名 */
     const ENUM_NOT_PRIVATE = 0;

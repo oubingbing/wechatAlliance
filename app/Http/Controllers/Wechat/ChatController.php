@@ -7,8 +7,10 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\ChatService;
 use App\Http\Service\FriendService;
+use App\Http\Service\InboxService;
 use App\Http\Service\PaginateService;
 use App\Models\ChatMessage;
+use App\Models\Inbox;
 use Carbon\Carbon;
 use League\Flysystem\Exception;
 
@@ -54,6 +56,9 @@ class ChatController extends Controller
 
             $result = $this->chat->sendMessage($userId,$friendId,$content,$attachments,$type,$postAt);
             $result = $this->chat->format($result);
+
+            //将私信投递到消息消息盒子
+            app(InboxService::class)->send($userId,$friendId,$friendId,$content,Inbox::ENUM_OBJ_TYPE_CHAT,Inbox::ENUM_ACTION_TYPE_CHAT,$postAt);
 
             \DB::commit();
         }catch (Exception $exception){

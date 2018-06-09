@@ -101,6 +101,9 @@ class InboxService
             case 5:
                 $obj = Praise::query()->find($objId);
                 break;
+            case 6:
+                $obj = User::query()->find($objId);
+                break;
         }
 
         return empty($obj) ? false : true;
@@ -261,6 +264,9 @@ class InboxService
                 break;
             case 5:
                 $obj = Praise::query()->find($objId);
+                break;
+            case 6:
+                $obj = User::query()->find($objId);
                 break;
         }
 
