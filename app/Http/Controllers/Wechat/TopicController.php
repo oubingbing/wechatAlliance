@@ -114,7 +114,7 @@ class TopicController extends Controller
                     $comment['can_delete'] = true;
                 }
             }
-            
+
             return $comment;
         });
 
@@ -143,8 +143,6 @@ class TopicController extends Controller
                     $comment['can_delete'] = true;
                 }
             }
-
-            dd($comment);
 
             return $comment;
         });
