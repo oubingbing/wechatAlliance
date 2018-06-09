@@ -170,6 +170,14 @@ $api->version('v1', function ($api) {
             /** 获取上架话题 */
             $api->get('/topic',TopicController::class . '@topic');
 
+            /** 点赞话题 */
+            $api->post('/praise/{id}/topic',TopicController::class . '@praiseTopic');
+
+            /** 话题的评论列表 */
+            $api->get('/topic/{id}/comments',TopicController::class . '@topicComments');
+
+            /** 获取最新的话题评论 */
+            $api->get('/topic/{id}/new_comments',TopicController::class . '@getMostNewTopComments');
         });
 
     });

@@ -62,6 +62,9 @@ class CommentService
             case Comment::ENUM_OBJ_TYPE_SALE_FRIEND:
                 $result = SaleFriend::query()->where(SaleFriend::FIELD_ID, $objId)->increment(SaleFriend::FIELD_COMMENT_NUMBER);
                 break;
+            case Comment::ENUM_OBJ_TYPE_TOPIC:
+                $result = Topic::query()->where(Topic::FIELD_ID, $objId)->increment(Topic::FIELD_COMMENT_NUMBER);
+                break;
             default:
                 $result = Post::query()->where(Post::FIELD_ID, $objId)->increment(Post::FIELD_COMMENT_NUMBER);
                 break;
