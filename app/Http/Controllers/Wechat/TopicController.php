@@ -126,10 +126,14 @@ class TopicController extends Controller
         $user = request()->input('user');
         $orderBy = request()->input('order_by','created_at');
         $sortBy = request()->input('sort_by','desc');
+        $time = request()->input('time');
 
         $comments = Comment::query()
             ->where(Comment::FIELD_ID_OBJ,$id)
             ->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_TOPIC)
+            ->when($time,function ($query)use($time){
+                return $query->where(Comment::FIELD_CREATED_AT,'>=',$time);
+            })
             ->orderBy($orderBy,$sortBy)
             ->limit(10)
             ->get();

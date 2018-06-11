@@ -57,6 +57,10 @@ class ChatController extends Controller
             $result = $this->chat->sendMessage($userId,$friendId,$content,$attachments,$type,$postAt);
             $result = $this->chat->format($result);
 
+            if(empty($content)){
+                $content = '收到一张图片';
+            }
+
             //将私信投递到消息消息盒子
             app(InboxService::class)->send($userId,$friendId,$friendId,$content,Inbox::ENUM_OBJ_TYPE_CHAT,Inbox::ENUM_ACTION_TYPE_CHAT,$postAt);
 
