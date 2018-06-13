@@ -84,7 +84,8 @@ class ChatController extends Controller
     public function chatList($friendId)
     {
         $user = request()->input('user');
-        $pageSize = request()->input('page_size',10);
+        //$pageSize = request()->input('page_size',10);
+        $pageSize = 5;
         $pageNumber = request()->input('page_number',1);
         $orderBy = request()->input('order_by','created_at');
         $sortBy = request()->input('sort_by','desc');
