@@ -94,12 +94,12 @@ class Inbox extends BaseModel
 
     public function fromUser()
     {
-        return $this->belongsTo(User::class,self::FIELD_ID_FROM)->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR);
+        return $this->belongsTo(User::class,self::FIELD_ID_FROM)->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
     }
 
     public function toUser()
     {
-        return $this->belongsTo(User::class,self::FIELD_ID_FROM)->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR);
+        return $this->belongsTo(User::class,self::FIELD_ID_FROM)->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
     }
 
 }

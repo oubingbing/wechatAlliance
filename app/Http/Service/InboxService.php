@@ -18,6 +18,7 @@ use App\Models\Praise;
 use App\Models\SaleFriend;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Validation\Rules\In;
 
 class InboxService
 {
@@ -232,6 +233,15 @@ class InboxService
         $inbox->obj = $obj;
 
         $inbox->parentObj = !empty($obj) ? $this->getObj($obj->obj_id, $obj->obj_type) : null;
+
+        if($inbox->{Inbox::FIELD_PRIVATE} == Inbox::ENUM_PRIVATE){
+            $inbox->fromUser->nickname = '匿名の同学';
+            if($inbox->fromUser->gender == User::ENUM_GENDER_BOY){
+                $inbox->fromUser->avatar = 'http://image.kucaroom.com/boy.png';
+            }else{
+                $inbox->fromUser->avatar = 'http://image.kucaroom.com/girl.png';
+            }
+        }
 
         return $inbox;
     }
