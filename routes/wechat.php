@@ -178,6 +178,9 @@ $api->version('v1', function ($api) {
 
             /** 获取最新的话题评论 */
             $api->get('/topic/{id}/new_comments',TopicController::class . '@getMostNewTopComments');
+
+            /** 修改用户信息 */
+            $api->patch('/update/{id}/user',UserController::class . '@updateUser');
         });
 
     });

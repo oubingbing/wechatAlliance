@@ -139,4 +139,41 @@ class UserController extends Controller
         return $result;
     }
 
+    /**
+     * 更新用户信息
+     *
+     * @author yezi
+     *
+     * @return bool
+     * @throws ApiException
+     */
+    public function updateUser()
+    {
+        $user = request()->input('user');
+        $nickname = request()->input('nickname');
+        $avatar = request()->input('avatar');
+
+        if(empty($nickname)){
+            throw new ApiException('昵称不能为空！', 500);
+        }
+
+        if(empty($avatar)){
+            throw new ApiException('头像不能为空！', 500);
+        }
+
+        $user = User::query()->find($user->id);
+        if(!$user){
+            throw new ApiException('用户不存在！', 500);
+        }
+
+        $user->{User::FIELD_NICKNAME} = $nickname;
+        $user->{User::FIELD_AVATAR} = $avatar;
+        $result = $user->save();
+        if(!$result){
+            throw new ApiException('更新失败！', 500);
+        }
+
+        return $user;
+    }
+
 }

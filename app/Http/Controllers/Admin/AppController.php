@@ -314,4 +314,35 @@ class AppController extends Controller
             return webResponse('修改失败！',200,$app);
         }
     }
+
+    /**
+     * 修改APP信息
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function updateApp()
+    {
+        $user = request()->get('user');
+        $name = request()->input('name');
+        $value = request()->input('value');
+        $app = $user->app();
+
+        if(empty($name)){
+            return webResponse('参数错误！',500);
+        }
+
+        if(empty($value)){
+            return webResponse('参数错误！',500);
+        }
+
+        $app->{$name} = $value;
+        $result = $app->save();
+        if(!$result){
+            return webResponse('修改失败！',500);
+        }
+
+        return webResponse('修改成功！',200,$app);
+    }
 }
