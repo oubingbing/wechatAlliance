@@ -62,4 +62,17 @@ class ExampleTest extends TestCase
         }
 
     }
+
+    public function testCreateJigsaw()
+    {
+        $array = [0,0,0,1,0,1,1,1,1,1];
+        $num = 0;
+        foreach ($array as $item){
+            if($item == 1){
+                $num++;
+            }
+        }
+
+        dd($num);
+    }
 }
