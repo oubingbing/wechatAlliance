@@ -62,6 +62,9 @@ class CommentService
             case Comment::ENUM_OBJ_TYPE_SALE_FRIEND:
                 $result = SaleFriend::query()->where(SaleFriend::FIELD_ID, $objId)->increment(SaleFriend::FIELD_COMMENT_NUMBER);
                 break;
+            case Comment::ENUM_OBJ_TYPE_TOPIC:
+                $result = Topic::query()->where(Topic::FIELD_ID, $objId)->increment(Topic::FIELD_COMMENT_NUMBER);
+                break;
             default:
                 $result = Post::query()->where(Post::FIELD_ID, $objId)->increment(Post::FIELD_COMMENT_NUMBER);
                 break;
@@ -132,7 +135,7 @@ class CommentService
         if($obj){
             if(isset($obj['private'])){
                 if($obj['private'] == 1){
-                    if($comment['commenter_id'] == $obj['poster_id'] && $obj['poster_id'] != $user->id){
+                    if($comment['commenter_id'] == $obj['poster_id']){
                         $nickname = '匿名の同学';
                     }
                 }
@@ -155,7 +158,7 @@ class CommentService
                     if($obj){
                         if(isset($obj['private'])){
                             if($obj['private'] == 1){
-                                if($refComment->refCommenter->id == $user->id && $obj['poster_id'] == $user->id){
+                                if($refComment->refCommenter->id == $obj['poster_id']){
                                     $refComment->refCommenter->nickname = '匿名の同学';
                                 }
                             }

@@ -164,9 +164,20 @@ $api->version('v1', function ($api) {
             /** 情侣脸比对 */
             $api->post('/compare_face',CompareFaceController::class . '@store');
 
-            /** 获取上架话题 */
+            /** 获取话题详情 */
             $api->get('/topic/{id}',TopicController::class . '@topicDetail');
 
+            /** 获取上架话题 */
+            $api->get('/topic',TopicController::class . '@topic');
+
+            /** 点赞话题 */
+            $api->post('/praise/{id}/topic',TopicController::class . '@praiseTopic');
+
+            /** 话题的评论列表 */
+            $api->get('/topic/{id}/comments',TopicController::class . '@topicComments');
+
+            /** 获取最新的话题评论 */
+            $api->get('/topic/{id}/new_comments',TopicController::class . '@getMostNewTopComments');
         });
 
     });

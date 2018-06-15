@@ -15,6 +15,7 @@ use App\Http\Service\CommentService;
 use App\Http\Service\InboxService;
 use App\Models\Comment;
 use App\Models\Inbox;
+use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -74,10 +75,21 @@ class CommentController extends Controller
             \DB::beginTransaction();
 
             $result = $this->comment->saveComment($commenterId, $objId, $content, $type, $refCommentId, $attachments, $collegeId);
-
             //如果评论对象是话题就不需要投递消息盒子
+            $privateType = Inbox::ENUM_NOT_PRIVATE;
             if($type != Comment::ENUM_OBJ_TYPE_TOPIC){
-                $this->inbox->send($fromId,$toId,$result->id,$content,$objType,$actionType,$postAt);
+                if($type == Comment::ENUM_COMMENT_POST_TYPE){
+                    //是不是匿名楼主回复的消息盒子
+                    if(isset($objData['obj'])){
+                        $obj = $objData['obj'];
+                        if(isset($obj[Post::FIELD_PRIVATE])){
+                            if($obj->{Post::FIELD_PRIVATE} == Post::ENUM_PRIVATE && $obj->{Post::FIELD_ID_POSTER} == $commenterId){
+                                $privateType = Inbox::ENUM_PRIVATE;
+                            }
+                        }
+                    }
+                }
+                $this->inbox->send($fromId,$toId,$result->id,$content,$objType,$actionType,$postAt,$privateType);
             }
 
             $this->comment->incrementComment($type,$objId);

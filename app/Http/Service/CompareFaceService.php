@@ -97,7 +97,7 @@ class CompareFaceService
             $keyWorld = '镜子脸';
             $level = 6;
             $message = '自己的照片吧，简直一模一样。';
-        }elseif ($compareResult['confidence'] >= 80 && $compareResult['confidence'] < 100){
+        }elseif ($compareResult['confidence'] >= 80 && $compareResult['confidence'] <= 100){
             $keyWorld = '自己脸';
             $level = 7;
             $message = '别闹了，难道你喜欢你自己？';
