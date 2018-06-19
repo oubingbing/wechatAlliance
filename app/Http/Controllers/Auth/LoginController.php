@@ -114,6 +114,9 @@ class LoginController extends Controller
         $response = $http->get($url);
 
         $result = json_decode((string) $response->getBody(), true);
+        if(!isset($result['openid'])){
+            throw new ApiException('小程序登录失败，请检查您的app_id和app_secret是否正确！');
+        }
 
         $token = $this->tokenService->createToken($userInfo,$result['openid'],$weChatApp->{WechatApp::FIELD_ID});
 

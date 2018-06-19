@@ -214,6 +214,13 @@ class AppController extends Controller
         return view('admin.app.deploy');
     }
 
+    /**
+     * 设置客服
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function serService()
     {
         $user = request()->get('user');
