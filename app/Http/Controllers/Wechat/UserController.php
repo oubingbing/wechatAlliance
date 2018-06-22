@@ -5,6 +5,7 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\UserService;
 use App\Jobs\UserLogs;
 use App\Models\Colleges;
 use App\Models\User;
@@ -174,6 +175,56 @@ class UserController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * 保存用户资料
+     *
+     * @author yezi
+     *
+     * @return mixed
+     * @throws ApiException
+     */
+    public function createProfile()
+    {
+        $user = request()->input('user');
+        $mobile = request()->input('mobile');
+        $name = request()->input('name');
+        $grade = request()->input('grade');
+        $college = request()->input('college');
+        $major = request()->input('major');
+        $studentNumber = request()->input('student_number');
+
+        if(!$mobile){
+            throw new ApiException('手机不能为空！',500);
+        }
+
+        if($name){
+            throw new ApiException('姓名不能为空！',500);
+        }
+
+        $userService = app(UserService::class);
+
+        try {
+            \DB::beginTransaction();
+
+            $updateResult = $userService->updateMobile($user->id,$mobile);
+            if(!$updateResult){
+                throw new ApiException('跟新数据失败！',500);
+            }
+
+            $result = $userService->saveProfile($name,$grade,$studentNumber,$major,$college);
+            if(!$result){
+                throw new ApiException('保存数据失败！',500);
+            }
+
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            throw new ApiException($e, 60001);
+        }
+
+        return $result;
     }
 
 }

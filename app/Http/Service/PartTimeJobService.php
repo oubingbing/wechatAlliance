@@ -12,9 +12,12 @@ namespace App\Http\Service;
 use App\Exceptions\ApiException;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
+use App\Models\User;
 
 class PartTimeJobService
 {
+    private $builder;
+
     /**
      * 新建悬赏
      *
@@ -209,6 +212,91 @@ class PartTimeJobService
         $result = $job->save();
 
         return $result;
+    }
+
+    /**
+     * 构造查询语句
+     *
+     * @author yezi
+     *
+     * @param $user
+     * @param int $status
+     * @return $this
+     */
+    public function builder($user,$status)
+    {
+        $this->builder = PartTimeJob::query()
+            ->with([PartTimeJob::REL_USER=>function($query){
+                $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
+            }])
+            ->whereHas(PartTimeJob::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
+            ->when($status,function ($query)use($status){
+                return $query->where(PartTimeJob::FIELD_STATUS,$status);
+            })
+            ->get();
+
+        return $this;
+    }
+
+    /**
+     * 过滤查询
+     *
+     * @author yezi
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function filter($title='')
+    {
+        $this->builder->when($title,function ($query)use($title){
+            return $query->where(PartTimeJob::FIELD_TITLE,'ilike',"%$title%");
+        });
+
+        return $this;
+    }
+
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @param $sort
+     * @return $this
+     */
+    public function sort($orderBy,$sort)
+    {
+        $this->builder->orderBy($orderBy,$sort);
+
+        return $this;
+    }
+
+    /**
+     * 返回查询构建的语句
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function done()
+    {
+        return $this->builder;
+    }
+
+    /**
+     * 格式化单挑数据
+     *
+     * @author yezi
+     *
+     * @param $job
+     * @param $user
+     * @return mixed
+     */
+    public function formatSinglePost($job,$user)
+    {
+        return $job;
     }
 
 }

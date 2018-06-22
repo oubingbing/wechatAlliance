@@ -11,6 +11,7 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
@@ -174,6 +175,41 @@ class PartTimeJobController extends Controller
         }
 
         return $finishPartTimeResult;
+    }
+
+    /**
+     * 获取悬赏令列表
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function partTimJobs()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size', 10);
+        $pageNumber = request()->input('page_number', 1);
+        $orderBy = request()->input('order_by', 'created_at');
+        $sortBy = request()->input('sort_by', 'desc');
+        $status = request()->input('status');
+        $filter = request()->input('filter');
+
+        $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
+
+        $query = $this->partTimeJob->builder($user,$status)->filter($filter)->sort($orderBy,$sortBy)->done();
+
+        $jobs = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
+
+            return $this->partTimeJob->formatSinglePost($item, $user);
+
+        });
+
+        return $jobs;
+    }
+
+    public function detail($id)
+    {
+        $user = request()->input('user');
     }
 
 }

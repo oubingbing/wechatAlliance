@@ -23,6 +23,12 @@ class YunPianService
         $this->apikey = env('YUN_PIAN_KEY');
     }
 
+    //发送验证码
+    public function sendMessageCode($mobile)
+    {
+
+    }
+
     public function sendMessage($appName,$mobile,$messageType='表白帖子')
     {
         $mobile = '13425144866';

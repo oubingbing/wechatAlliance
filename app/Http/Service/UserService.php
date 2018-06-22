@@ -10,6 +10,7 @@ namespace App\Http\Service;
 
 
 use App\Models\User;
+use App\Models\UserProfile;
 
 class UserService
 {
@@ -86,6 +87,69 @@ class UserService
     public function done()
     {
         return $this->builder;
+    }
+
+    public function getUserById($id)
+    {
+        $user = User::find($id);
+
+        return $user;
+    }
+
+    /**
+     * 获取个人资料
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getProfileById($userId)
+    {
+        $profile = UserProfile::query()->where(UserProfile::FIELD_ID_USER,$userId)->first();
+
+        return $profile;
+    }
+
+    /**
+     * 跟新手机号码
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $mobile
+     * @return int
+     */
+    public function updateMobile($userId,$mobile)
+    {
+        $result = User::query()->where(User::FIELD_ID,$userId)->update([User::FIELD_MOBILE=>$mobile]);
+
+        return $result;
+    }
+
+    /**
+     * 保存个人资料
+     *
+     * @author yezi
+     *
+     * @param $name
+     * @param $grade
+     * @param $number
+     * @param $major
+     * @param $college
+     * @return mixed
+     */
+    public function saveProfile($name,$grade,$number,$major,$college)
+    {
+        $profile = UserProfile::create([
+            UserProfile::FIELD_NAME=>$name,
+            UserProfile::FIELD_GRADE=>$grade,
+            UserProfile::FIELD_STUDENT_NUMBER=>$number,
+            UserProfile::FIELD_COLLEGE=>$college,
+            UserProfile::FIELD_MAJOR=>$major
+        ]);
+
+        return $profile;
     }
 
 }

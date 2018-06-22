@@ -17,9 +17,11 @@ class CreateUserProfilesTable extends Migration
             $table->bigIncrements('id');
 
             $table->bigInteger('user_id')->index()->comment('用户ID');
+            $table->string('nickname')->default('')->comment('微信初始昵称');
+            $table->string('avatar')->default('')->comment('微信初始头像');
             $table->string('name',128)->default('')->comment('用户证实姓名');
-            $table->string('card_no')->default('')->comment('学号');
-            $table->tinyInteger('用户年级')->dafault(1)->comment('用户年级');
+            $table->string('student_number')->default('')->comment('学号');
+            $table->tinyInteger('grade')->dafault(1)->comment('用户年级,1=大一，2=大二，3=大三，4=大四，5=其他');
             $table->string('major')->default('')->comment('专业');
             $table->string('college')->default('')->comment('所属学院');
 

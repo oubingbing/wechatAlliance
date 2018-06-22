@@ -48,6 +48,7 @@ class PartTimeJob extends BaseModel
     const ENUM_STATUS_EXPIRE = 4;
     const ENUM_STATUS_SUCCESS = 5;
 
+    const REL_USER = 'user';
 
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
@@ -65,4 +66,15 @@ class PartTimeJob extends BaseModel
         self::FIELD_END_AT
     ];
 
+    /**
+     * 发帖人
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class,self::FIELD_ID_BOSS);
+    }
 }

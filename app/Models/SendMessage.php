@@ -25,17 +25,17 @@ class SendMessage extends BaseModel
     /** Field code */
     const FIELD_CODE = 'code';
 
+    /** Field type 消息类型,1=短息验证码，2=... */
+    const FIELD_TYPE = 'type';
+
     /** Field status 发送状态1=成功，2=失败 */
     const FIELD_STATUS = 'status';
 
-    /** field created_at */
-    const FIELD_CREATED_AT = 'created_at';
+    /** Field expired_at 短信验证码有效期 */
+    const Field_expired_at = 'expired_at';
 
-    /** field updated_at */
-    const FIELD_UPDATED_AT = 'updated_at';
-
-    /** field deleted_at */
-    const FIELD_DELETED_AT = 'deleted_at';
+    /** 短息验证码 */
+    const ENUM_TYPE_MESSAGE_CODE = 1;
 
     /** 发送成功 */
     const STATUS_SUCCESS = 1;
@@ -46,6 +46,8 @@ class SendMessage extends BaseModel
         self::FIELD_ID,
         self::FIELD_CODE,
         self::FIELD_MOBILE,
+        self::FIELD_TYPE,
+        self::Field_expired_at,
         self::FIELD_CREATED_AT,
         self::FIELD_UPDATED_AT,
         self::FIELD_DELETED_AT
@@ -53,13 +55,13 @@ class SendMessage extends BaseModel
 
     public static function getEffectMessageCode($mobile,$code)
     {
-        $result = MessageCode::query()
+        /*$result = MessageCode::query()
             ->where(MessageCode::FIELD_MOBILE,$mobile)
             ->where(MessageCode::FIELD_CODE,$code)
             ->where(MessageCode::FIELD_UPDATED_AT,'<=',Carbon::now())
             ->first();
 
-        return $result;
+        return $result;*/
     }
 
 }
