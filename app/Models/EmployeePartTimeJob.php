@@ -23,7 +23,7 @@ class EmployeePartTimeJob extends BaseModel
     /** Field user_id 赏金猎人ID */
     const FIELD_ID_USER = 'user_id';
 
-    /** Field status 于悬赏的关系状态 */
+    /** Field status 与悬赏的关系状态 */
     const FIELD_STATUS = 'status';
 
     /** Field score 任务得分 */
@@ -34,6 +34,16 @@ class EmployeePartTimeJob extends BaseModel
 
     /** attachments 评论附件 */
     const FIELD_ATTACHMENTS = 'attachments';
+
+    /** 用户执行悬赏令的状态 1=执行任务中，2=被雇主不信任解除雇佣关系,3=任务完成 */
+    const ENUM_STATUS_WORKING = 1;
+    const ENUM_STATUS_BE_FIRED = 2;
+    const ENUM_STATUS_SUCCESS = 3;
+
+    /** 任务评分，1=好评，2=中评，3=差评 */
+    const ENUM_SCORE_GOOD = 1;
+    const ENUM_SCORE_MIDDLE = 2;
+    const ENUM_SCORE_BAD = 3;
 
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
