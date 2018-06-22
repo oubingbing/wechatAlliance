@@ -23,16 +23,10 @@ class YunPianService
         $this->apikey = env('YUN_PIAN_KEY');
     }
 
-    //发送验证码
-    public function sendMessageCode($mobile)
+    public function sendMessage($content,$mobile)
     {
-
-    }
-
-    public function sendMessage($appName,$mobile,$messageType='表白帖子')
-    {
-        $mobile = '13425144866';
-        $content = "【恋言网】您收到一条表白帖子，微信搜索小程序小情书，进入后搜索您的手机号码，即可查看";
+        //$mobile = '13425144866';
+        //$content = "【恋言网】您收到一条表白帖子，微信搜索小程序小情书，进入后搜索您的手机号码，即可查看";
 
         $result = app(YunPianService::class)->sendSingle($mobile,$content);
     }
