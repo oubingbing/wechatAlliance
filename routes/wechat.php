@@ -181,6 +181,15 @@ $api->version('v1', function ($api) {
 
             /** 修改用户信息 */
             $api->patch('/update/{id}/user',UserController::class . '@updateUser');
+
+            /** 获取手机验证码 */
+            $api->get('/get_message_code',IndexController::class . '@getMessageCode');
+
+            /** 提交用户资料 */
+            $api->post('/profile',UserController::class . '@createProfile');
+
+            /** 获取个人资料 */
+            $api->get('/profile',UserController::class . '@profile');
         });
 
     });

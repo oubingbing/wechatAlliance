@@ -24,7 +24,7 @@ class CreateTableSecretMessagesTable extends Migration
             $table->string('code')->defalut('0000')->index()->commemt('读信验证码');
 
             $table->longText('content')->nullable()->comment('内容');
-            $table->jsonb('attachments')->nullable()->comment('附件的内容');
+            $table->jsonb('attachments')->comment('附件的内容');
 
             $table->tinyInteger('status')->default(1)->comment('是否已读，1=未读，2=已读');
 

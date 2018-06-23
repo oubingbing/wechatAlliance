@@ -5,11 +5,13 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\SendMessageService;
 use App\Http\Service\UserService;
 use App\Jobs\UserLogs;
 use App\Models\Colleges;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller
 {
@@ -185,35 +187,40 @@ class UserController extends Controller
      * @return mixed
      * @throws ApiException
      */
-    public function createProfile()
+    public function createProfile(\Illuminate\Http\Request $request)
     {
-        $user = request()->input('user');
-        $mobile = request()->input('mobile');
-        $name = request()->input('name');
-        $grade = request()->input('grade');
-        $college = request()->input('college');
-        $major = request()->input('major');
-        $studentNumber = request()->input('student_number');
+        $user = $request->input('user');
+        $mobile = $request->input('mobile');
+        $name = $request->input('username');
+        //$grade = $request->input('grade');
+        $grade = 1;
+        $college = $request->input('college');
+        $major = $request->input('major');
+        $studentNumber = $request->input('student_number');
+        $code = $request->input('code');
 
-        if(!$mobile){
-            throw new ApiException('手机不能为空！',500);
-        }
-
-        if($name){
-            throw new ApiException('姓名不能为空！',500);
-        }
+        app(SendMessageService::class)->validCode($code);
 
         $userService = app(UserService::class);
+        $valid = $userService->validProfile($request);
+        if(!$valid['valid']){
+            throw new ApiException($valid['message'],500);
+        }
+
+        $validPhone = validMobile($mobile);
+        if($validPhone != 1){
+            throw new ApiException('手机号码格式错误',500);
+        }
 
         try {
             \DB::beginTransaction();
 
             $updateResult = $userService->updateMobile($user->id,$mobile);
             if(!$updateResult){
-                throw new ApiException('跟新数据失败！',500);
+                throw new ApiException('更新数据失败！',500);
             }
 
-            $result = $userService->saveProfile($name,$grade,$studentNumber,$major,$college);
+            $result = $userService->saveProfile($user,$name,$grade,$studentNumber,$major,$college);
             if(!$result){
                 throw new ApiException('保存数据失败！',500);
             }
@@ -225,6 +232,22 @@ class UserController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * 获取个人资料
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function profile()
+    {
+        $user = request()->input('user');
+
+        $profile = app(UserService::class)->getProfileById($user->id);
+
+        return $profile;
     }
 
 }

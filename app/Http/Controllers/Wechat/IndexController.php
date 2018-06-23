@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\PostService;
 use App\Http\Service\SaleFriendService;
+use App\Http\Service\YunPianService;
 use App\Models\SaleFriend;
 use App\Models\User;
 use App\Models\WechatApp;
@@ -92,4 +93,33 @@ class IndexController extends Controller
         return $result;
     }
 
+    /**
+     * 发送验证码
+     *
+     * @author yezi
+     *
+     * @return mixed
+     * @throws ApiException
+     */
+    public function getMessageCode()
+    {
+        $user = request()->input('user');
+        $phone = request()->input('phone');
+
+        if(!$phone){
+            throw new ApiException('手机号码不能为空！',500);
+        }
+
+        $validPhone = validMobile($phone);
+        if($validPhone != 1){
+            throw new ApiException('手机号码格式错误',500);
+        }
+
+        $result = app(YunPianService::class)->sendMessageCode($phone);
+        if($result['code'] != 0){
+            throw new ApiException('发送失败！',500);
+        }
+
+        return $result;
+    }
 }

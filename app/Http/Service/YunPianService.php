@@ -9,6 +9,9 @@
 namespace App\Http\Service;
 
 
+use App\Models\SendMessage;
+use Carbon\Carbon;
+
 class YunPianService
 {
     protected $singleUrl;
@@ -23,12 +26,39 @@ class YunPianService
         $this->apikey = env('YUN_PIAN_KEY');
     }
 
+    /**
+     * 发送短信验证码
+     *
+     * @author yezi
+     *
+     * @param $phone
+     * @return mixed
+     */
+    public function sendMessageCode($phone)
+    {
+        $code = random_int(10000,100000);
+        $content = "【情书网】Hi，同学，您的验证码是".$code."。如非本人操作，请忽略本短信";
+
+        $result = $this->sendMessage($content,$phone);
+        if($result['code'] == 0){
+            $status = SendMessage::ENUM_STATUS_SUCCESS;
+        }else{
+            $status = SendMessage::ENUM_STATUS_FAIL;
+        }
+
+        $type = SendMessage::ENUM_TYPE_MESSAGE_CODE;
+        $sessionId = 0;
+        $expire = Carbon::now()->addSecond(90);
+        app(SendMessageService::class)->saveSendMessageLog($phone,$code,$status,$type,$sessionId,$expire);
+
+        return $result;
+    }
+
     public function sendMessage($content,$mobile)
     {
-        //$mobile = '13425144866';
-        //$content = "【恋言网】您收到一条表白帖子，微信搜索小程序小情书，进入后搜索您的手机号码，即可查看";
-
         $result = app(YunPianService::class)->sendSingle($mobile,$content);
+
+        return $result;
     }
 
     /**

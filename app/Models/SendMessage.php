@@ -19,6 +19,9 @@ class SendMessage extends BaseModel
     /** Field id */
     const FIELD_ID = 'id';
 
+    /** Field message_session_id 会话id */
+    const FIELD_ID_MESSAGE_SESSION = 'message_session_id';
+
     /** Field mobile */
     const FIELD_MOBILE = 'mobile';
 
@@ -32,22 +35,24 @@ class SendMessage extends BaseModel
     const FIELD_STATUS = 'status';
 
     /** Field expired_at 短信验证码有效期 */
-    const Field_expired_at = 'expired_at';
+    const FIELD_EXPIRED_AT = 'expired_at';
 
     /** 短息验证码 */
     const ENUM_TYPE_MESSAGE_CODE = 1;
 
     /** 发送成功 */
-    const STATUS_SUCCESS = 1;
+    const ENUM_STATUS_SUCCESS = 1;
     /** 发送失败 */
-    const STATUS_FAIL = 2;
+    const ENUM_STATUS_FAIL = 2;
 
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_CODE,
         self::FIELD_MOBILE,
+        self::FIELD_STATUS,
+        self::FIELD_ID_MESSAGE_SESSION,
         self::FIELD_TYPE,
-        self::Field_expired_at,
+        self::FIELD_EXPIRED_AT,
         self::FIELD_CREATED_AT,
         self::FIELD_UPDATED_AT,
         self::FIELD_DELETED_AT

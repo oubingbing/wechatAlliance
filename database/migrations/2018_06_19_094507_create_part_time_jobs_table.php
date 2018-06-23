@@ -18,8 +18,8 @@ class CreatePartTimeJobsTable extends Migration
 
             $table->bigInteger('user_id')->index()->comment('悬赏人ID');
             $table->string('title')->default('')->comment('悬赏标题');
-            $table->longText('content')->default('')->comment('悬赏内容');
-            $table->jsonb('attachments')->nullable()->comment('悬赏附件');
+            $table->longText('content')->nullable()->comment('悬赏内容');
+            $table->jsonb('attachments')->comment('悬赏附件');
             $table->float('salary')->default(0)->comment('悬赏酬劳');
 
             $table->tinyInteger('status')->default(1)->comment('悬赏的状态，1=悬赏中，2=任务中，3=悬赏终止，4=悬赏过期，5=悬赏完成');
