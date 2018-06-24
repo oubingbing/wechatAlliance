@@ -20,6 +20,7 @@ use App\Http\Wechat\FollowController;
 use App\Http\Wechat\InboxController;
 use App\Http\Wechat\IndexController;
 use App\Http\Wechat\MatchLoveController;
+use App\Http\Wechat\PartTimeJobController;
 use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
 use App\Http\Wechat\SaleFriendController;
@@ -190,6 +191,15 @@ $api->version('v1', function ($api) {
 
             /** 获取个人资料 */
             $api->get('/profile',UserController::class . '@profile');
+
+            /** 发布悬赏 */
+            $api->post('/post_help',PartTimeJobController::class . '@store');
+
+            /** 悬赏列表 */
+            $api->get('/helps',PartTimeJobController::class . '@partTimJobs');
+
+            /** 获取最新的悬赏 */
+            $api->get('/new_helps',PartTimeJobController::class . '@getMostNew');
         });
 
     });

@@ -15,7 +15,7 @@ use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class PartTimeJobController extends Controller
 {
@@ -42,7 +42,7 @@ class PartTimeJobController extends Controller
         $content = $request->input('content');
         $attachments = $request->input('attachments',[]);
         $salary = $request->input('salary',0);
-        $endAt = $request->input('end_at');
+        $endAt = $request->input('end_at',null);
 
         $valid = $this->partTimeJob->validParam($request);
         if(!$valid['valid']){
@@ -132,6 +132,14 @@ class PartTimeJobController extends Controller
         return $result;
     }
 
+    /**
+     * 完成任务
+     *
+     * @author yezi
+     *
+     * @return bool
+     * @throws ApiException
+     */
     public function finishJob()
     {
         $user = request()->input('user');
@@ -191,7 +199,7 @@ class PartTimeJobController extends Controller
         $pageNumber = request()->input('page_number', 1);
         $orderBy = request()->input('order_by', 'created_at');
         $sortBy = request()->input('sort_by', 'desc');
-        $status = request()->input('status');
+        $status = request()->input('type');
         $filter = request()->input('filter');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
@@ -205,6 +213,27 @@ class PartTimeJobController extends Controller
         });
 
         return $jobs;
+    }
+
+    /**
+     * 获取最新的悬赏
+     *
+     * @author yezi
+     *
+     * @return static
+     */
+    public function getMostNew()
+    {
+        $user = request()->input('user');
+        $time = request()->input('time');
+
+        $result = app(PartTimeJobService::class)->newList($user,$time);
+
+        $result = collect($result)->map(function ($item)use($user){
+            return $this->partTimeJob->formatSinglePost($item, $user);
+        });
+
+        return $result;
     }
 
     public function detail($id)

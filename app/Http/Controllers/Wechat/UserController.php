@@ -192,8 +192,7 @@ class UserController extends Controller
         $user = $request->input('user');
         $mobile = $request->input('mobile');
         $name = $request->input('username');
-        //$grade = $request->input('grade');
-        $grade = 1;
+        $grade = $request->input('grade');
         $college = $request->input('college');
         $major = $request->input('major');
         $studentNumber = $request->input('student_number');
@@ -246,6 +245,9 @@ class UserController extends Controller
         $user = request()->input('user');
 
         $profile = app(UserService::class)->getProfileById($user->id);
+        if($profile){
+            $profile->phone = $user->{User::FIELD_MOBILE};
+        }
 
         return $profile;
     }

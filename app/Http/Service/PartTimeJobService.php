@@ -214,6 +214,23 @@ class PartTimeJobService
         return $result;
     }
 
+    public function newList($user,$time)
+    {
+        $result = PartTimeJob::query()
+            ->with([PartTimeJob::REL_USER=>function($query){
+                $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
+            }])
+            ->whereHas(PartTimeJob::REL_USER,function ($query)use($user){
+                $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+            })
+            ->when($time, function ($query) use ($time) {
+                return $query->where(PartTimeJob::FIELD_CREATED_AT, '>=', $time);
+            })
+            ->get();
+
+        return $result;
+    }
+
     /**
      * 构造查询语句
      *
@@ -232,10 +249,13 @@ class PartTimeJobService
             ->whereHas(PartTimeJob::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
             })
-            ->when($status,function ($query)use($status){
+            ->when(in_array($status,[PartTimeJob::ENUM_STATUS_RECRUITING,PartTimeJob::ENUM_STATUS_WORKING,PartTimeJob::ENUM_STATUS_END,PartTimeJob::ENUM_STATUS_SUCCESS]),function ($query)use($status){
                 return $query->where(PartTimeJob::FIELD_STATUS,$status);
-            })
-            ->get();
+            });
+
+        if($status == 6){
+            $this->builder->where(PartTimeJob::FIELD_ID_BOSS,$user->id);
+        }
 
         return $this;
     }

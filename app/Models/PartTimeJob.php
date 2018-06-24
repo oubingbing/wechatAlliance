@@ -41,12 +41,11 @@ class PartTimeJob extends BaseModel
     /** Field end_at 兼职的是小日期 */
     const FIELD_END_AT = 'end_at';
 
-    /** field status 悬赏的状态 1=悬赏中，2=任务中，3=悬赏终止，4=悬赏过期，5=悬赏完成 */
+    /** field status 悬赏的状态 1=悬赏中，2=任务中，3=悬赏终止，4=悬赏完成 */
     const ENUM_STATUS_RECRUITING = 1;
     const ENUM_STATUS_WORKING = 2;
     const ENUM_STATUS_END = 3;
-    const ENUM_STATUS_EXPIRE = 4;
-    const ENUM_STATUS_SUCCESS = 5;
+    const ENUM_STATUS_SUCCESS = 4;
 
     const REL_USER = 'user';
 
