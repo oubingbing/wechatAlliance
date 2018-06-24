@@ -46,6 +46,22 @@ class PartTimeJobService
     }
 
     /**
+     * 根据主键更新状态
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @param $status
+     * @return int
+     */
+    public function updatePartTimeJobStatusById($id,$status)
+    {
+        $result = PartTimeJob::query()->where(PartTimeJob::FIELD_ID,$id)->update([PartTimeJob::FIELD_STATUS=>$status]);
+
+        return $result;
+    }
+
+    /**
      * 验证参数
      *
      * @author yezi
@@ -131,12 +147,13 @@ class PartTimeJobService
      * @param $status
      * @return mixed
      */
-    public function saveEmployeeParTimeJob($employeeId,$partTimeJobId,$status)
+    public function saveEmployeeParTimeJob($employeeId,$partTimeJobId,$status,$attachments=[])
     {
         $result = EmployeePartTimeJob::create([
             EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB=>$partTimeJobId,
             EmployeePartTimeJob::FIELD_ID_USER=>$employeeId,
-            EmployeePartTimeJob::FIELD_STATUS=>$status
+            EmployeePartTimeJob::FIELD_STATUS=>$status,
+            EmployeePartTimeJob::FIELD_ATTACHMENTS=>$attachments
         ]);
 
         return $result;
@@ -214,6 +231,15 @@ class PartTimeJobService
         return $result;
     }
 
+    /**
+     * 获取最新帖子
+     *
+     * @author yezi
+     *
+     * @param $user
+     * @param $time
+     * @return mixed
+     */
     public function newList($user,$time)
     {
         $result = PartTimeJob::query()
@@ -245,6 +271,8 @@ class PartTimeJobService
         $this->builder = PartTimeJob::query()
             ->with([PartTimeJob::REL_USER=>function($query){
                 $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
+            },PartTimeJob::REL_EMPLOYEE=>function($query){
+                $query->select(EmployeePartTimeJob::FIELD_ID,EmployeePartTimeJob::FIELD_ID_USER,EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,EmployeePartTimeJob::FIELD_STATUS);
             }])
             ->whereHas(PartTimeJob::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
@@ -316,6 +344,22 @@ class PartTimeJobService
      */
     public function formatSinglePost($job,$user)
     {
+        $job->can_entry = false;
+        $job->can_delete = false;
+        $job->role = '';
+        if($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
+            $job->can_entry = true;
+            $job->can_delete = true;
+            $job->role = 'boss';
+        }
+
+        if($job->{PartTimeJob::REL_EMPLOYEE}){
+            if($job->{PartTimeJob::REL_EMPLOYEE}->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
+                $job->can_entry = true;
+                $job->role = 'employee';
+            }
+        }
+
         return $job;
     }
 

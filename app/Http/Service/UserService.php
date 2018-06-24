@@ -11,6 +11,7 @@ namespace App\Http\Service;
 
 use App\Models\User;
 use App\Models\UserProfile;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class UserService
 {
@@ -210,6 +211,11 @@ class UserService
         }else{
             return ['valid'=>true,'message'=>'success'];
         }
+    }
+
+    public function getPhoneById($id)
+    {
+        return User::query()->where(User::FIELD_ID,$id)->value(User::FIELD_MOBILE);
     }
 
 }

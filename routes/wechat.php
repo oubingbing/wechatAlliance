@@ -200,6 +200,12 @@ $api->version('v1', function ($api) {
 
             /** 获取最新的悬赏 */
             $api->get('/new_helps',PartTimeJobController::class . '@getMostNew');
+
+            /** 接单 */
+            $api->post('/receipt_order',PartTimeJobController::class . '@receiptOrder');
+
+            /** 悬赏令详情 */
+            $api->get('/job_detail/{id}',PartTimeJobController::class . '@detail');
         });
 
     });

@@ -13,6 +13,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
+use App\Http\Service\UserService;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
 use Illuminate\Http\Request;
@@ -79,7 +80,11 @@ class PartTimeJobController extends Controller
             throw new ApiException('悬赏不存在！',500);
         }
 
-        if($parTimeJob != PartTimeJob::ENUM_STATUS_RECRUITING){
+        if($parTimeJob->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
+            throw new ApiException('不能接自己的悬赏令！',500);
+        }
+
+        if($parTimeJob->{PartTimeJob::FIELD_STATUS} != PartTimeJob::ENUM_STATUS_RECRUITING){
             throw new ApiException('该悬赏令不处于悬赏中！',500);
         }
 
@@ -88,10 +93,24 @@ class PartTimeJobController extends Controller
             throw new ApiException('您已接过该悬赏令，不能重复接单！',500);
         }
 
-        $status = EmployeePartTimeJob::ENUM_STATUS_WORKING;
-        $result = $this->partTimeJob->saveEmployeeParTimeJob($user->id,$orderId,$status);
-        if(!$result){
-            throw new ApiException('接单失败！',500);
+        try{
+            \DB::beginTransaction();
+
+            $status = EmployeePartTimeJob::ENUM_STATUS_WORKING;
+            $result = $this->partTimeJob->saveEmployeeParTimeJob($user->id,$orderId,$status);
+            if(!$result){
+                throw new ApiException('接单失败！',500);
+            }
+
+            $updateResult = $this->partTimeJob->updatePartTimeJobStatusById($orderId,PartTimeJob::ENUM_STATUS_WORKING);
+            if(!$updateResult){
+                throw new ApiException('接单失败！',500);
+            }
+
+            \DB::commit();
+        }catch (\Exception $exception){
+            \DB::rollBack();
+            throw new ApiException($exception);
         }
 
         return $result;
@@ -236,9 +255,34 @@ class PartTimeJobController extends Controller
         return $result;
     }
 
+    /**
+     * 悬赏令详情
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     */
     public function detail($id)
     {
         $user = request()->input('user');
+
+        $job = $this->partTimeJob->getPartTimeJobById($id);
+        $job->{PartTimeJob::REL_USER};
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+
+        $userService = app(UserService::class);
+        $job->boss_profile = $userService->getProfileById($job->{PartTimeJob::FIELD_ID_BOSS});
+        $job->boss_profile->phone = $userService->getPhoneById($job->{PartTimeJob::FIELD_ID_BOSS});
+        $job->employee_profile = '';
+        if($employee){
+            $job->employee_profile = $userService->getProfileById($employee->{EmployeePartTimeJob::FIELD_ID_USER});
+            $job->employee_profile->phone = $userService->getPhoneById($employee->{EmployeePartTimeJob::FIELD_ID_USER});
+        }
+
+        $result = $this->partTimeJob->formatSinglePost($job,$user);
+
+        return $result;
     }
 
 }
