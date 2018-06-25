@@ -20,6 +20,7 @@ class CreateTemplateTable extends Migration
             $table->string('template_id')->comment('模板ID');
             $table->string('title')->comment('消息模板标题');
             $table->text('content')->nullable()->comment('模板消息内容');
+            $table->jsonb('keyword_ids')->comment('消息模板关键字组合模板排列ID');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

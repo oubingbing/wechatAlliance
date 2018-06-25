@@ -48,7 +48,8 @@ class WeChatMessageService
                     WeChatTemplate::FIELD_ID_APP=>$this->appId,
                     WeChatTemplate::FIELD_ID_TEMPLATE=>$result['template_id'],
                     WeChatTemplate::FIELD_TITLE=>$item->{TemplateKeyWord::FIELD_TITLE},
-                    WeChatTemplate::FIELD_CONTENT=>$item->{TemplateKeyWord::FIELD_CONTENT}
+                    WeChatTemplate::FIELD_CONTENT=>$item->{TemplateKeyWord::FIELD_CONTENT},
+                    WeChatTemplate::FIELD_KEY_WORD_IDS=>json_encode($item->{TemplateKeyWord::FIELD_KEY_WORD_IDS})
                 ]);
             }else{
                 throw new ApiException('初始化错误！',500);
@@ -111,11 +112,22 @@ class WeChatMessageService
      *
      * @return mixed
      */
-    public function send($openId,$templateId,$content,$fromId,$page='')
+    public function send($openId,$templateId,$values,$fromId,$page='')
     {
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token='.$this->token;
-        $touser = $openId;
+        $template = WeChatTemplate::query()
+            ->where(WeChatTemplate::FIELD_ID_APP,$this->appId)
+            ->where(WeChatTemplate::FIELD_ID_TEMPLATE,$templateId)
+            ->first();
+        if(!$template){
+            throw new ApiException('消息模板不存在！',500);
+        }
 
+        $content = [];
+        foreach ($template->{WeChatTemplate::FIELD_ID} as $key => $item){
+            array_push($content,["keyword$key"=>$values[$key]]);
+        }
+
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token='.$this->token;
         $data = [
             'touser'=>$openId,
             'template_id'=>$templateId,
