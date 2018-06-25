@@ -3,13 +3,23 @@
 namespace App\Http\Service;
 
 use App\Exceptions\ApiException;
+use App\Models\AccessToken;
 use App\Models\User;
 use App\Models\WechatApp;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TokenService
 {
+    /**
+     * 获取微信小程序用户登录token
+     *
+     * @author yezi
+     *
+     * @param $user
+     * @return mixed
+     */
     public function getWecChatToken($user)
     {
         $token = JWTAuth::fromUser($user);
@@ -43,9 +53,18 @@ class TokenService
         return $token;
     }
 
+    /**
+     * 请求微信服务器获取access token
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return mixed
+     * @throws ApiException
+     */
     public function accessToken($appId)
     {
-        $weChatApp = WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$appId)->first();
+        $weChatApp = WechatApp::query()->find($appId);
         if(!$weChatApp){
             throw new ApiException('不是有效的key',6000);
         }
@@ -67,10 +86,26 @@ class TokenService
         return $result;
     }
 
+    /**
+     * 获取微信access token
+     *
+     * @author yezi
+     *
+     * @param $appId
+     * @return mixed
+     */
     public function getAccessToken($appId)
     {
-        $result = $this->accessToken($appId);
+        $token = AccessToken::query()->where(AccessToken::FIELD_ID_APP,$appId)->where(AccessToken::FIELD_EXPIRED_AT,'>',Carbon::now())->first();
+        if(!$token){
+            $result = $this->accessToken($appId);
+            $token = AccessToken::create([
+                AccessToken::FIELD_ID_APP=>$appId,
+                AccessToken::FIELD_TOKEN=>$result['access_token'],
+                AccessToken::FIELD_EXPIRED_AT=>Carbon::now()->addSecond($result['expires_in'])
+            ]);
+        }
 
-        return $result['access_token'];
+        return $token['token'];
     }
 }
