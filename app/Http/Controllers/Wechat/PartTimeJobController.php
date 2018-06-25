@@ -14,8 +14,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
 use App\Http\Service\UserService;
+use App\Http\Service\WeChatMessageService;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PartTimeJobController extends Controller
@@ -70,6 +72,7 @@ class PartTimeJobController extends Controller
     {
         $user = request()->input('user');
         $orderId = request()->input('id');
+        $formId = request()->input('form_id');
 
         if(!$orderId){
             throw new ApiException('悬赏令不能为空!',500);
@@ -106,6 +109,12 @@ class PartTimeJobController extends Controller
             if(!$updateResult){
                 throw new ApiException('接单失败！',500);
             }
+
+            //发送模板消息
+            $openId = $user->{User::FIELD_ID_OPENID};
+            $templateId = 'So8zN8wUoFzY3f-uIMMQqWrGsDJAJEKmrFjzaDie3ZE';
+            $values = ['您的悬赏令已被接收','代课','叶子'];
+            (new WeChatMessageService($user->{User::FIELD_ID_APP}))->send($openId,$templateId,$values,$formId);
 
             \DB::commit();
         }catch (\Exception $exception){

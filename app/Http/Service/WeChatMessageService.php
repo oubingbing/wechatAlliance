@@ -123,7 +123,7 @@ class WeChatMessageService
         }
 
         $content = [];
-        foreach ($template->{WeChatTemplate::FIELD_ID} as $key => $item){
+        foreach ($template->{WeChatTemplate::FIELD_KEY_WORD_IDS} as $key => $item){
             array_push($content,["keyword$key"=>$values[$key]]);
         }
 
