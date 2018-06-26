@@ -136,7 +136,6 @@ class WeChatMessageService
             'touser'=>$openId,
             'template_id'=>$templateId,
             'form_id'=>$fromId,
-            'color'=>env('WECHAT_COLOR','#616161'),
             'data'=>$content
         ];
         if($page){
