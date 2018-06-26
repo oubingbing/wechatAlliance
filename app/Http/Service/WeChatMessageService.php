@@ -113,7 +113,7 @@ class WeChatMessageService
      *
      * @return mixed
      */
-    public function send($openId,$title,$values,$fromId,$page='index')
+    public function send($openId,$title,$values,$fromId,$page='pages/index/index')
     {
         $template = WeChatTemplate::query()
             ->where(WeChatTemplate::FIELD_ID_APP,$this->appId)

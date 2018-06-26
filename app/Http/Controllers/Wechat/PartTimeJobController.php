@@ -113,7 +113,7 @@ class PartTimeJobController extends Controller
             //发送模板消息
             $openId = $user->{User::FIELD_ID_OPENID};
             $templateId = '任务接收通知';
-            $values = ['您的悬赏令已被接收,详情请登录小程序查看。','代课','叶子'];
+            $values = ['代课','叶子','您的悬赏令已被接收,详情请登录小程序查看。'];
             (new WeChatMessageService($user->{User::FIELD_ID_APP}))->send($openId,$templateId,$values,$formId);
 
             \DB::commit();
