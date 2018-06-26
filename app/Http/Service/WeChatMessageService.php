@@ -11,6 +11,7 @@ namespace App\Http\Service;
 
 use App\Exceptions\ApiException;
 use App\Models\TemplateKeyWord;
+use App\Models\TemplateLog;
 use App\Models\WeChatTemplate;
 use GuzzleHttp\Client;
 
@@ -142,6 +143,21 @@ class WeChatMessageService
         $response = $this->client->post($url,['json'=>$data]);
 
         $result = json_decode((string) $response->getBody(), true);
+
+        if($result['errcode' == 0]){
+            $status = TemplateLog::ENUM_STATUS_SUCCESS;
+        }else{
+            $status = TemplateLog::ENUM_STATUS_SUCCESS;
+        }
+
+        TemplateLog::create([
+            TemplateLog::FIELD_ID_OPEN=>$openId,
+            TemplateLog::FIELD_ID_TEMPLATE,$templateId,
+            TemplateLog::FIELD_ID_APP=>$this->appId,
+            TemplateLog::FIELD_CONTENT=>json_encode($data),
+            TemplateLog::FIELD_PAGE=>$page,
+            TemplateLog::FIELD_STATUS=>$status
+        ]);
 
         return $result;
     }
