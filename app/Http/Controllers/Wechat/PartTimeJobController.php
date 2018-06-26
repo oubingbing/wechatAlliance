@@ -119,7 +119,7 @@ class PartTimeJobController extends Controller
             \DB::commit();
         }catch (\Exception $exception){
             \DB::rollBack();
-            throw new ApiException($exception);
+            throw new ApiException($exception,500);
         }
 
         return $result;
