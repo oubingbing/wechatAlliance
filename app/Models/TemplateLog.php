@@ -42,6 +42,10 @@ class TemplateLog extends BaseModel
     const ENUM_STATUS_SUCCESS = 1;
     const ENUM_STATUS_FAIL = 2;
 
+    protected $casts = [
+        self::FIELD_CONTENT => 'array',
+    ];
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_APP,
