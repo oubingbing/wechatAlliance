@@ -125,7 +125,7 @@ class WeChatMessageService
         $content = [];
         foreach ($template->{WeChatTemplate::FIELD_KEY_WORD_IDS} as $key => $item){
             $keyword = $key + 1;
-            array_push($content,["keyword$keyword"=>['value'=>$values[$key]]]);
+            array_push($content,["keyword$keyword"=>['value'=>$values[$key],'color'=>'#333']]);
         }
 
         $url = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token='.$this->token;
