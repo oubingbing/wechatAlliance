@@ -113,15 +113,17 @@ class WeChatMessageService
      *
      * @return mixed
      */
-    public function send($openId,$templateId,$values,$fromId,$page='')
+    public function send($openId,$title,$values,$fromId,$page='index')
     {
         $template = WeChatTemplate::query()
             ->where(WeChatTemplate::FIELD_ID_APP,$this->appId)
-            ->where(WeChatTemplate::FIELD_ID_TEMPLATE,$templateId)
+            ->where(WeChatTemplate::FIELD_TITLE,$title)
             ->first();
         if(!$template){
             throw new ApiException('消息模板不存在！',500);
         }
+
+        $templateId = $template->{WeChatTemplate::FIELD_ID_TEMPLATE};
 
         $content = [];
         foreach ($template->{WeChatTemplate::FIELD_KEY_WORD_IDS} as $key => $item){
