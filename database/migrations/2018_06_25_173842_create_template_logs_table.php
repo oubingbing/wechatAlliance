@@ -20,6 +20,7 @@ class CreateTemplateLogsTable extends Migration
             $table->string('open_id')->comment('发送人');
             $table->string('template_id')->comment('模板ID');
             $table->jsonb('content')->comment('发送的内容');
+            $table->jsonb('result')->comment('返回结果');
             $table->string('page')->default('')->comment('跳转的页面');
 
             $table->tinyInteger('status')->default(1)->comment('发送状态，1=成功，2=失败');

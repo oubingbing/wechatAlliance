@@ -156,7 +156,8 @@ class WeChatMessageService
             TemplateLog::FIELD_ID_APP=>$this->appId,
             TemplateLog::FIELD_CONTENT=>$data,
             TemplateLog::FIELD_PAGE=>$page,
-            TemplateLog::FIELD_STATUS=>$status
+            TemplateLog::FIELD_STATUS=>$status,
+            TemplateLog::FIELD_RESULT=>$result
         ]);
 
         return $result;

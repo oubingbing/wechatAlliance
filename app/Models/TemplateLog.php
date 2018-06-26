@@ -38,12 +38,16 @@ class TemplateLog extends BaseModel
     /** Field type */
     const FIELD_TYPE = 'type';
 
+    /** Field result 返回结果 */
+    const FIELD_RESULT = 'result';
+
     /** 发送状态 status 1=成功，2=失败 */
     const ENUM_STATUS_SUCCESS = 1;
     const ENUM_STATUS_FAIL = 2;
 
     protected $casts = [
         self::FIELD_CONTENT => 'array',
+        self::FIELD_RESULT => 'array'
     ];
 
     protected $fillable = [
@@ -52,7 +56,8 @@ class TemplateLog extends BaseModel
         self::FIELD_ID_OPEN,
         self::FIELD_ID_TEMPLATE,
         self::FIELD_CONTENT,
-        self::FIELD_PAGE
+        self::FIELD_PAGE,
+        self::FIELD_RESULT
     ];
 
 }
