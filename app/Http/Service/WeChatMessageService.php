@@ -107,11 +107,17 @@ class WeChatMessageService
     }
 
     /**
-     * 发送模板消息
+     * 发送微信模板消息
      *
      * @author yezi
      *
+     * @param $openId
+     * @param $title
+     * @param $values
+     * @param $fromId
+     * @param string $page
      * @return mixed
+     * @throws ApiException
      */
     public function send($openId,$title,$values,$fromId,$page='pages/index/index')
     {
@@ -120,7 +126,9 @@ class WeChatMessageService
             ->where(WeChatTemplate::FIELD_TITLE,$title)
             ->first();
         if(!$template){
-            throw new ApiException('消息模板不存在！',500);
+            //没有模板就不发微信消息
+            //throw new ApiException('消息模板不存在！',500);
+            return false;
         }
 
         $templateId = $template->{WeChatTemplate::FIELD_ID_TEMPLATE};
