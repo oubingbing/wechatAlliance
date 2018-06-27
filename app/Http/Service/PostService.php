@@ -80,12 +80,10 @@ class PostService
                         $query->where(Follow::FIELD_ID_USER, $user->id)->where(Follow::FIELD_STATUS, Follow::ENUM_STATUS_FOLLOW);
                     });
                 }
-
                 return $query;
             })
             ->when($just, function ($query) use ($user) {
                 $query->where(Post::FIELD_ID_POSTER, $user->id);
-
                 return $query;
             })
             ->when($user->{User::FIELD_ID_COLLEGE}, function ($query) use ($user) {
@@ -194,15 +192,6 @@ class PostService
                 //是否是超管
                 if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
                     $post['can_delete'] = true;
-                }
-            }
-
-            $post['show_college'] = false;
-            $post['college']      = null;
-            if (!$user->{User::FIELD_ID_COLLEGE}) {
-                if ($post['college_id']) {
-                    $post['show_college'] = true;
-                    $post['college']      = Colleges::where(Colleges::FIELD_ID, $post['college_id'])->value(Colleges::FIELD_NAME);
                 }
             }
         }
