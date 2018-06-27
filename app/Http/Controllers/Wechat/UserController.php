@@ -58,7 +58,7 @@ class UserController extends Controller
         $job = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
         dispatch($job)->onQueue('record_visit_log');
 
-        $college = $user->college;
+        $college = $user->{User::FIELD_ID_COLLEGE};
 
         return $college ? $college->{Colleges::FIELD_NAME} : '请选择学校';
     }
