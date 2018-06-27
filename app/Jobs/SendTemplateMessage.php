@@ -29,25 +29,14 @@ class SendTemplateMessage implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * 队列执行发送微信模板消息
+     *
+     * @author yezi
      *
      * @return void
      */
     public function handle()
     {
-        $result = (new NotificationService($this->appId))->templateMessage($this->data['open_id'],$this->data['template_id'],$this->data['values'],$this->data['from_id'],$this->data['page']);
-        if($result['errcode' == 0]){
-            $status = TemplateLog::ENUM_STATUS_SUCCESS;
-        }else{
-            $status = TemplateLog::ENUM_STATUS_SUCCESS;
-        }
-
-        TemplateLog::create([
-            TemplateLog::FIELD_ID_APP=>$this->appId,
-            TemplateLog::FIELD_ID_TEMPLATE=>$this->data['template_id'],
-            TemplateLog::FIELD_ID_OPEN=>$this->data['open_id'],
-            TemplateLog::FIELD_PAGE=>$this->data['page'],
-            TemplateLog::FIELD_STATUS=>$status
-        ]);
+        (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['template_id'], $this->data['values'], $this->data['from_id'], $this->data['page']);
     }
 }
