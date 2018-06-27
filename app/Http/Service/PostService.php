@@ -68,7 +68,9 @@ class PostService
      */
     public function builder($user, $type, $just)
     {
-        $this->builder = Post::query()->with(['poster', 'praises', 'comments'])
+        $this->builder = Post::query()->with(['poster'=>function($query){
+            $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER,User::FIELD_CREATED_AT);
+        }, 'praises', 'comments'])
             ->whereHas(Post::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
             })
@@ -162,17 +164,7 @@ class PostService
     public function formatSinglePost($post, $user)
     {
         if (collect($post)->toArray()) {
-            $poster         = $post['poster'];
-            $post           = collect($post)->forget('poster');
-            $post['poster'] = [
-                'id'         => $poster->id,
-                'nickname'   => $poster->nickname,
-                'avatar'     => $poster->avatar,
-                'college_id' => $poster->college_id,
-                'created_at' => $poster->created_at,
-                'gender'     => $poster->gender
-            ];
-
+            $post = collect($post)->toArray();
 
             Carbon::setLocale('zh');
             $post[Post::FIELD_CREATED_AT] = Carbon::parse($post[Post::FIELD_CREATED_AT])->diffForHumans();
@@ -183,7 +175,6 @@ class PostService
                 if (is_null($item) || $item == null) {
                     $item = '';
                 }
-
                 return $item;
             });
 
@@ -214,7 +205,6 @@ class PostService
                     $post['college']      = Colleges::where(Colleges::FIELD_ID, $post['college_id'])->value(Colleges::FIELD_NAME);
                 }
             }
-
         }
 
         return $post;
