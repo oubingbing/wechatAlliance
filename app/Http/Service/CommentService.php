@@ -53,6 +53,15 @@ class CommentService
         return $comment;
     }
 
+    /**
+     * 评论自增
+     *
+     * @author yezi
+     *
+     * @param $type
+     * @param $objId
+     * @return int
+     */
     public function incrementComment($type, $objId)
     {
         switch ($type) {
