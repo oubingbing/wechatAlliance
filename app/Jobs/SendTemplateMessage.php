@@ -37,6 +37,6 @@ class SendTemplateMessage implements ShouldQueue
      */
     public function handle()
     {
-        (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['template_id'], $this->data['values'], $this->data['from_id'], $this->data['page']);
+        (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['title'], $this->data['values'], $this->data['form_id'], $this->data['page']);
     }
 }

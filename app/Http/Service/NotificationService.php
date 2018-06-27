@@ -45,9 +45,9 @@ class NotificationService
      * @param string $page
      * @return mixed
      */
-    public function templateMessage($openId,$templateId,$values,$fromId,$page='')
+    public function templateMessage($openId,$title,$values,$fromId,$page='')
     {
-        $result = (new WeChatMessageService($this->appId))->send($openId,$templateId,$values,$fromId,$page);
+        $result = (new WeChatMessageService($this->appId))->send($openId,$title,$values,$fromId,$page);
 
         return $result;
     }

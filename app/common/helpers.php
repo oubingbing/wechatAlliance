@@ -48,7 +48,7 @@ if( ! function_exists('senTemplateMessage') ){
             'open_id'=>$openId,
             'title'=>$title,
             'values'=>$values,
-            'from_id'=>$formId,
+            'form_id'=>$formId,
             'page'=>$page
         ];
         $job = new SendTemplateMessage($appId,$jobData);
