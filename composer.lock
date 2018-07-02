@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15926d9053ecf2cf8a819ca21c617e6d",
+    "content-hash": "99bc3074a88fa9c73a9acec7a1beea88",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -365,6 +365,80 @@
                 "parser"
             ],
             "time": "2017-02-24T16:22:25+00:00"
+        },
+        {
+            "name": "doctrine/cache",
+            "version": "v1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/cache.git",
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/doctrine/cache/b3217d58609e9c8e661cd41357a54d926c4a2a1a.zip",
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.1"
+            },
+            "conflict": {
+                "doctrine/common": ">2.2,<2.4"
+            },
+            "require-dev": {
+                "alcaeus/mongo-php-adapter": "^1.1",
+                "mongodb/mongodb": "^1.1",
+                "phpunit/phpunit": "^5.7",
+                "predis/predis": "~1.0"
+            },
+            "suggest": {
+                "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Common\\Cache\\": "lib/Doctrine/Common/Cache"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Caching library offering an object-oriented API for many cache backends",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "cache",
+                "caching"
+            ],
+            "time": "2017-08-25T07:02:50+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1251,6 +1325,54 @@
                 "rest"
             ],
             "time": "2017-06-12T11:04:56+00:00"
+        },
+        {
+            "name": "lndj/lcrawl",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lndj/Lcrawl.git",
+                "reference": "61adc5d99355155099743b288ea3be52efebb852"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/lndj/Lcrawl/61adc5d99355155099743b288ea3be52efebb852.zip",
+                "reference": "61adc5d99355155099743b288ea3be52efebb852",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/cache": "^1.6",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=5.4.0",
+                "symfony/css-selector": "^3.0",
+                "symfony/dom-crawler": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lndj\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ning Luo",
+                    "email": "luoning@luoning.me",
+                    "homepage": "http://www.luoning.me"
+                }
+            ],
+            "description": "一只优雅的正方教务系统爬虫。",
+            "homepage": "http://lcrawl.lzjtuhand.com",
+            "keywords": [
+                "wechat",
+                "教务系统",
+                "模拟登陆",
+                "正方"
+            ],
+            "time": "2016-10-30T05:35:57+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2601,6 +2723,63 @@
             "time": "2017-10-02T06:42:24+00:00"
         },
         {
+            "name": "symfony/dom-crawler",
+            "version": "v3.4.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "201b210fafcdd193c1e45b2994bf7133fb6263e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/symfony/dom-crawler/201b210fafcdd193c1e45b2994bf7133fb6263e8.zip",
+                "reference": "201b210fafcdd193c1e45b2994bf7133fb6263e8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "~2.8|~3.0|~4.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-05-01T22:53:27+00:00"
+        },
+        {
             "name": "symfony/event-dispatcher",
             "version": "v3.3.10",
             "source": {
@@ -2850,6 +3029,61 @@
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
             "time": "2017-10-05T23:40:19+00:00"
+        },
+        {
+            "name": "symfony/polyfill-ctype",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/symfony/polyfill-ctype/7cc359f1b7b80fc25ed7796be7d96adc9b354bae.zip",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "Gert de Pagter",
+                    "email": "BackEndTea@gmail.com"
+                }
+            ],
+            "description": "Symfony polyfill for ctype functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "ctype",
+                "polyfill",
+                "portable"
+            ],
+            "time": "2018-04-30T19:57:29+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -4490,6 +4724,56 @@
             "time": "2017-08-03T14:08:16+00:00"
         },
         {
+            "name": "pimple/pimple",
+            "version": "v3.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "9e403941ef9d65d20cba7d54e29fe906db42cf32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/silexphp/Pimple/9e403941ef9d65d20cba7d54e29fe906db42cf32.zip",
+                "reference": "9e403941ef9d65d20cba7d54e29fe906db42cf32",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/container": "^1.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2018-01-21T07:42:36+00:00"
+        },
+        {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
             "source": {
@@ -5087,6 +5371,63 @@
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "time": "2017-04-07T12:08:54+00:00"
+        },
+        {
+            "name": "yuan1994/z-crawler",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yuan1994/ZCrawler.git",
+                "reference": "46c48a7c1837e404c324811776fc60f7b2a80df6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/yuan1994/ZCrawler/46c48a7c1837e404c324811776fc60f7b2a80df6.zip",
+                "reference": "46c48a7c1837e404c324811776fc60f7b2a80df6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/cache": "^1.6",
+                "guzzlehttp/guzzle": "^6.2",
+                "monolog/monolog": "^1.22",
+                "php": ">=5.5.0",
+                "pimple/pimple": "^3.0",
+                "symfony/css-selector": "^3.2",
+                "symfony/dom-crawler": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ZCrawler\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "yuan1994",
+                    "email": "tianpian0805@gmail.com"
+                }
+            ],
+            "description": "【正方教务】爬虫，支持成绩查询、考试查询、课表查询、四六级成绩查询、四六级报名、选课查询、修改密码、获取用户菜单等功能，并且解析数据成易读格式，符合 psr 规范，拿来即用",
+            "keywords": [
+                "cet",
+                "crawler",
+                "exam",
+                "grade",
+                "schedule",
+                "zcrawler",
+                "zfjw",
+                "zhengfangjiaowu",
+                "模拟登录",
+                "模拟登陆",
+                "正方",
+                "正方教务",
+                "爬虫"
+            ],
+            "time": "2017-03-06T05:32:30+00:00"
         }
     ],
     "aliases": [],
