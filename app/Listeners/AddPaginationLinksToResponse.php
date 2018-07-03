@@ -37,11 +37,13 @@ class AddPaginationLinksToResponse
                 $response[$key] = $item;
             }
         }else{
+            $response['error_code'] = 0;
+            $response['error_message'] = 'success';
             $response['data'] = $data;
         }
         $response['json_api'] = [
             'meta'=>[
-                'name'=>'Json Api 小情书',
+                'name'=>'Json Api 小情书联盟',
                 'copyright'=>Carbon::now()->year.' ouzhibing@outlook.com',
                 'power_by'=>'叶子'
             ]

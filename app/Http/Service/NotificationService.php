@@ -74,4 +74,20 @@ class NotificationService
         return $result;
     }
 
+    /**
+     * 发送短信消息
+     *
+     * @author yezi
+     *
+     * @param $mobile
+     * @param $content
+     * @return mixed
+     */
+    public function sendMobileMessage($mobile,$content)
+    {
+        $result = app(YunPianService::class)->sendMessage($content,$mobile);
+
+        return $result;
+    }
+
 }

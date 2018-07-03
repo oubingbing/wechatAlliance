@@ -17,8 +17,10 @@ use App\Http\Service\UserService;
 use App\Http\Service\WeChatMessageService;
 use App\Jobs\SendTemplateMessage;
 use App\Models\EmployeePartTimeJob;
+use App\Models\Inbox;
 use App\Models\PartTimeJob;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PartTimeJobController extends Controller
@@ -62,7 +64,7 @@ class PartTimeJobController extends Controller
     }
 
     /**
-     * 接单
+     * 领取悬赏令
      *
      * @author yezi
      *
@@ -121,6 +123,8 @@ class PartTimeJobController extends Controller
         $title = '任务接收通知';
         $values = ['代课','叶子','您的悬赏令已被接收,详情请登录小程序查看。'];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
+        //投递消息盒子
+        senInbox($user->{User::FIELD_ID_APP}, $parTimeJob->{PartTimeJob::FIELD_ID_BOSS}, $parTimeJob->id, '您的悬赏令被领取了！', Inbox::ENUM_OBJ_TYPE_PART_TIME_JOB, Inbox::ENUM_ACTION_TYPE_JOB, Carbon::now());
 
         return $result;
     }

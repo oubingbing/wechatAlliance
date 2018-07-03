@@ -127,7 +127,6 @@ class WeChatMessageService
             ->first();
         if(!$template){
             //没有模板就不发微信消息
-            //throw new ApiException('消息模板不存在！',500);
             return false;
         }
 

@@ -13,6 +13,7 @@ use App\Exceptions\ApiException;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\MatchLove;
+use App\Models\PartTimeJob;
 use App\Models\Post;
 use App\Models\Praise;
 use App\Models\SaleFriend;
@@ -104,6 +105,9 @@ class InboxService
                 break;
             case 6:
                 $obj = User::query()->find($objId);
+                break;
+            case 7:
+                $obj = PartTimeJob::query()->find($objId);
                 break;
         }
 
@@ -277,6 +281,9 @@ class InboxService
                 break;
             case 6:
                 $obj = User::query()->find($objId);
+                break;
+            case 7:
+                $obj = PartTimeJob::query()->find($objId);
                 break;
         }
 

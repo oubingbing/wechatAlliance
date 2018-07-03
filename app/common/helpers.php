@@ -1,5 +1,7 @@
 <?php
 
+use App\Jobs\SendInbox;
+use App\Jobs\SendPhoneMessage;
 use App\Jobs\SendTemplateMessage;
 use Carbon\Carbon;
 
@@ -53,5 +55,29 @@ if( ! function_exists('senTemplateMessage') ){
         ];
         $job = new SendTemplateMessage($appId,$jobData);
         dispatch($job)->onQueue('send_template_message');
+    }
+}
+
+/**
+ * 投递消息盒子
+ *
+ * @author yezi
+ */
+if( ! function_exists('senInbox') ){
+    function senInbox($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0){
+        $job = new SendInbox($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private);
+        dispatch($job)->onQueue('send_inbox');
+    }
+}
+
+/**
+ * 发送短信消息
+ *
+ * @author yezi
+ */
+if( ! function_exists('sendMessage') ){
+    function sendMessage($phone,$message){
+        $job = new SendPhoneMessage($phone,$message);
+        dispatch($job)->onQueue('send_message');
     }
 }
