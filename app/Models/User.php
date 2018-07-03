@@ -88,6 +88,8 @@ class User extends Authenticatable implements JWTSubject
     /** gender 未知 */
     const ENUM_GENDER_UN_KNOW = 0;
 
+    const REL_PROFILE = 'profile';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -144,6 +146,11 @@ class User extends Authenticatable implements JWTSubject
     public function college()
     {
         return $this->belongsTo(Colleges::class,self::FIELD_ID_COLLEGE);
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class,self::FIELD_ID,UserProfile::FIELD_ID_USER);
     }
 
 }
