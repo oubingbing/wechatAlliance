@@ -41,9 +41,9 @@ class AddPaginationLinksToResponse
         }
         $response['json_api'] = [
             'meta'=>[
-                'name'=>'Json Api School',
+                'name'=>'Json Api 小情书',
                 'copyright'=>Carbon::now()->year.' ouzhibing@outlook.com',
-                'power_by'=>'yezi'
+                'power_by'=>'叶子'
             ]
         ];
         $event->content = $response;
