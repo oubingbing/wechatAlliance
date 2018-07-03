@@ -206,6 +206,9 @@ $api->version('v1', function ($api) {
 
             /** 悬赏令详情 */
             $api->get('/job_detail/{id}',PartTimeJobController::class . '@detail');
+
+            /** 确认悬赏令完成 */
+            $api->post('/finish/{id}/job',PartTimeJobController::class . '@finishJob');
         });
 
     });

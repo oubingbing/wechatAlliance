@@ -203,9 +203,9 @@ class PartTimeJobService
         $job = $this->getPartTimeJobById($id);
 
         $job->{PartTimeJob::FIELD_STATUS} = PartTimeJob::ENUM_STATUS_SUCCESS;
-        $result = $job->save();
+        $job->save();
 
-        return $result;
+        return $job;
     }
 
     /**
@@ -346,17 +346,47 @@ class PartTimeJobService
     {
         $job->can_entry = false;
         $job->can_delete = false;
+        $job->can_restart = false;
+        $job->can_comfirm = false;
+        $job->can_comment = false;
+        $job->show_contact = false;
+        $job->show_employee_tip = '';
+        $job->can_show_tip = false;
+        $job->give_up = false;
         $job->role = '';
         if($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
             $job->can_entry = true;
             $job->can_delete = true;
             $job->role = 'boss';
+            if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_WORKING){
+                $job->can_comfirm = true;
+                $job->can_restart = true;
+            }
+            if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_SUCCESS){
+                $job->can_comment = true;
+            }
         }
 
         if($job->{PartTimeJob::REL_EMPLOYEE}){
             if($job->{PartTimeJob::REL_EMPLOYEE}->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
+                $job->show_contact = true;
                 $job->can_entry = true;
                 $job->role = 'employee';
+                switch ($job->{PartTimeJob::FIELD_STATUS}){
+                    case PartTimeJob::ENUM_STATUS_WORKING:
+                        $job->can_show_tip = true;
+                        $job->show_employee_tip = '任务中';
+                        $job->give_up = true;
+                        break;
+                    case PartTimeJob::ENUM_STATUS_END:
+                        $job->can_show_tip = true;
+                        $job->show_employee_tip = '任务终止';
+                        break;
+                    case PartTimeJob::ENUM_STATUS_SUCCESS:
+                        $job->can_show_tip = true;
+                        $job->show_employee_tip = '任务完成';
+                        break;
+                }
             }
         }
 

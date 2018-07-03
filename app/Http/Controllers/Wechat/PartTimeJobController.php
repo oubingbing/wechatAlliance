@@ -172,28 +172,28 @@ class PartTimeJobController extends Controller
      * @return bool
      * @throws ApiException
      */
-    public function finishJob()
+    public function finishJob($id)
     {
         $user = request()->input('user');
-        $id = request()->input('id');
-        $employeeId = request()->input('employee_id');
 
         if(is_null($id)){
             throw new ApiException('悬赏令不能为空！',500);
         }
 
-        if(is_null($employeeId)){
-            throw new ApiException('赏金猎人不能为空！',500);
-        }
-
-        $job = $this->getPartTimeJobById($id);
+        $job = PartTimeJob::query()->find($id);
         if(!$job){
             throw new ApiException('悬赏令不存在！',500);
+        }
+
+        if($job->{PartTimeJob::FIELD_STATUS} != PartTimeJob::ENUM_STATUS_WORKING){
+            throw new ApiException('悬赏令状态错误！',500);
         }
 
         if($job->{PartTimeJob::FIELD_ID_BOSS} != $user->id){
             throw new ApiException('您不是该悬赏令的发布者！',500);
         }
+
+        $employeeId = $job->{PartTimeJob::REL_EMPLOYEE}->{EmployeePartTimeJob::FIELD_ID_USER};
 
         try{
             \DB::beginTransaction();
@@ -211,10 +211,12 @@ class PartTimeJobController extends Controller
             \DB::commit();
         }catch (\Exception $exception){
             \DB::rollBack();
-            throw new ApiException($exception);
+            throw new ApiException($exception,500);
         }
 
-        return $finishPartTimeResult;
+        $result = $this->detail($id);
+
+        return $result;
     }
 
     /**
