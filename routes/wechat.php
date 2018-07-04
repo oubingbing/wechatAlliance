@@ -32,7 +32,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
 
-    $api->group(['prefix' => 'wechat','middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1], function ($api) {
+    $api->group(['prefix' => 'wechat','middleware' => 'api.throttle', 'limit' => 150, 'expires' => 1], function ($api) {
 
         $api->get('/config',IndexController::class . '@config');
 
