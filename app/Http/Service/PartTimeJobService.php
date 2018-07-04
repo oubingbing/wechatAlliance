@@ -147,13 +147,12 @@ class PartTimeJobService
      * @param $status
      * @return mixed
      */
-    public function saveEmployeeParTimeJob($employeeId,$partTimeJobId,$status,$attachments=[])
+    public function saveEmployeeParTimeJob($employeeId,$partTimeJobId,$status)
     {
         $result = EmployeePartTimeJob::create([
             EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB=>$partTimeJobId,
             EmployeePartTimeJob::FIELD_ID_USER=>$employeeId,
             EmployeePartTimeJob::FIELD_STATUS=>$status,
-            EmployeePartTimeJob::FIELD_ATTACHMENTS=>$attachments
         ]);
 
         return $result;

@@ -366,7 +366,7 @@ class PartTimeJobController extends Controller
 
     public function delete($id)
     {
-        
+
     }
 
 }
