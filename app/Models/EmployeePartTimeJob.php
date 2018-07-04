@@ -29,12 +29,6 @@ class EmployeePartTimeJob extends BaseModel
     /** Field score 任务得分 */
     const FIELD_SCORE = 'score';
 
-    /** comments 悬赏评分 */
-    const FIELD_COMMENTS = 'comments';
-
-    /** attachments 评论附件 */
-    const FIELD_ATTACHMENTS = 'attachments';
-
     /** 用户执行悬赏令的状态 1=执行任务中，2=被雇主不信任解除雇佣关系,3=任务完成 */
     const ENUM_STATUS_WORKING = 1;
     const ENUM_STATUS_BE_FIRED = 2;
@@ -45,18 +39,19 @@ class EmployeePartTimeJob extends BaseModel
     const ENUM_SCORE_MIDDLE = 2;
     const ENUM_SCORE_BAD = 3;
 
-    protected $casts = [
-        self::FIELD_ATTACHMENTS => 'array',
-    ];
+    const REL_USER = 'user';
 
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_PART_TIME_JOB,
         self::FIELD_ID_USER,
         self::FIELD_STATUS,
-        self::FIELD_SCORE,
-        self::FIELD_COMMENTS,
-        self::FIELD_ATTACHMENTS
+        self::FIELD_SCORE
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,self::FIELD_ID_USER,User::FIELD_ID);
+    }
 
 }

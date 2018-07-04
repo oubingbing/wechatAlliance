@@ -20,8 +20,10 @@ use App\Models\EmployeePartTimeJob;
 use App\Models\Inbox;
 use App\Models\PartTimeJob;
 use App\Models\User;
+use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class PartTimeJobController extends Controller
 {
@@ -119,12 +121,25 @@ class PartTimeJobController extends Controller
             throw new ApiException($exception,500);
         }
 
-        //发送模板消息
+        $boss = $parTimeJob->{PartTimeJob::REL_USER};
+        $employeeProfile = $user->{User::REL_PROFILE};
+
+        //给悬赏人发送模板消息
         $title = '任务接收通知';
-        $values = ['代课','叶子','您的悬赏令已被接收,详情请登录小程序查看。'];
+        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},'您的悬赏令已被揭下,详情请登录小程序查看。'];
+        senTemplateMessage($user->{User::FIELD_ID_APP},$boss->{User::FIELD_ID_OPENID},$title,$values,$formId);
+
+        //给赏金猎人发送模板消息
+        $title = '任务接收通知';
+        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的揭下了{$boss->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}的悬赏令,详情请登录小程序查看。"];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
-        //投递消息盒子
-        senInbox($user->{User::FIELD_ID_APP}, $parTimeJob->{PartTimeJob::FIELD_ID_BOSS}, $parTimeJob->id, '您的悬赏令被领取了！', Inbox::ENUM_OBJ_TYPE_PART_TIME_JOB, Inbox::ENUM_ACTION_TYPE_JOB, Carbon::now());
+
+        //给悬赏人的消息盒子头发信息
+        senInbox($user->{User::FIELD_ID_APP}, $parTimeJob->{PartTimeJob::FIELD_ID_BOSS}, $parTimeJob->id, '您的悬赏令被揭下！', Inbox::ENUM_OBJ_TYPE_PART_TIME_JOB, Inbox::ENUM_ACTION_TYPE_JOB, Carbon::now());
+
+        //给悬赏人发送短信通知
+        $content = "【情书网】您好，{$employeeProfile->{UserProfile::FIELD_NAME}}接了您的悬赏令：{$parTimeJob->{PartTimeJob::FIELD_TITLE}}，详情请登陆小程序查看。";
+        sendMessage($boss->{User::FIELD_MOBILE},$content);
 
         return $result;
     }
@@ -159,13 +174,13 @@ class PartTimeJobController extends Controller
             throw new ApiException('你不是该悬赏令的发布者！',500);
         }
 
-        $result = $this->partTimeJob->commentJob($employeeId,$id,$score,$comment,$attachments);
+        $result = $this->partTimeJob->commentJob($employeeId,$id,$score);
 
         return $result;
     }
 
     /**
-     * 完成任务
+     * 确认完成任务
      *
      * @author yezi
      *
@@ -175,12 +190,13 @@ class PartTimeJobController extends Controller
     public function finishJob($id)
     {
         $user = request()->input('user');
+        $formId = request()->input('form_id');
 
         if(is_null($id)){
             throw new ApiException('悬赏令不能为空！',500);
         }
 
-        $job = PartTimeJob::query()->find($id);
+        $job = $this->partTimeJob->getPartTimeJobById($id);
         if(!$job){
             throw new ApiException('悬赏令不存在！',500);
         }
@@ -193,7 +209,9 @@ class PartTimeJobController extends Controller
             throw new ApiException('您不是该悬赏令的发布者！',500);
         }
 
-        $employeeId = $job->{PartTimeJob::REL_EMPLOYEE}->{EmployeePartTimeJob::FIELD_ID_USER};
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+        $employeeUser = $employee->{EmployeePartTimeJob::REL_USER};
+        $employeeId = $employee->{EmployeePartTimeJob::FIELD_ID_USER};
 
         try{
             \DB::beginTransaction();
@@ -215,6 +233,16 @@ class PartTimeJobController extends Controller
         }
 
         $result = $this->detail($id);
+
+        //给悬赏人发送模板消息
+        $title = '任务完成通知';
+        $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',Carbon::now()];
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
+
+        //给上架猎人发送模板消息
+        $title = '任务完成通知';
+        $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。"];
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $result;
     }
@@ -298,6 +326,47 @@ class PartTimeJobController extends Controller
         $result = $this->partTimeJob->formatSinglePost($job,$user);
 
         return $result;
+    }
+
+    /**
+     * 解雇赏金猎人，重新发布悬赏
+     *
+     * @author yezi
+     *
+     * @return null|static[]
+     * @throws ApiException
+     */
+    public function restartJob()
+    {
+        $user = request()->input('user');
+        $jobId = request()->input('id');
+
+        $job = $this->partTimeJob->getPartTimeJobById($jobId);
+        if(!$job){
+            throw new ApiException('悬赏令不存在！',500);
+        }
+
+        if($job->{PartTimeJob::FIELD_ID_BOSS} != $user->id){
+            throw new ApiException('您不是悬赏人！');
+        }
+
+        try{
+            \DB::beginTransaction();
+
+            $result = $this->partTimeJob->fireEmployee($jobId);
+
+            \DB::commit();
+        }catch (\Exception $exception){
+            \DB::rollBack();
+            throw new ApiException($exception,500);
+        }
+
+        return $result;
+    }
+
+    public function delete($id)
+    {
+        
     }
 
 }

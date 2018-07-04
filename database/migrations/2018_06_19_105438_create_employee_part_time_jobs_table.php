@@ -20,8 +20,6 @@ class CreateEmployeePartTimeJobsTable extends Migration
             $table->bigInteger('user_id')->index()->comment('赏金猎人ID');
             $table->tinyInteger('status')->default(1)->comment('于悬赏的状态，1=执行任务中，2=被雇主不信任解除雇佣关系,3=任务完成');
             $table->tinyInteger('score')->default(1)->comment('任务好评，1=好评，2=中评，3=差评');
-            $table->longText('comments')->nullable()->comment('文字评论');
-            $table->jsonb('attachments')->comment('评论附件');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

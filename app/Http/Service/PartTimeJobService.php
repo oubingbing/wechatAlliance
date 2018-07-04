@@ -167,12 +167,10 @@ class PartTimeJobService
      * @param $employeeId
      * @param $jobId
      * @param $score
-     * @param $comment
-     * @param $attachments
      * @return \Illuminate\Database\Eloquent\Model|null|static
      * @throws ApiException
      */
-    public function commentJob($employeeId,$jobId,$score,$comment,$attachments)
+    public function commentJob($employeeId,$jobId,$score)
     {
         $employeeJob = $this->getEmployeeJobByJobId($jobId,$employeeId);
         if(!$employeeJob){
@@ -180,8 +178,6 @@ class PartTimeJobService
         }
 
         $employeeJob->{EmployeePartTimeJob::FIELD_SCORE} = $score;
-        $employeeJob->{EmployeePartTimeJob::FIELD_COMMENTS} = $comment;
-        $employeeJob->{EmployeePartTimeJob::FIELD_ATTACHMENTS} = $attachments;
         $result = $employeeJob->save();
         if(!$result){
             throw new ApiException('评分失败！',500);
@@ -354,6 +350,7 @@ class PartTimeJobService
         $job->can_show_tip = false;
         $job->give_up = false;
         $job->role = '';
+
         if($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
             $job->can_entry = true;
             $job->can_delete = true;
@@ -389,6 +386,52 @@ class PartTimeJobService
                 }
             }
         }
+
+        return $job;
+    }
+
+    /**
+     * 获取该悬赏令正在任务中的赏金猎人
+     *
+     * @author yezi
+     *
+     * @param $jobId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function getJobEmployee($jobId)
+    {
+        $job = EmployeePartTimeJob::query()
+            ->where(EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,$jobId)
+            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_WORKING)
+            ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'desc')
+            ->first();
+        return $job;
+    }
+
+    /**
+     * 解雇赏金猎人，重新发布悬赏
+     *
+     * @author yezi
+     *
+     * @param $jobId
+     * @return null|static[]
+     * @throws ApiException
+     */
+    public function fireEmployee($jobId)
+    {
+        $job = $this->getPartTimeJobById($jobId);
+        if(!$job){
+            throw new ApiException('悬赏令不存在',500);
+        }
+        $job->{PartTimeJob::FIELD_STATUS} = PartTimeJob::ENUM_STATUS_WORKING;
+        $job->save();
+
+        $employee = $this->getJobEmployee($jobId);
+        if (!$employee){
+            throw new ApiException('赏金猎人不存在！',500);
+        }
+        $employee->{EmployeePartTimeJob::FIELD_STATUS} = EmployeePartTimeJob::ENUM_STATUS_BE_FIRED;
+        $employee->save();
 
         return $job;
     }
