@@ -129,4 +129,21 @@ class SendMessageService
         return $result;
     }
 
+    /**
+     * 统计当天表白墙发送的短信数量
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return int
+     */
+    public function countTodayPostSecretMessage($userId)
+    {
+        $number = SecretMessage::query()->where(SecretMessage::FIELD_ID_POST_USER,$userId)
+            ->whereBetween(SecretMessage::FIELD_CREATED_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()])
+            ->count();
+
+        return $number;
+    }
+
 }

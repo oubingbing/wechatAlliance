@@ -12,6 +12,7 @@ namespace App\Http\Service;
 
 use App\Models\Colleges;
 use App\Models\Follow;
+use App\Models\MessageSession;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
@@ -89,6 +90,30 @@ class PostService
             ->when($user->{User::FIELD_ID_COLLEGE}, function ($query) use ($user) {
                 return $query->where(Post::FIELD_ID_COLLEGE, $user->{User::FIELD_ID_COLLEGE});
             });
+
+        return $this;
+    }
+
+    /**
+     * 搜索过滤
+     *
+     * @author yezi
+     *
+     * @param $filter
+     */
+    public function filter($filter)
+    {
+        $this->builder->when($filter,function ($query)use($filter){
+            return $query->where(function ($query)use($filter){
+                $query->where(Post::FIELD_TOPIC,'iike',"%$filter%")
+                    ->orWhere(Post::FIELD_CONTENT,'like',"%$filter%")
+                    ->orWhere(function ($query)use($filter){
+                        $query->whereHas(Post::REL_MESSAGE_SESSION,function ($query)use($filter){
+                            $query->where(MessageSession::FIELD_RECEIVE_PHONE,$filter);
+                        });
+                    });
+            });
+        });
 
         return $this;
     }

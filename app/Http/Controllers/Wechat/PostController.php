@@ -61,15 +61,19 @@ class PostController extends Controller
             if($mobile){
                 $checkMobile = validMobile($mobile);
                 if($checkMobile){
+                    $sendMessageService = app(SendMessageService::class);
+                    if($sendMessageService->countTodayPostSecretMessage($user->id) > 2){
+                        throw new ApiException('每人每天只能发送两条短信表白墙！',500);
+                    }
                     //发送短信
                     $number = rand(10000,100000);
                     $content = "【恋言网】您的消息编号：$number,信息：hi,有同学跟你表白了，登录微信小程序--{$user->{User::REL_APP}->{WechatApp::FIELD_NAME}}，在表白墙搜索你的手机号码即可查看！";
                     sendMessage($user->{User::FIELD_MOBILE},$mobile,$content);
                     //建立一个短信会话
-                    $session = app(SendMessageService::class)->createMessageSession($user->id,null,$mobile,$result->id,MessageSession::ENUM_OBJ_TYPE_POST);
-                    app(SendMessageService::class)->saveSecretMessage($user->id,null,$session->id,$content,$imageUrls,$number);
+                    $session = $sendMessageService->createMessageSession($user->id,null,$mobile,$result->id,MessageSession::ENUM_OBJ_TYPE_POST);
+                    $sendMessageService->saveSecretMessage($user->id,null,$session->id,$content,$imageUrls,$number);
                 }else{
-                    throw new ApiException('不是一个有效的手机号码！', 6000);
+                    throw new ApiException('号码格式错误！', 6000);
                 }
             }
 
@@ -98,10 +102,11 @@ class PostController extends Controller
         $type = request()->input('type');
         $orderBy = request()->input('order_by', 'created_at');
         $sortBy = request()->input('sort_by', 'desc');
+        $filter = request()->input('filter');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
-        $query = $this->postLogic->builder($user,$type,$just)->sort($orderBy, $sortBy)->done();
+        $query = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
 
         $posts = $this->paginateLogic->paginate($query, $pageParams, '*', function ($post) use ($user) {
 

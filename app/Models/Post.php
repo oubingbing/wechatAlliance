@@ -61,6 +61,7 @@ class Post extends BaseModel
     const ENUM_PRIVATE = 1;
 
     const REL_USER = 'poster';
+    const REL_MESSAGE_SESSION = 'messageSession';
 
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
@@ -133,6 +134,11 @@ class Post extends BaseModel
     public function follows()
     {
         return $this->hasMany(Follow::class,Follow::FIELD_ID_OBJ)->where(Follow::FIELD_OBJ_TYPE,Follow::ENUM_OBJ_TYPE_POST);
+    }
+
+    public function messageSession()
+    {
+        return $this->hasOne(MessageSession::class,MessageSession::FIELD_OBJ_ID,self::FIELD_ID)->where(MessageSession::FIELD_OBJ_TYPE,MessageSession::ENUM_OBJ_TYPE_POST);
     }
 
 }
