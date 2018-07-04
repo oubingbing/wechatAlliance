@@ -9,7 +9,7 @@
 namespace App\Models;
 
 
-class SecretMessage
+class SecretMessage extends BaseModel
 {
     const TABLE_NAME = 'secret_messages';
     protected $table = self::TABLE_NAME;
@@ -58,6 +58,10 @@ class SecretMessage
     const ENUM_SEND_DELAY = 2;
 
     const REL_MESSAGE_SESSION = 'messageSession';
+
+    protected $casts = [
+        self::FIELD_ATTACHMENTS => 'array',
+    ];
 
     protected $fillable = [
         self::FIELD_ID,
