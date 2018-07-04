@@ -105,11 +105,16 @@ class PostService
     {
         $this->builder->when($filter,function ($query)use($filter){
             return $query->where(function ($query)use($filter){
-                $query->where(Post::FIELD_TOPIC,'iike',"%$filter%")
+                $query->where(Post::FIELD_TOPIC,'like',"%$filter%")
                     ->orWhere(Post::FIELD_CONTENT,'like',"%$filter%")
                     ->orWhere(function ($query)use($filter){
                         $query->whereHas(Post::REL_MESSAGE_SESSION,function ($query)use($filter){
                             $query->where(MessageSession::FIELD_RECEIVE_PHONE,$filter);
+                        });
+                    })
+                    ->orWhere(function ($query)use($filter){
+                        $query->where(Post::FIELD_PRIVATE,Post::ENUM_NOT_PRIVATE)->whereHas(Post::REL_USER,function ($query)use($filter){
+                            $query->where(User::FIELD_NICKNAME,'like',"%$filter%");
                         });
                     });
             });
