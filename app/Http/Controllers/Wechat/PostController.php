@@ -63,7 +63,7 @@ class PostController extends Controller
                 if($checkMobile){
                     $sendMessageService = app(SendMessageService::class);
                     if($sendMessageService->countTodayPostSecretMessage($user->id) > 2){
-                        throw new ApiException('每人每天只能发送两条短信表白墙！',500);
+                        throw new ApiException('超过发送数量！',500);
                     }
                     //发送短信
                     $number = rand(10000,100000);
