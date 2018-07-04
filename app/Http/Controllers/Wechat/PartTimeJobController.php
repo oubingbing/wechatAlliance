@@ -135,11 +135,11 @@ class PartTimeJobController extends Controller
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         //给悬赏人的消息盒子头发信息
-        senInbox($user->{User::FIELD_ID_APP}, $parTimeJob->{PartTimeJob::FIELD_ID_BOSS}, $parTimeJob->id, '您的悬赏令被揭下！', Inbox::ENUM_OBJ_TYPE_PART_TIME_JOB, Inbox::ENUM_ACTION_TYPE_JOB, Carbon::now());
+        senInbox($user->{User::FIELD_ID_APP},$user->id, $parTimeJob->{PartTimeJob::FIELD_ID_BOSS}, $parTimeJob->id, '您的悬赏令被揭下！', Inbox::ENUM_OBJ_TYPE_PART_TIME_JOB, Inbox::ENUM_ACTION_TYPE_JOB, Carbon::now());
 
         //给悬赏人发送短信通知
         $content = "【情书网】您好，{$employeeProfile->{UserProfile::FIELD_NAME}}接了您的悬赏令：{$parTimeJob->{PartTimeJob::FIELD_TITLE}}，详情请登陆小程序查看。";
-        sendMessage($boss->{User::FIELD_MOBILE},$content);
+        sendMessage($user->{User::FIELD_ID_APP},$boss->{User::FIELD_MOBILE},$content);
 
         return $result;
     }

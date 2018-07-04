@@ -89,6 +89,7 @@ class User extends Authenticatable implements JWTSubject
     const ENUM_GENDER_UN_KNOW = 0;
 
     const REL_PROFILE = 'profile';
+    const REL_APP = 'app';
 
     /**
      * The attributes that are mass assignable.
@@ -151,6 +152,11 @@ class User extends Authenticatable implements JWTSubject
     public function profile()
     {
         return $this->hasOne(UserProfile::class,self::FIELD_ID,UserProfile::FIELD_ID_USER);
+    }
+
+    public function app()
+    {
+        return $this->belongsTo(WechatApp::class,self::FIELD_ID_APP,WechatApp::FIELD_ID);
     }
 
 }

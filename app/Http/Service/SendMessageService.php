@@ -10,6 +10,8 @@ namespace App\Http\Service;
 
 
 use App\Exceptions\ApiException;
+use App\Models\MessageSession;
+use App\Models\SecretMessage;
 use App\Models\SendMessage;
 use Carbon\Carbon;
 
@@ -69,6 +71,62 @@ class SendMessageService
         if(Carbon::now()->gte(Carbon::parse($log->{SendMessage::FIELD_EXPIRED_AT}))){
             throw new ApiException('验证码已过期，请重新发送！',500);
         }
+    }
+
+    /**
+     * 建立短息消息会话
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $postPhone
+     * @param $receivePhone
+     * @param $objId
+     * @param $objType
+     * @return mixed
+     */
+    public function createMessageSession($userId,$postPhone,$receivePhone,$objId,$objType)
+    {
+        $result = MessageSession::create([
+            MessageSession::FIELD_ID_USER=>$userId,
+            MessageSession::FIELD_POST_PHONE=>$postPhone,
+            MessageSession::FIELD_RECEIVE_PHONE=>$receivePhone,
+            MessageSession::FIELD_OBJ_ID=>$objId,
+            MessageSession::FIELD_OBJ_TYPE=>$objType
+        ]);
+
+        return $result;
+    }
+
+    /**
+     * 保存恋言信息
+     *
+     * @author yezi
+     *
+     * @param $postId
+     * @param $receiveId
+     * @param $sessionId
+     * @param $content
+     * @param $attachments
+     * @param $code
+     * @param $number
+     * @param null $delayAt
+     * @return mixed
+     */
+    public function saveSecretMessage($postId,$receiveId,$sessionId,$content,$attachments,$code,$number=0,$delayAt=null)
+    {
+        $result = SecretMessage::create([
+            SecretMessage::FIELD_ID_MESSAGE_SESSION=>$sessionId,
+            SecretMessage::FIELD_ID_POST_USER=>$postId,
+            SecretMessage::FIELD_ID_RECEIVE_USER=>$receiveId,
+            SecretMessage::FIELD_CONTENT=>$content,
+            SecretMessage::FIELD_ATTACHMENTS=>$attachments,
+            SecretMessage::FIELD_CODE=>$code,
+            SecretMessage::FIELD_NUMBER=>$number,
+            SecretMessage::FIELD_DELAY_AT=>$delayAt
+        ]);
+
+        return $result;
     }
 
 }

@@ -64,8 +64,8 @@ if( ! function_exists('senTemplateMessage') ){
  * @author yezi
  */
 if( ! function_exists('senInbox') ){
-    function senInbox($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0){
-        $job = new SendInbox($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private);
+    function senInbox($appId,$fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0){
+        $job = new SendInbox($appId,$fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private);
         dispatch($job)->onQueue('send_inbox');
     }
 }
@@ -76,8 +76,8 @@ if( ! function_exists('senInbox') ){
  * @author yezi
  */
 if( ! function_exists('sendMessage') ){
-    function sendMessage($phone,$message){
-        $job = new SendPhoneMessage($phone,$message);
+    function sendMessage($appId,$phone,$message){
+        $job = new SendPhoneMessage($appId,$phone,$message);
         dispatch($job)->onQueue('send_message');
     }
 }

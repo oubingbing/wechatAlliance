@@ -20,6 +20,9 @@ class SecretMessageVisitLog extends BaseModel
     /** Field user_id */
     const FIELD_ID_USER = 'user_id';
 
+    /** Field secret_message_id 秘言ID */
+    const FIELD_ID_SECRET_MESSAGE = 'secret_message_id';
+
     /** Field nickname */
     const FIELD_NICKNAME = 'nickname';
 
@@ -35,6 +38,7 @@ class SecretMessageVisitLog extends BaseModel
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_USER,
+        self::FIELD_ID_SECRET_MESSAGE,
         self::FIELD_NICKNAME,
         self::FIELD_CREATED_AT,
         self::FIELD_UPDATED_AT,

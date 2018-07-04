@@ -13,6 +13,7 @@ class SendPhoneMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $appId;
     protected $mobile;
     protected $content;
 
@@ -21,8 +22,9 @@ class SendPhoneMessage implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($mobile,$content)
+    public function __construct($appId,$mobile,$content)
     {
+        $this->appId = $appId;
         $this->mobile = $mobile;
         $this->content = $content;
     }
@@ -36,6 +38,6 @@ class SendPhoneMessage implements ShouldQueue
      */
     public function handle()
     {
-        app(NotificationService::class)->sendMobileMessage($this->mobile,$this->content);
+        (new NotificationService($this->appId))->sendMobileMessage($this->mobile,$this->content);
     }
 }

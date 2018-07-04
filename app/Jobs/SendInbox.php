@@ -13,6 +13,7 @@ class SendInbox implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $appId;
     protected $fromId;
     protected $toId;
     protected $objId;
@@ -27,8 +28,9 @@ class SendInbox implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0)
+    public function __construct($appId,$fromId, $toId, $objId, $content, $objType, $actionType, $postAt,$private=0)
     {
+        $this->appId = $appId;
         $this->fromId = $fromId;
         $this->toId = $toId;
         $this->objId = $objId;
@@ -48,6 +50,6 @@ class SendInbox implements ShouldQueue
      */
     public function handle()
     {
-        app(NotificationService::class)->sendInbox($this->fromId, $this->toId, $this->objId, $this->content, $this->objType, $this->actionType, $this->postAt,$this->private);
+        (new NotificationService($this->appId))->sendInbox($this->fromId, $this->toId, $this->objId, $this->content, $this->objType, $this->actionType, $this->postAt,$this->private);
     }
 }

@@ -17,7 +17,7 @@ class CreateTableSecretMessagesTable extends Migration
             $table->bigIncrements('id');
 
             $table->bigInteger('post_user_id')->index()->comment('发送人用户ID');
-            $table->bigInteger('receive_user_id')->index()->comment('接收人id');
+            $table->bigInteger('receive_user_id')->nullable()->index()->comment('接收人id');
             $table->bigInteger('message_session_id')->index()->comment('短信会话ID');
 
             $table->string('number')->default('0000')->index()->comment('编号');
