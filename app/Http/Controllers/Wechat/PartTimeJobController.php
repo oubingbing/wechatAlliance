@@ -11,11 +11,13 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\CommentService;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
 use App\Http\Service\UserService;
 use App\Http\Service\WeChatMessageService;
 use App\Jobs\SendTemplateMessage;
+use App\Models\Comment;
 use App\Models\EmployeePartTimeJob;
 use App\Models\Inbox;
 use App\Models\PartTimeJob;
@@ -152,13 +154,11 @@ class PartTimeJobController extends Controller
      * @return \Illuminate\Database\Eloquent\Model|null|static
      * @throws ApiException
      */
-    public function commentPartTimeJob()
+    public function commentPartTimeJob($id)
     {
         $user = request()->input('user');
-        $id = request()->input('id');
-        $employeeId = request()->input('employeeId');
         $score = request()->input('score');
-        $comment = request()->input('comments');
+        $content = request()->input('content');
         $attachments = request()->input('attachments');
 
         if(!$score){
@@ -174,7 +174,18 @@ class PartTimeJobController extends Controller
             throw new ApiException('你不是该悬赏令的发布者！',500);
         }
 
-        $result = $this->partTimeJob->commentJob($employeeId,$id,$score);
+        try{
+            \DB::beginTransaction();
+
+            $result = $this->partTimeJob->commentJob($id,$score);
+            $content = empty($content)?'无':$content;
+            app(CommentService::class)->saveComment($user->id, $partTimeJob->id, $content, Comment::ENUM_OBJ_TYPE_JOB, null, $attachments);
+
+            \DB::commit();
+        }catch (\Exception $exception){
+            \DB::rollBack();
+            throw new ApiException($exception,500);
+        }
 
         return $result;
     }
@@ -324,6 +335,13 @@ class PartTimeJobController extends Controller
         }
 
         $result = $this->partTimeJob->formatSinglePost($job,$user);
+
+        $result['comment'] = $this->partTimeJob->getJobComment($job->id);
+        if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_SUCCESS && empty($result['comment'])){
+            $result['can_comment'] = true;
+        }else{
+            $result['can_comment'] = false;
+        }
 
         return $result;
     }

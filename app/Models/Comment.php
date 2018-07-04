@@ -62,7 +62,8 @@ class Comment extends BaseModel
     const ENUM_OBJ_TYPE_COMMENT = 4;
     /** obj_type 话题 */
     const ENUM_OBJ_TYPE_TOPIC = 5;
-    /** obj_type 私信 */
+    /** obj_type 悬赏令 */
+    const ENUM_OBJ_TYPE_JOB = 6;
 
     /** type-评论表白墙 */
     const ENUM_COMMENT_POST_TYPE = 1;

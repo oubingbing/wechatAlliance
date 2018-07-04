@@ -209,6 +209,9 @@ $api->version('v1', function ($api) {
 
             /** 确认悬赏令完成 */
             $api->post('/finish/{id}/job',PartTimeJobController::class . '@finishJob');
+
+            /** 评价悬赏任务 */
+            $api->post('comment/{id}/job',PartTimeJobController::class . '@commentPartTimeJob');
         });
 
     });

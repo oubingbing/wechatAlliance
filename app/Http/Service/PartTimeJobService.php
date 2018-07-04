@@ -10,6 +10,7 @@ namespace App\Http\Service;
 
 
 use App\Exceptions\ApiException;
+use App\Models\Comment;
 use App\Models\EmployeePartTimeJob;
 use App\Models\PartTimeJob;
 use App\Models\User;
@@ -127,6 +128,15 @@ class PartTimeJobService
         return $result;
     }
 
+    /**
+     * 根据悬赏id和猎人id获取关联的信息
+     *
+     * @author yezi
+     *
+     * @param $partTimeJobId
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function getEmployeeJobByJobId($partTimeJobId,$userId)
     {
         $result = EmployeePartTimeJob::query()
@@ -163,15 +173,17 @@ class PartTimeJobService
      *
      * @author yezi
      *
-     * @param $employeeId
      * @param $jobId
      * @param $score
      * @return \Illuminate\Database\Eloquent\Model|null|static
      * @throws ApiException
      */
-    public function commentJob($employeeId,$jobId,$score)
+    public function commentJob($jobId,$score)
     {
-        $employeeJob = $this->getEmployeeJobByJobId($jobId,$employeeId);
+        $employeeJob = EmployeePartTimeJob::query()
+            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_SUCCESS)
+            ->where(EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,$jobId)
+            ->first();
         if(!$employeeJob){
             throw new ApiException('任务不存在！',500);
         }
@@ -433,6 +445,20 @@ class PartTimeJobService
         $employee->save();
 
         return $job;
+    }
+
+    /**
+     * 获取悬赏任务的评论
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function getJobComment($id)
+    {
+        $result = Comment::query()->where(Comment::FIELD_ID_OBJ,$id)->where(Comment::FIELD_TYPE,Comment::ENUM_OBJ_TYPE_JOB)->first();
+        return $result;
     }
 
 }
