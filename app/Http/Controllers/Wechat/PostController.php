@@ -66,7 +66,7 @@ class PostController extends Controller
                     $content = "【恋言网】您的消息编号：$number,信息：hi,有同学跟你表白了，登录微信小程序--{$user->{User::REL_APP}->{WechatApp::FIELD_NAME}}，在表白墙搜索你的手机号码即可查看！";
                     sendMessage($user->{User::FIELD_MOBILE},$mobile,$content);
                     //建立一个短信会话
-                    $session = app(SendMessageService::class)->createMessageSession($user->id,null,$$mobile,$result->id,MessageSession::ENUM_OBJ_TYPE_POST);
+                    $session = app(SendMessageService::class)->createMessageSession($user->id,null,$mobile,$result->id,MessageSession::ENUM_OBJ_TYPE_POST);
                     app(SendMessageService::class)->saveSecretMessage($user->id,null,$session->id,$content,$imageUrls,$number);
                 }else{
                     throw new ApiException('不是一个有效的手机号码！', 6000);
