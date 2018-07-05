@@ -15,8 +15,6 @@ use App\Http\Service\CommentService;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PartTimeJobService;
 use App\Http\Service\UserService;
-use App\Http\Service\WeChatMessageService;
-use App\Jobs\SendTemplateMessage;
 use App\Models\Comment;
 use App\Models\EmployeePartTimeJob;
 use App\Models\Inbox;
@@ -25,7 +23,6 @@ use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class PartTimeJobController extends Controller
 {
@@ -128,12 +125,12 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $title = '任务接收通知';
-        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},'您的悬赏令已被揭下,详情请登录小程序查看。'];
+        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的悬赏令【{$parTimeJob->{PartTimeJob::FIELD_TITLE}}】已被揭下,详情请登录小程序查看。"];
         senTemplateMessage($user->{User::FIELD_ID_APP},$boss->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         //给赏金猎人发送模板消息
         $title = '任务接收通知';
-        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的揭下了{$boss->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}的悬赏令,详情请登录小程序查看。"];
+        $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的揭下了【{$boss->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】的悬赏令【{$parTimeJob->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         //给悬赏人的消息盒子头发信息
@@ -220,7 +217,7 @@ class PartTimeJobController extends Controller
             throw new ApiException('您不是该悬赏令的发布者！',500);
         }
 
-        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
         $employeeUser = $employee->{EmployeePartTimeJob::REL_USER};
         $employeeId = $employee->{EmployeePartTimeJob::FIELD_ID_USER};
 
@@ -247,12 +244,12 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $title = '任务完成通知';
-        $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',Carbon::now()];
+        $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',Carbon::now()->toDayDateTimeString()];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         //给上架猎人发送模板消息
         $title = '任务完成通知';
-        $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。"];
+        $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。",Carbon::now()->toDayDateTimeString()];
         senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $result;
@@ -323,7 +320,7 @@ class PartTimeJobController extends Controller
 
         $job = $this->partTimeJob->getPartTimeJobById($id);
         $job->{PartTimeJob::REL_USER};
-        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
 
         $userService = app(UserService::class);
         $job->boss_profile = $userService->getProfileById($job->{PartTimeJob::FIELD_ID_BOSS});
@@ -382,6 +379,20 @@ class PartTimeJobController extends Controller
             throw new ApiException($exception,500);
         }
 
+        $employeeJod = $job->{PartTimeJob::REL_FIRE_EMPLOYEE_JOB};
+        $employee = $employeeJod->{EmployeePartTimeJob::REL_USER};
+        $employeeName = $employee->{User::REL_PROFILE}->{UserProfile::FIELD_NAME};
+
+        //给悬赏人发送模板消息
+        $bossTitle = '订单终止提醒';
+        $bossValues = [$job->id,Carbon::now()->toDayDateTimeString(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$bossTitle,$bossValues,$formId);
+
+        //给赏金猎人发送模板消息
+        $title = '订单终止提醒';
+        $employeeValues = [$job->id,Carbon::now()->toDayDateTimeString(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"【{$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】终止了与您的悬赏关系,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$employeeValues,$formId);
+
         return $result;
     }
 
@@ -419,7 +430,7 @@ class PartTimeJobController extends Controller
             throw new ApiException('悬赏令不存在！',500);
         }
 
-        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
         if(!$employee){
             throw new ApiException('赏金猎人不存在！',500);
         }
@@ -464,7 +475,7 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $title = '订单终止提醒';
-        $values = [$job->id,Carbon::now(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        $values = [$job->id,Carbon::now()->toDayDateTimeString(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $job;

@@ -278,7 +278,7 @@ class PartTimeJobService
         $this->builder = PartTimeJob::query()
             ->with([PartTimeJob::REL_USER=>function($query){
                 $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER);
-            },PartTimeJob::REL_EMPLOYEE=>function($query){
+            },PartTimeJob::REL_EMPLOYEE_JOB=>function($query){
                 $query->select(EmployeePartTimeJob::FIELD_ID,EmployeePartTimeJob::FIELD_ID_USER,EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,EmployeePartTimeJob::FIELD_STATUS);
             }])
             ->whereHas(PartTimeJob::REL_USER,function ($query)use($user){
@@ -385,8 +385,8 @@ class PartTimeJobService
             }
         }
 
-        if($job->{PartTimeJob::REL_EMPLOYEE}){
-            if($job->{PartTimeJob::REL_EMPLOYEE}->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
+        if($job->{PartTimeJob::REL_EMPLOYEE_JOB}){
+            if($job->{PartTimeJob::REL_EMPLOYEE_JOB}->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
                 $job->show_contact = true;
                 $job->can_entry = true;
                 $job->role = 'employee';
