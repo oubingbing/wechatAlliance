@@ -461,4 +461,64 @@ class PartTimeJobService
         return $result;
     }
 
+    /**
+     * 统计猎人的任务情况
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return array
+     */
+    public function countEmployee($userId)
+    {
+        $result = EmployeePartTimeJob::query()
+            ->where(EmployeePartTimeJob::FIELD_ID_USER,$userId)
+            ->select([EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::FIELD_SCORE])
+            ->get();
+
+        $score['good'] = collect($result)->where('score',1)->count();
+        $score['middle'] = collect($result)->where('score',2)->count();
+        $score['bad'] = collect($result)->where('score',3)->count();
+
+        $status['working'] = collect($result)->where('score',1)->count();
+        $status['fire'] = collect($result)->where('score',2)->count();
+        $status['success'] = collect($result)->where('score',3)->count();
+        $status['abandon'] = collect($result)->where('score',4)->count();
+
+        return [
+            'score'=>$score,
+            'status'=>$status
+        ];
+    }
+
+    /**
+     * 获取猎人任务列表
+     *
+     * @param $userId
+     * @param string $status
+     * @return mixed
+     */
+    public function employeeMissionComments($userId,$status='')
+    {
+        $result = EmployeePartTimeJob::query()
+            ->with([
+                EmployeePartTimeJob::REL_USER=>function($query){
+                    $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR);
+                },
+                EmployeePartTimeJob::REL_JOB.'.'.PartTimeJob::REL_COMMENT=>function($query){
+                    $query->select(Comment::FIELD_ID,Comment::FIELD_CONTENT,Comment::FIELD_ATTACHMENTS,Comment::FIELD_OBJ_TYPE,Comment::FIELD_ID_OBJ);
+                },
+                EmployeePartTimeJob::REL_JOB.'.'.PartTimeJob::REL_USER=>function($query){
+                    $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR);
+                }
+            ])
+            ->where(EmployeePartTimeJob::FIELD_ID_USER,$userId)
+            ->when($status,function ($query)use($status){
+                $query->where(EmployeePartTimeJob::FIELD_STATUS,$status);
+            })
+            ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
+
+        return $result;
+    }
+
 }

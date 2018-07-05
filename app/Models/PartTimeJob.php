@@ -49,6 +49,7 @@ class PartTimeJob extends BaseModel
 
     const REL_USER = 'user';
     const REL_EMPLOYEE = 'employee';
+    const REL_COMMENT = 'comment';
 
     protected $casts = [
         self::FIELD_ATTACHMENTS => 'array',
@@ -87,7 +88,15 @@ class PartTimeJob extends BaseModel
      */
     public function employee()
     {
-        return $this->hasOne(EmployeePartTimeJob::class,EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,self::FIELD_ID)
+        $result = $this->hasOne(EmployeePartTimeJob::class,EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,self::FIELD_ID)
             ->where(EmployeePartTimeJob::FIELD_STATUS,'!=',EmployeePartTimeJob::ENUM_STATUS_BE_FIRED);
+
+        return $result;
     }
+
+    public function comment()
+    {
+        return $this->hasOne(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_JOB);
+    }
+
 }

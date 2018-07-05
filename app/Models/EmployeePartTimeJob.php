@@ -29,10 +29,11 @@ class EmployeePartTimeJob extends BaseModel
     /** Field score 任务得分 */
     const FIELD_SCORE = 'score';
 
-    /** 用户执行悬赏令的状态 1=执行任务中，2=被雇主不信任解除雇佣关系,3=任务完成 */
+    /** 用户执行悬赏令的状态 1=执行任务中，2=被雇主不信任解除雇佣关系,3=任务完成,4=猎人自动放弃任务 */
     const ENUM_STATUS_WORKING = 1;
     const ENUM_STATUS_BE_FIRED = 2;
     const ENUM_STATUS_SUCCESS = 3;
+    const ENUM_STATUS_ABANDON = 4;
 
     /** 任务评分，1=好评，2=中评，3=差评 */
     const ENUM_SCORE_GOOD = 1;
@@ -40,6 +41,7 @@ class EmployeePartTimeJob extends BaseModel
     const ENUM_SCORE_BAD = 3;
 
     const REL_USER = 'user';
+    const REL_JOB = 'job';
 
     protected $fillable = [
         self::FIELD_ID,
@@ -52,6 +54,11 @@ class EmployeePartTimeJob extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class,self::FIELD_ID_USER,User::FIELD_ID);
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(PartTimeJob::class,self::FIELD_ID_PART_TIME_JOB,PartTimeJob::FIELD_ID);
     }
 
 }

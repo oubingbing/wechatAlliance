@@ -343,6 +343,8 @@ class PartTimeJobController extends Controller
             $result['can_comment'] = false;
         }
 
+        $result['job_status'] = $this->partTimeJob->countEmployee($employee->{EmployeePartTimeJob::FIELD_ID_USER});
+
         return $result;
     }
 
@@ -354,10 +356,10 @@ class PartTimeJobController extends Controller
      * @return null|static[]
      * @throws ApiException
      */
-    public function restartJob()
+    public function restartJob($id)
     {
         $user = request()->input('user');
-        $jobId = request()->input('id');
+        $jobId = $id;
 
         $job = $this->partTimeJob->getPartTimeJobById($jobId);
         if(!$job){
@@ -382,9 +384,87 @@ class PartTimeJobController extends Controller
         return $result;
     }
 
+    /**
+     * 获取赏金猎人的悬赏记录
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function employeeJobComments($id)
+    {
+        $user = request()->input('user');
+    }
+
+    public function missionRecord($jobId)
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size', 10);
+        $pageNumber = request()->input('page_number', 1);
+        $status = request()->input('status');
+
+        $job = $this->partTimeJob->getPartTimeJobById($jobId);
+        if(!$job){
+            throw new ApiException('悬赏令不存在！',500);
+        }
+
+        $employee = $job->{PartTimeJob::REL_EMPLOYEE};
+        if(!$employee){
+            throw new ApiException('赏金猎人不存在！',500);
+        }
+
+        $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
+        $query = $this->partTimeJob->employeeMissionComments($employee->{EmployeePartTimeJob::FIELD_ID_USER},$status);
+        $jobs = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
+            return $item;
+        });
+
+        return $jobs;
+    }
+
+    /**
+     * 赏金猎人放弃任务
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     * @throws ApiException
+     */
+    public function abandonJob($id)
+    {
+        $user = request()->input('user');
+        $job = EmployeePartTimeJob::query()
+            ->where(EmployeePartTimeJob::FIELD_ID_USER,$user->id)
+            ->where(EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,$id)
+            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_WORKING)
+            ->first();
+        if(!$job){
+            throw new ApiException('无法放弃任务！',500);
+        }
+
+        $job->{EmployeePartTimeJob::FIELD_STATUS} = EmployeePartTimeJob::ENUM_STATUS_ABANDON;
+        $job->save();
+
+        return $job;
+    }
+
+    /**
+     * 删除悬赏令,这里有点问题
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     */
     public function delete($id)
     {
+        $user = request()->input('user');
 
+        $result = PartTimeJob::where(PartTimeJob::FIELD_ID, $id)->delete();
+
+        return $result;
     }
 
 }

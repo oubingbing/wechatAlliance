@@ -211,7 +211,19 @@ $api->version('v1', function ($api) {
             $api->post('/finish/{id}/job',PartTimeJobController::class . '@finishJob');
 
             /** 评价悬赏任务 */
-            $api->post('comment/{id}/job',PartTimeJobController::class . '@commentPartTimeJob');
+            $api->post('/comment/{id}/job',PartTimeJobController::class . '@commentPartTimeJob');
+
+            /** 赏金猎人的悬赏记录 */
+            $api->get('/employee/{id}/record',PartTimeJobController::class .'@employeeJobComments');
+
+            /** 赏金猎人的悬赏记录 */
+            $api->get('/job/{id}/mission_record',PartTimeJobController::class .'@missionRecord');
+
+            /** 放弃任务 */
+            $api->get('/abandon/{id}/job',PartTimeJobController::class . '@abandonJob');
+
+            /** 不信任猎人，重新发布悬赏 */
+            $api->put('/restart/{id}/job',PartTimeJobController::class . '@restartJob');
         });
 
     });
