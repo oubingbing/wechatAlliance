@@ -75,4 +75,9 @@ class ExampleTest extends TestCase
 
         dd($num);
     }
+
+    public function testTime()
+    {
+        dd(date('Y-m-d H:i:s',time()));
+    }
 }

@@ -199,7 +199,7 @@ class PartTimeJobController extends Controller
     {
         $user = request()->input('user');
         $formId = request()->input('form_id');
-        
+
         if(is_null($id)){
             throw new ApiException('悬赏令不能为空！',500);
         }
@@ -244,12 +244,12 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $title = '任务完成通知';
-        $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',Carbon::now()->toDayDateTimeString()];
+        $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',date('Y-m-d H:i:s',time())];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         //给上架猎人发送模板消息
         $title = '任务完成通知';
-        $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。",Carbon::now()->toDayDateTimeString()];
+        $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。",date('Y-m-d H:i:s',time())];
         senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $result;
@@ -385,12 +385,12 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $bossTitle = '订单终止提醒';
-        $bossValues = [$job->id,Carbon::now()->toDayDateTimeString(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        $bossValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$bossTitle,$bossValues,$formId);
 
         //给赏金猎人发送模板消息
         $title = '订单终止提醒';
-        $employeeValues = [$job->id,Carbon::now()->toDayDateTimeString(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"【{$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】终止了与您的悬赏关系,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        $employeeValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"【{$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】终止了与您的悬赏关系,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$employeeValues,$formId);
 
         return $result;
@@ -475,7 +475,7 @@ class PartTimeJobController extends Controller
 
         //给悬赏人发送模板消息
         $title = '订单终止提醒';
-        $values = [$job->id,date('Y-m-d H:i:s',strtotime(Carbon::now())),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        $values = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $job;
