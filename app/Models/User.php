@@ -151,7 +151,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function profile()
     {
-        return $this->hasOne(UserProfile::class,self::FIELD_ID,UserProfile::FIELD_ID_USER);
+        return $this->hasOne(UserProfile::class,UserProfile::FIELD_ID_USER,self::FIELD_ID);
     }
 
     public function app()

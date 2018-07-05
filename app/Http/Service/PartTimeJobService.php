@@ -359,6 +359,7 @@ class PartTimeJobService
         $job->show_contact = false;
         $job->show_employee_tip = '';
         $job->can_show_tip = false;
+        $job->can_stop = false;
         $job->give_up = false;
         $job->role = '';
 
@@ -366,6 +367,10 @@ class PartTimeJobService
             $job->can_entry = true;
             $job->can_delete = true;
             $job->role = 'boss';
+
+            if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_RECRUITING){
+                $job->can_stop = true;
+            }
             if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_WORKING){
                 $job->can_comfirm = true;
                 $job->can_restart = true;
@@ -388,11 +393,11 @@ class PartTimeJobService
                         break;
                     case PartTimeJob::ENUM_STATUS_END:
                         $job->can_show_tip = true;
-                        $job->show_employee_tip = '任务终止';
+                        $job->show_employee_tip = '已终止';
                         break;
                     case PartTimeJob::ENUM_STATUS_SUCCESS:
                         $job->can_show_tip = true;
-                        $job->show_employee_tip = '任务完成';
+                        $job->show_employee_tip = '已完成';
                         break;
                 }
             }
@@ -434,7 +439,7 @@ class PartTimeJobService
         if(!$job){
             throw new ApiException('悬赏令不存在',500);
         }
-        $job->{PartTimeJob::FIELD_STATUS} = PartTimeJob::ENUM_STATUS_WORKING;
+        $job->{PartTimeJob::FIELD_STATUS} = PartTimeJob::ENUM_STATUS_RECRUITING;
         $job->save();
 
         $employee = $this->getJobEmployee($jobId);

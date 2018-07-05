@@ -367,7 +367,7 @@ class PartTimeJobController extends Controller
         }
 
         if($job->{PartTimeJob::FIELD_ID_BOSS} != $user->id){
-            throw new ApiException('您不是悬赏人！');
+            throw new ApiException('您不是悬赏人！',500);
         }
 
         try{
@@ -432,20 +432,23 @@ class PartTimeJobController extends Controller
      * @return \Illuminate\Database\Eloquent\Model|null|static
      * @throws ApiException
      */
-    public function abandonJob($id)
+    public function stopMission($id)
     {
         $user = request()->input('user');
-        $job = EmployeePartTimeJob::query()
-            ->where(EmployeePartTimeJob::FIELD_ID_USER,$user->id)
-            ->where(EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,$id)
-            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_WORKING)
+        $job = PartTimeJob::query()
+            ->where(PartTimeJob::FIELD_ID,$id)
+            ->where(PartTimeJob::FIELD_ID_BOSS,$user->id)
+            ->where(PartTimeJob::FIELD_STATUS,PartTimeJob::ENUM_STATUS_RECRUITING)
             ->first();
         if(!$job){
-            throw new ApiException('无法放弃任务！',500);
+            throw new ApiException('无法终止任务！',500);
         }
 
-        $job->{EmployeePartTimeJob::FIELD_STATUS} = EmployeePartTimeJob::ENUM_STATUS_ABANDON;
-        $job->save();
+        $job->{PartTimeJob::FIELD_STATUS} = PartTimeJob::ENUM_STATUS_END;
+        $result = $job->save();
+        if(!$result){
+            throw new ApiException('终止失败！',500);
+        }
 
         return $job;
     }

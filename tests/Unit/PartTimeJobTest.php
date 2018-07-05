@@ -18,8 +18,6 @@ class PartTimeJobTest extends TestCase
     {
         $userId = 4058;
         $result = app(PartTimeJobService::class)->employeeMissionComments($userId);
-
-        dd(collect($result)->toArray());
     }
 
     public function testCountEmployeeJob()

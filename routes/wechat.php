@@ -220,7 +220,7 @@ $api->version('v1', function ($api) {
             $api->get('/job/{id}/mission_record',PartTimeJobController::class .'@missionRecord');
 
             /** 放弃任务 */
-            $api->get('/abandon/{id}/job',PartTimeJobController::class . '@abandonJob');
+            $api->put('/stop/{id}/job',PartTimeJobController::class . '@stopMission');
 
             /** 不信任猎人，重新发布悬赏 */
             $api->put('/restart/{id}/job',PartTimeJobController::class . '@restartJob');
