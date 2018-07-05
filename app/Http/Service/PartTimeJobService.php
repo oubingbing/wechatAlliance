@@ -303,10 +303,14 @@ class PartTimeJobService
      * @param string $title
      * @return $this
      */
-    public function filter($title='')
+    public function filter($filter)
     {
-        $this->builder->when($title,function ($query)use($title){
-            return $query->where(PartTimeJob::FIELD_TITLE,'ilike',"%$title%");
+        $this->builder->when($filter,function ($query)use($filter){
+            return $query->where(function ($query)use($filter){
+                $query->where(PartTimeJob::FIELD_TITLE,'like',"%$filter%")
+                    ->orWhere(PartTimeJob::FIELD_CONTENT,'like',"%$filter%")
+                    ->orWhere(PartTimeJob::FIELD_SALARY,'like',"%$filter%");
+            });
         });
 
         return $this;
@@ -359,6 +363,7 @@ class PartTimeJobService
         $job->show_contact = false;
         $job->show_employee_tip = '';
         $job->can_show_tip = false;
+        $job->can_contact = true;
         $job->can_stop = false;
         $job->give_up = false;
         $job->role = '';
@@ -462,7 +467,7 @@ class PartTimeJobService
      */
     public function getJobComment($id)
     {
-        $result = Comment::query()->where(Comment::FIELD_ID_OBJ,$id)->where(Comment::FIELD_TYPE,Comment::ENUM_OBJ_TYPE_JOB)->first();
+        $result = Comment::query()->where(Comment::FIELD_ID_OBJ,$id)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_JOB)->first();
         return $result;
     }
 

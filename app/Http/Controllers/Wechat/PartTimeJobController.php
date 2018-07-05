@@ -359,6 +359,7 @@ class PartTimeJobController extends Controller
     public function restartJob($id)
     {
         $user = request()->input('user');
+        $formId = request()->input('form_id');
         $jobId = $id;
 
         $job = $this->partTimeJob->getPartTimeJobById($jobId);
@@ -397,6 +398,15 @@ class PartTimeJobController extends Controller
         $user = request()->input('user');
     }
 
+    /**
+     * 赏金猎人的悬赏记录
+     *
+     * @author yezi
+     *
+     * @param $jobId
+     * @return mixed
+     * @throws ApiException
+     */
     public function missionRecord($jobId)
     {
         $user = request()->input('user');
@@ -435,6 +445,8 @@ class PartTimeJobController extends Controller
     public function stopMission($id)
     {
         $user = request()->input('user');
+        $formId = request()->input('form_id');
+
         $job = PartTimeJob::query()
             ->where(PartTimeJob::FIELD_ID,$id)
             ->where(PartTimeJob::FIELD_ID_BOSS,$user->id)
@@ -449,6 +461,11 @@ class PartTimeJobController extends Controller
         if(!$result){
             throw new ApiException('终止失败！',500);
         }
+
+        //给悬赏人发送模板消息
+        $title = '订单终止提醒';
+        $values = [$job->id,Carbon::now(),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $job;
     }
