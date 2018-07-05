@@ -51,11 +51,25 @@ class EmployeePartTimeJob extends BaseModel
         self::FIELD_SCORE
     ];
 
+    /**
+     * 赏金猎人
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class,self::FIELD_ID_USER,User::FIELD_ID);
     }
 
+    /**
+     * 悬赏令
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function job()
     {
         return $this->belongsTo(PartTimeJob::class,self::FIELD_ID_PART_TIME_JOB,PartTimeJob::FIELD_ID);

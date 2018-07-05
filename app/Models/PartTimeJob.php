@@ -95,17 +95,33 @@ class PartTimeJob extends BaseModel
         return $result;
     }
 
+    /**
+     * 获取最新一条被炒的人员
+     *
+     * @author yez
+     *
+     * @return $this
+     */
     public function fireEmployeeJob()
     {
         $result = $this->hasOne(EmployeePartTimeJob::class,EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB,self::FIELD_ID)
-            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_BE_FIRED);
+            ->where(EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::ENUM_STATUS_BE_FIRED)
+            ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
 
         return $result;
     }
 
+    /**
+     * 悬赏令的任务评论
+     *
+     * @author yezi
+     *
+     * @return $this
+     */
     public function comment()
     {
-        return $this->hasOne(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_JOB);
+        $result = $this->hasOne(Comment::class,Comment::FIELD_ID_OBJ,self::FIELD_ID)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_JOB);
+        return $result;
     }
 
 }
