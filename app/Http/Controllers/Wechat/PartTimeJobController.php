@@ -157,6 +157,7 @@ class PartTimeJobController extends Controller
         $score = request()->input('score');
         $content = request()->input('content');
         $attachments = request()->input('attachments');
+        $formId = request()->input('form_id');
 
         if(!$score){
             throw new ApiException('任务评分不能为空！',500);
@@ -183,6 +184,14 @@ class PartTimeJobController extends Controller
             \DB::rollBack();
             throw new ApiException($exception,500);
         }
+
+        $commentScore = collect(['1'=>'好评', '2'=>'中评', '3'=>'差评'])->get((string)$score);
+        $employeeJob = $partTimeJob->{PartTimeJob::REL_EMPLOYEE_JOB};
+        $employee = $employeeJob->{EmployeePartTimeJob::REL_USER};
+        //给悬赏人发送模板消息
+        $title = '评价完成通知';
+        $values = [$partTimeJob->{PartTimeJob::FIELD_TITLE},$commentScore,'悬赏人对您的任务进行了评价，详情请登录小程序查看！'];
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->{User::FIELD_ID_OPENID},$title,$values,$formId);
 
         return $result;
     }
