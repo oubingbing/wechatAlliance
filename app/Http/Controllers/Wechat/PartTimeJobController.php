@@ -503,6 +503,9 @@ class PartTimeJobController extends Controller
         $user = request()->input('user');
 
         $result = PartTimeJob::where(PartTimeJob::FIELD_ID, $id)->delete();
+        if(!$result){
+            throw new ApiException('删除失败！',500);
+        }
 
         return $result;
     }
