@@ -42,10 +42,13 @@ class TokenService
         }
 
         $user = User::where(User::FIELD_ID_OPENID,$openId)->where(User::FIELD_ID_APP,$appId)->first();
-
         if(!$user){
             $userLogin = new UserService();
             $user = $userLogin->createWeChatUser($openId,$userInfo,$appId);
+        }else{
+            $user->{User::FIELD_NICKNAME} = $userInfo['nickName'];
+            $user->{User::FIELD_AVATAR} = $userInfo['avatarUrl'];
+            $user->save();
         }
 
         $token = $this->getWecChatToken($user);
