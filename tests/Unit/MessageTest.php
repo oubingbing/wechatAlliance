@@ -28,9 +28,24 @@ class MessageTest extends TestCase
     {
         $appId = 2;
         $Message = new WeChatMessageService($appId);
-        $result = $Message->getKeyWorld('AT2039');
+        $result = $Message->getKeyWorld('AT1250');
 
         dd($result);
+    }
+
+    public function testAddKeyword()
+    {
+        $title = '内容被赞提醒';
+        $key = 'AT1250';
+        $ids = [9,7,8,10];
+        $content = "主题、点赞人、点赞时间、累计获赞";
+
+        TemplateKeyWord::create([
+            TemplateKeyWord::FIELD_TITLE => $title,
+            TemplateKeyWord::FIELD_KEY_WORD => $key,
+            TemplateKeyWord::FIELD_KEY_WORD_IDS => $ids,
+            TemplateKeyWord::FIELD_CONTENT => $content
+        ]);
     }
 
     public function testTemplate()
@@ -38,22 +53,18 @@ class MessageTest extends TestCase
         $appId = 2;
         $Message = new WeChatMessageService($appId);
 
-        $result = $Message->addTemplate('AT0280',[1,4,3,6,8]);
+        $result = $Message->addTemplate('AT0280',[1,2,12]);
+
+        dd($result);
     }
 
-    public function testAddKeyword()
+    public function testDeleteTemplate()
     {
-        /*$title = '咨询回复通知';
-        $key = 'AT2039';
-        $ids = [1,5,4];
-        $content = "";
+        $appId = 2;
+        $Message = new WeChatMessageService($appId);
 
-        TemplateKeyWord::create([
-            TemplateKeyWord::FIELD_TITLE => $title,
-            TemplateKeyWord::FIELD_KEY_WORD => $key,
-            TemplateKeyWord::FIELD_KEY_WORD_IDS => $ids,
-            TemplateKeyWord::FIELD_CONTENT => $content
-        ]);*/
+        $result = $Message->deleteTemplate('BraiGxqtyD2OJCmtTIjhx6LyWO2XTKF_fvw_STGkM2k');
+        dd($result);
     }
 
     public function testInitTemplate()
@@ -61,9 +72,7 @@ class MessageTest extends TestCase
         $appId = 2;
         $Message = new WeChatMessageService($appId);
 
-        $result = $Message->initAppTemplate();
-
-        self::assertTrue($result);
+        $Message->initTemplate();
     }
 
     public function testMessage()

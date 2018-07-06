@@ -31,6 +31,28 @@ class WeChatMessageService
     }
 
     /**
+     * 初始化微信消息模板
+     *
+     * @author yezi
+     *
+     * @throws \Exception
+     */
+    public function initTemplate()
+    {
+        try{
+            \DB::beginTransaction();
+
+            $this->batchDeleteTemplate();
+            $this->batchAddTemplate();
+
+            \DB::commit();
+        }catch (\Exception $e){
+            \DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
      * 初始化小程序的消息模板,给小程序添加微信消息模板
      *
      * @author yezi
@@ -38,7 +60,7 @@ class WeChatMessageService
      * @return mixed
      * @throws ApiException
      */
-    public function initAppTemplate()
+    public function batchAddTemplate()
     {
         $template = [];
         $keys = TemplateKeyWord::query()->get();
@@ -100,6 +122,43 @@ class WeChatMessageService
     {
         $url = $this->baseUrl.'/add?access_token='.$this->token;
         $data = ['id'=>$titleId,'keyword_id_list'=>$keywordIds];
+        $response = $this->client->post($url,['json'=>$data]);
+
+        $result = json_decode((string) $response->getBody(), true);
+        if($result['errcode'] != 0){
+            throw new \Exception('添加模板失败！',500);
+        }
+        return $result;
+    }
+
+    /**
+     * 删除小程序的所有模板
+     *
+     * @author yezi
+     */
+    public function batchDeleteTemplate()
+    {
+        $templates = WeChatTemplate::query()->where(WeChatTemplate::FIELD_ID_APP,$this->appId)->get();
+        if($templates){
+            foreach ($templates as $template){
+                $this->deleteTemplate($template[WeChatTemplate::FIELD_ID_TEMPLATE]);
+            }
+            WeChatTemplate::query()->where(WeChatTemplate::FIELD_ID_APP,$this->appId)->delete();
+        }
+    }
+
+    /**
+     * 删除单个小程序模板
+     *
+     * @author yezi
+     *
+     * @param $templateId
+     * @return mixed
+     */
+    public function deleteTemplate($templateId)
+    {
+        $url = $this->baseUrl.'/del?access_token='.$this->token;
+        $data = ['template_id'=>$templateId];
         $response = $this->client->post($url,['json'=>$data]);
 
         $result = json_decode((string) $response->getBody(), true);
