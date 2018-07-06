@@ -224,6 +224,9 @@ $api->version('v1', function ($api) {
 
             /** 不信任猎人，重新发布悬赏 */
             $api->put('/restart/{id}/job',PartTimeJobController::class . '@restartJob');
+
+            /** 删除悬赏令 */
+            $api->delete('/delete/{id}/job',PartTimeJobController::class . '@delete');
         });
 
     });

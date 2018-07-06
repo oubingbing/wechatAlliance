@@ -383,6 +383,11 @@ class PartTimeJobService
             if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_SUCCESS){
                 $job->can_comment = true;
             }
+        }else{
+            //是否是超管
+            if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+                $post['can_delete'] = true;
+            }
         }
 
         if($job->{PartTimeJob::REL_EMPLOYEE_JOB}){
