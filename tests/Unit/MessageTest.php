@@ -68,8 +68,10 @@ class MessageTest extends TestCase
 
     public function testMessage()
     {
-        $content = '【恋言网】您的消息编号：3306,信息：hi,有同学跟你表白了，登录微信小程序--小情书，在表白墙搜索你的手机号码即可查看！';
-        (new NotificationService(2))->sendMobileMessage(13425144866,$content);
+        $content = '【恋言网】您的消息编号：3306,信息：hi,有同学跟你表白了，登录微信小程序：小情书，在表白墙搜索你的手机号码即可查看！';
+        $result = (new NotificationService(2))->sendMobileMessage(13425144866,$content);
+
+        dd($result);
     }
 
 }
