@@ -531,7 +531,6 @@ class PartTimeJobService
             ->when($status,function ($query)use($status){
                 $query->where(EmployeePartTimeJob::FIELD_STATUS,$status);
             })
-            ->withTrashed()
             ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
 
         return $result;

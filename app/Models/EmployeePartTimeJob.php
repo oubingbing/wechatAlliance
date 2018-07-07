@@ -72,7 +72,7 @@ class EmployeePartTimeJob extends BaseModel
      */
     public function job()
     {
-        return $this->belongsTo(PartTimeJob::class,self::FIELD_ID_PART_TIME_JOB,PartTimeJob::FIELD_ID);
+        return $this->belongsTo(PartTimeJob::class,self::FIELD_ID_PART_TIME_JOB,PartTimeJob::FIELD_ID)->withTrashed();
     }
 
 }
