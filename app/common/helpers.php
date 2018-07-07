@@ -45,12 +45,12 @@ if( ! function_exists('validMobile') ){
  * @author yezi
  */
 if( ! function_exists('senTemplateMessage') ){
-    function senTemplateMessage($appId,$openId,$title,$values,$formId,$page='pages/index/index'){
+    function senTemplateMessage($appId,$openId,$title,$values,$formId=null,$page='pages/index/index'){
         $jobData = [
             'open_id'=>$openId,
             'title'=>$title,
             'values'=>$values,
-            'form_id'=>$formId,
+            //'form_id'=>$formId,
             'page'=>$page
         ];
         $job = new SendTemplateMessage($appId,$jobData);

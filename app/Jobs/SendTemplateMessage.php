@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Http\Service\FormIdService;
 use App\Http\Service\NotificationService;
-use App\Models\TemplateLog;
+use App\Models\FormIds;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,6 +39,12 @@ class SendTemplateMessage implements ShouldQueue
      */
     public function handle()
     {
-        (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['title'], $this->data['values'], $this->data['form_id'], $this->data['page']);
+        $userId = User::query()->where(User::FIELD_ID_OPENID,$this->data['open_id'])->value(User::FIELD_ID);
+        if($userId){
+            $formId = app(FormIdService::class)->getForIdByUserId($userId);
+            if($formId){
+                (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['title'], $this->data['values'], $formId, $this->data['page']);
+            }
+        }
     }
 }

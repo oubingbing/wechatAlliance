@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: bingbing
+ * Date: 2018/7/7
+ * Time: 17:21
+ */
+
+namespace App\Http\Wechat;
+
+
+use App\Http\Controllers\Controller;
+use App\Http\Service\FormIdService;
+use Carbon\Carbon;
+
+class FormIdController extends Controller
+{
+    public function save()
+    {
+        $user = request()->input('user');
+        $formId = request()->input('form_id');
+
+        $result = app(FormIdService::class)->save($user->id,$formId,Carbon::now()->addDay(7));
+
+        return $result;
+    }
+
+}
