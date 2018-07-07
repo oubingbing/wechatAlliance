@@ -23,6 +23,9 @@ class FormIds extends BaseModel
     /** Field form_id */
     const FIELD_ID_FORM = 'form_id';
 
+    /** Field open_id */
+    const FIELD_ID_OPEN = 'open_id';
+
     /** Field expired_at */
     const FIELD_EXPIRED_AT = 'expired_at';
 
@@ -30,6 +33,7 @@ class FormIds extends BaseModel
         self::FIELD_ID,
         self::FIELD_ID_USER,
         self::FIELD_ID_FORM,
-        self::FIELD_EXPIRED_AT
+        self::FIELD_EXPIRED_AT,
+        self::FIELD_ID_OPEN
     ];
 }

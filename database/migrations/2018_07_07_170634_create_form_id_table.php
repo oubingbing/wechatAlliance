@@ -18,6 +18,7 @@ class CreateFormIdTable extends Migration
 
             $table->bigInteger('user_id')->index()->comment('用户id');
             $table->string('form_id')->comment('微信模板消息formid');
+            $table->string('open_id')->index()->comment('openid');
             $table->timestamp('expired_at')->nullable()->index()->comment('form过期时间');
 
             $table->timestamp('created_at')->nullable()->index();

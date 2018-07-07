@@ -39,9 +39,9 @@ class SendTemplateMessage implements ShouldQueue
      */
     public function handle()
     {
-        $formId = app(FormIdService::class)->getForIdByUserId($this->data['user_id']);
-        if($formId){
-            (new NotificationService($this->appId))->templateMessage($this->data['open_id'], $this->data['title'], $this->data['values'], $formId, $this->data['page']);
+        $form = app(FormIdService::class)->getForIdByUserId($this->data['user_id']);
+        if($form){
+            (new NotificationService($this->appId))->templateMessage($form->{FormIds::FIELD_ID_OPEN}, $this->data['title'], $this->data['values'], $form->{FormIds::FIELD_ID_FORM}, $this->data['page']);
         }
     }
 }

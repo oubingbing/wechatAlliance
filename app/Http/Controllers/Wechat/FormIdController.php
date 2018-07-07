@@ -11,6 +11,7 @@ namespace App\Http\Wechat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Service\FormIdService;
+use App\Models\User;
 use Carbon\Carbon;
 
 class FormIdController extends Controller
@@ -20,7 +21,7 @@ class FormIdController extends Controller
         $user = request()->input('user');
         $formId = request()->input('form_id');
 
-        $result = app(FormIdService::class)->save($user->id,$formId,Carbon::now()->addDay(7));
+        $result = app(FormIdService::class)->save($user->id,$user->{User::FIELD_ID_OPENID},$formId,Carbon::now()->addDay(7));
 
         return $result;
     }

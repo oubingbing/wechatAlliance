@@ -21,15 +21,17 @@ class FormIdService
      *
      * @param $userId
      * @param $formId
+     * @param $openId
      * @param $expire
      * @return mixed
      */
-    public function save($userId,$formId,$expire)
+    public function save($userId,$openId,$formId,$expire)
     {
         $formId = FormIds::create([
             FormIds::FIELD_ID_FORM=>$formId,
             FormIds::FIELD_ID_USER=>$userId,
-            FormIds::FIELD_EXPIRED_AT=>$expire
+            FormIds::FIELD_EXPIRED_AT=>$expire,
+            FormIds::FIELD_ID_OPEN=>$openId
         ]);
 
         return $formId;
@@ -50,9 +52,10 @@ class FormIdService
             ->where(FormIds::FIELD_EXPIRED_AT,'>=',Carbon::now())
             ->first();
 
-        FormIds::query()->where(FormIds::FIELD_ID,$form->id)->delete();
-
-        return $form->{FormIds::FIELD_ID_FORM};
+        if($form){
+            FormIds::query()->where(FormIds::FIELD_ID,$form->id)->delete();
+            return $form;
+        }
     }
 
 }
