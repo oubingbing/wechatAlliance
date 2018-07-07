@@ -513,7 +513,7 @@ class PartTimeJobService
      * @param string $status
      * @return mixed
      */
-    public function employeeMissionComments($userId,$status='')
+    public function employeeMissionComments($userId,$status)
     {
         $result = EmployeePartTimeJob::query()
             ->with([
@@ -529,7 +529,7 @@ class PartTimeJobService
             ])
             ->where(EmployeePartTimeJob::FIELD_ID_USER,$userId)
             ->when($status,function ($query)use($status){
-                $query->where(EmployeePartTimeJob::FIELD_STATUS,$status);
+                $query->where(EmployeePartTimeJob::FIELD_SCORE,$status);
             })
             ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
 

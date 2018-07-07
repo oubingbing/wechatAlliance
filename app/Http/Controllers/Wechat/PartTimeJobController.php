@@ -446,6 +446,7 @@ class PartTimeJobController extends Controller
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
         $query = $this->partTimeJob->employeeMissionComments($employee->{EmployeePartTimeJob::FIELD_ID_USER},$status);
+
         $jobs = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
             return $item;
         });
