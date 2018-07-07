@@ -76,7 +76,6 @@ class PartTimeJobController extends Controller
     {
         $user = request()->input('user');
         $orderId = request()->input('id');
-        //$formId = request()->input('form_id');
 
         if(!$orderId){
             throw new ApiException('悬赏令不能为空!',500);
@@ -157,7 +156,6 @@ class PartTimeJobController extends Controller
         $score = request()->input('score');
         $content = request()->input('content');
         $attachments = request()->input('attachments');
-        $formId = request()->input('form_id');
 
         if(!$score){
             throw new ApiException('任务评分不能为空！',500);
@@ -191,7 +189,7 @@ class PartTimeJobController extends Controller
         //给悬赏人发送模板消息
         $title = '评价完成通知';
         $values = [$partTimeJob->{PartTimeJob::FIELD_TITLE},$commentScore,'悬赏人对您的任务进行了评价，详情请登录小程序查看！'];
-        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->{User::FIELD_ID_OPENID},$title,$values,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->id,$title,$values);
 
         return $result;
     }
@@ -207,7 +205,6 @@ class PartTimeJobController extends Controller
     public function finishJob($id)
     {
         $user = request()->input('user');
-        $formId = request()->input('form_id');
 
         if(is_null($id)){
             throw new ApiException('悬赏令不能为空！',500);
@@ -254,12 +251,12 @@ class PartTimeJobController extends Controller
         //给悬赏人发送模板消息
         $title = '任务完成通知';
         $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',date('Y-m-d H:i:s',time())];
-        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$title,$values);
 
         //给上架猎人发送模板消息
         $title = '任务完成通知';
         $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。",date('Y-m-d H:i:s',time())];
-        senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->{User::FIELD_ID_OPENID},$title,$values,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->id,$title,$values);
 
         return $result;
     }
@@ -365,7 +362,6 @@ class PartTimeJobController extends Controller
     public function restartJob($id)
     {
         $user = request()->input('user');
-        $formId = request()->input('form_id');
         $jobId = $id;
 
         $job = $this->partTimeJob->getPartTimeJobById($jobId);
@@ -395,12 +391,12 @@ class PartTimeJobController extends Controller
         //给悬赏人发送模板消息
         $bossTitle = '订单终止提醒';
         $bossValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
-        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$bossTitle,$bossValues,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$bossTitle,$bossValues);
 
         //给赏金猎人发送模板消息
         $title = '订单终止提醒';
         $employeeValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"【{$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】终止了与您的悬赏关系,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
-        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->{User::FIELD_ID_OPENID},$title,$employeeValues,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->id,$title,$employeeValues);
 
         return $result;
     }
@@ -466,7 +462,6 @@ class PartTimeJobController extends Controller
     public function stopMission($id)
     {
         $user = request()->input('user');
-        $formId = request()->input('form_id');
 
         $job = PartTimeJob::query()
             ->where(PartTimeJob::FIELD_ID,$id)
@@ -486,7 +481,7 @@ class PartTimeJobController extends Controller
         //给悬赏人发送模板消息
         $title = '订单终止提醒';
         $values = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
-        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$values,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$title,$values);
 
         return $job;
     }
