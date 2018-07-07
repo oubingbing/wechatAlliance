@@ -289,7 +289,11 @@ class PartTimeJobService
             });
 
         if($status == 6){
-            $this->builder->where(PartTimeJob::FIELD_ID_BOSS,$user->id);
+            $this->builder->where(PartTimeJob::FIELD_ID_BOSS,$user->id)
+                ->orWhereHas(PartTimeJob::REL_EMPLOYEE_JOB,function ($query)use($user){
+                $query->where(EmployeePartTimeJob::FIELD_ID_USER,$user->id)
+                    ->where(EmployeePartTimeJob::FIELD_STATUS,'!=',EmployeePartTimeJob::ENUM_STATUS_BE_FIRED);
+            });
         }
 
         return $this;
@@ -531,7 +535,7 @@ class PartTimeJobService
             ->when($status,function ($query)use($status){
                 $query->where(EmployeePartTimeJob::FIELD_SCORE,$status);
             })
-            ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
+            ->orderBy(EmployeePartTimeJob::FIELD_UPDATED_AT,'DESC');
 
         return $result;
     }
