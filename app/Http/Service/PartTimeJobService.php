@@ -386,7 +386,7 @@ class PartTimeJobService
         }else{
             //是否是超管
             if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
-                $post['can_delete'] = true;
+                $job->can_delete = true;
             }
         }
 
@@ -531,6 +531,7 @@ class PartTimeJobService
             ->when($status,function ($query)use($status){
                 $query->where(EmployeePartTimeJob::FIELD_STATUS,$status);
             })
+            ->withTrashed()
             ->orderBy(EmployeePartTimeJob::FIELD_CREATED_AT,'DESC');
 
         return $result;

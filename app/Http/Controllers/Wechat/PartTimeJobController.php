@@ -400,7 +400,7 @@ class PartTimeJobController extends Controller
         //给赏金猎人发送模板消息
         $title = '订单终止提醒';
         $employeeValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"【{$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】终止了与您的悬赏关系,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
-        senTemplateMessage($user->{User::FIELD_ID_APP},$user->{User::FIELD_ID_OPENID},$title,$employeeValues,$formId);
+        senTemplateMessage($user->{User::FIELD_ID_APP},$employee->{User::FIELD_ID_OPENID},$title,$employeeValues,$formId);
 
         return $result;
     }
@@ -497,6 +497,7 @@ class PartTimeJobController extends Controller
      *
      * @param $id
      * @return mixed
+     * @throws ApiException
      */
     public function delete($id)
     {
