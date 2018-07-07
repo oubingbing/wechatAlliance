@@ -10,6 +10,7 @@ namespace Tests\Unit;
 
 
 use App\Friend;
+use App\Http\Service\FormIdService;
 use Tests\TestCase;
 
 class FollowTest extends TestCase
@@ -17,9 +18,11 @@ class FollowTest extends TestCase
     /**
      * @test
      */
-    public function test()
+    public function testForm()
     {
-        app(Friend::class);
+        $result = app(FormIdService::class)->getForIdByUserId(3937);
+
+        dd($result);
     }
 
 }
