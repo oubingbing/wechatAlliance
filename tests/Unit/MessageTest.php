@@ -69,7 +69,7 @@ class MessageTest extends TestCase
 
     public function testInitTemplate()
     {
-        $appId = 2;
+        $appId = 5;
         $Message = new WeChatMessageService($appId);
 
         $Message->initTemplate();

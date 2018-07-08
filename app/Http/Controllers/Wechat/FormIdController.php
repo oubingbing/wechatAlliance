@@ -21,6 +21,10 @@ class FormIdController extends Controller
         $user = request()->input('user');
         $formId = request()->input('form_id');
 
+        if($formId == 'the formId is a mock one'){
+            return;
+        }
+
         $result = app(FormIdService::class)->save($user->id,$user->{User::FIELD_ID_OPENID},$formId,Carbon::now()->addDay(7));
 
         return $result;
