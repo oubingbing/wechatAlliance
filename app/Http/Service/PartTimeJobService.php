@@ -371,6 +371,22 @@ class PartTimeJobService
         $job->can_stop = false;
         $job->give_up = false;
         $job->role = '';
+        $job->contact_id = '';
+
+        $employeeJob = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
+
+        //判断联系人
+        if($job->{PartTimeJob::FIELD_STATUS} == PartTimeJob::ENUM_STATUS_RECRUITING){
+            $job->contact_id = $job->{PartTimeJob::FIELD_ID_BOSS};
+        }elseif($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
+            if($employeeJob){
+                $job->contact_id = $employeeJob->{EmployeePartTimeJob::FIELD_ID_USER};
+            }else{
+                $job->contact_id = $job->{PartTimeJob::FIELD_ID_BOSS};
+            }
+        }else{
+            $job->contact_id = $job->{PartTimeJob::FIELD_ID_BOSS};
+        }
 
         if($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
             $job->can_entry = true;
@@ -394,8 +410,8 @@ class PartTimeJobService
             }
         }
 
-        if($job->{PartTimeJob::REL_EMPLOYEE_JOB}){
-            if($job->{PartTimeJob::REL_EMPLOYEE_JOB}->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
+        if($employeeJob){
+            if($employeeJob->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
                 $job->show_contact = true;
                 $job->can_entry = true;
                 $job->role = 'employee';
