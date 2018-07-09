@@ -17,6 +17,7 @@ use App\Http\Wechat\ChatController;
 use App\Http\Wechat\CommentController;
 use App\Http\Wechat\CompareFaceController;
 use App\Http\Wechat\FollowController;
+use App\Http\Wechat\FormIdController;
 use App\Http\Wechat\InboxController;
 use App\Http\Wechat\IndexController;
 use App\Http\Wechat\MatchLoveController;
@@ -227,6 +228,9 @@ $api->version('v1', function ($api) {
 
             /** 删除悬赏令 */
             $api->delete('/delete/{id}/job',PartTimeJobController::class . '@delete');
+
+            /** 收集form id */
+            $api->post('/save_form_id',FormIdController::class . '@save');
         });
 
     });

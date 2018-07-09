@@ -11,10 +11,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
+use App\Http\Service\WeChatMessageService;
 use App\Models\Admin;
 use App\Models\Colleges;
 use App\Models\User;
 use App\Models\WechatApp;
+use App\Models\WeChatTemplate;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -351,5 +353,34 @@ class AppController extends Controller
         }
 
         return webResponse('修改成功！',200,$app);
+    }
+
+    public function templateView()
+    {
+        return view('admin.app.template');
+    }
+
+    public function template()
+    {
+        $user = request()->get('user');
+        $app = $user->app();
+
+        $templates = app(AppService::class)->getTemplateByAppId($app->id);
+
+        return webResponse('修改成功！',200,$templates);
+    }
+
+    public function createTemplate()
+    {
+        $user = request()->get('user');
+        $app = $user->app();
+
+        $weChatService = new WeChatMessageService($app->id);
+
+        $weChatService->initTemplate();
+
+        $templates = app(AppService::class)->getTemplateByAppId($app->id);
+
+        return webResponse('添加模板成功！',200,$templates);
     }
 }

@@ -51,6 +51,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::patch('/update_qr_code','AppController@updateImage');
         /** 修改名称，ID，secret的视图 */
         Route::post('/update_app_info','AppController@updateApp');
+        /** 微信模板列表 */
+        Route::get('/templates_index','AppController@templateView');
+        /** 微信模板列表 */
+        Route::get('/templates','AppController@template');
+        /** 微信模板列表 */
+        Route::post('/templates','AppController@createTemplate');
     });
 
     Route::group(['middleware'=>['createApp']], function () {

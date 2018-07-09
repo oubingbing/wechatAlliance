@@ -12,6 +12,7 @@ namespace App\Http\Service;
 use App\Models\AdminApps;
 use App\Models\Colleges;
 use App\Models\WechatApp;
+use App\Models\WeChatTemplate;
 
 class AppService
 {
@@ -197,6 +198,16 @@ class AppService
         }else{
             return ['status'=>true,'message'=>'ok'];
         }
+    }
+
+    public function getTemplateByAppId($appId)
+    {
+        $templates = WeChatTemplate::query()
+            ->where(WeChatTemplate::FIELD_ID_APP,$appId)
+            ->select(WeChatTemplate::FIELD_ID_TEMPLATE,WeChatTemplate::FIELD_TITLE)
+            ->get();
+
+        return $templates;
     }
 
 }

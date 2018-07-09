@@ -58,7 +58,7 @@ class WeChatMessageService
      * @author yezi
      *
      * @return mixed
-     * @throws ApiException
+     * @throws \Exception
      */
     public function batchAddTemplate()
     {
@@ -75,14 +75,14 @@ class WeChatMessageService
                     WeChatTemplate::FIELD_KEY_WORD_IDS=>json_encode($item->{TemplateKeyWord::FIELD_KEY_WORD_IDS})
                 ]);
             }else{
-                throw new ApiException('初始化错误！',500);
+                throw new \Exception('初始化错误！',500);
             }
         }
 
         if(!empty($template)){
             $result = WeChatTemplate::insert($template);
             if(!$result){
-                throw new ApiException('初始化失败！',500);
+                throw new \Exception('初始化失败！',500);
             }
         }
 
@@ -112,11 +112,12 @@ class WeChatMessageService
     /**
      * 添加模板消息
      *
-     * @autor yezi
+     * @author yezi
      *
      * @param $titleId
      * @param $keywordIds
      * @return mixed
+     * @throws \Exception
      */
     public function addTemplate($titleId,$keywordIds)
     {
