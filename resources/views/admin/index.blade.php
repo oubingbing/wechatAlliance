@@ -106,7 +106,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6b8;</i>
+                    <i class="iconfont">&#xe696;</i>
                     <cite>微信消息模板</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>

@@ -231,6 +231,9 @@ $api->version('v1', function ($api) {
 
             /** 收集form id */
             $api->post('/save_form_id',FormIdController::class . '@save');
+
+            /** 获取小程序的二维码 */
+            $api->get('/qr_code',UserController::class . '@qrCode');
         });
 
     });

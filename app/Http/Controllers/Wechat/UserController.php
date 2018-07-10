@@ -10,6 +10,7 @@ use App\Http\Service\UserService;
 use App\Jobs\UserLogs;
 use App\Models\Colleges;
 use App\Models\User;
+use App\Models\WechatApp;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 
@@ -250,6 +251,22 @@ class UserController extends Controller
         }
 
         return $profile;
+    }
+
+    /**
+     * 获取小程序二维码
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function qrCode()
+    {
+        $user = request()->input('user');
+
+        $qrCode = WechatApp::query()->where(WechatApp::FIELD_ID,$user->{User::FIELD_ID_APP})->value(WechatApp::FIELD_ATTACHMENTS);
+
+        return $qrCode;
     }
 
 }
