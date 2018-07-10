@@ -25,6 +25,7 @@ use App\Http\Wechat\PartTimeJobController;
 use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
 use App\Http\Wechat\SaleFriendController;
+use App\Http\Wechat\StepTravelController;
 use App\Http\Wechat\TopicController;
 use App\Http\Wechat\UserController;
 use Illuminate\Support\Facades\Log;
@@ -234,6 +235,9 @@ $api->version('v1', function ($api) {
 
             /** 获取小程序的二维码 */
             $api->get('/qr_code',UserController::class . '@qrCode');
+
+            /** 获取用户微信步数 */
+            $api->post('/run_data',StepTravelController::class . '@saveStep');
         });
 
     });
