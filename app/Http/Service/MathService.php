@@ -12,39 +12,119 @@ namespace App\Http\Service;
 class MathService
 {
     /**
-     * 已知x轴，求两点直线上的y轴
+     * 获取出发地与目的直线斜率
      *
      * @author yezi
      *
-     * @param $x1
-     * @param $y1
-     * @param $x2
-     * @param $y2
-     * @param $x
+     * @param $fx
+     * @param $fy
+     * @param $tx
+     * @param $ty
      * @return float|int
      */
-    public function locationY($x1,$y1,$x2,$y2,$x)
+    public function lineSlope($fx,$fy,$tx,$ty)
     {
-        $y = ($y1-$y2)*($x-$x1)/($x1-$x2)+$y1;
-        return $y;
+        $result = ($ty - $fy) / ($tx - $fx);
+        return $result;
     }
 
     /**
-     * 已知y轴，求两点直线上的x轴
+     * 知道两个地理坐标形成的直线斜率，求该直线与水平直线形成的夹角
      *
      * @author yezi
      *
-     * @param $x1
-     * @param $y1
-     * @param $x2
-     * @param $y2
-     * @param $y
+     * @param $slope
      * @return float|int
      */
-    public function locationX($x1,$y1,$x2,$y2,$y)
+    public function lineAngle($slope)
     {
-        $x = ($y-$y1)*($x1-$x2)/($y1-$y2)+$x1;
-        return $x;
+        $result = atan($slope) / (2 * M_PI) * 360;
+        return abs($result);
+    }
+
+    public function angleToRad($angle)
+    {
+        return ($angle * M_PI / 180);
+    }
+
+    /**
+     * 求剩余角度
+     *
+     * @author yezi
+     *
+     * @param $angle
+     * @return int
+     */
+    public function otherAngle($angle)
+    {
+        return abs(90 - $angle);
+    }
+
+    /**
+     * 已知直角跟对边的(length / (sin(90))),求bc的长度
+     *
+     * @author yezi
+     *
+     * @param $value
+     * @param $angle
+     * @return mixed
+     */
+    public function ACLength($value,$angle)
+    {
+        $rad = $this->angleToRad($angle);
+        return ($value * (sin($rad)));
+    }
+
+    /**
+     * 已知直角跟对边的(length / (sin(90))),求ac的长度
+     *
+     * @author yezi
+     *
+     * @param $value
+     * @param $angle
+     * @return mixed
+     */
+    public function BCLength($value,$angle)
+    {
+        $rad = $this->angleToRad($angle);
+        return ($value * sin($rad));
+    }
+
+    public function location($fx,$fy,$tx,$slope,$ac,$bc)
+    {
+        if($slope < 0){
+            if($fx > $tx){
+                $x = $fx - $ac;
+                $y = $fy + $bc;
+            }else{
+                $x = $fx + $ac;
+                $y = $fy - $bc;
+            }
+        }else{
+            if($fx > $tx){
+                $x = $fx - $ac;
+                $y = $fy - $bc;
+            }else{
+                $x = $fx + $ac;
+                $y = $fy + $bc;
+            }
+        }
+
+        return ['x'=>$x,'y'=>$y];
+    }
+
+    public function getLocationPoint($fx,$fy,$tx,$ty,$dis)
+    {
+        $lineSlope = $this->lineSlope($fx,$fy,$tx,$ty);
+        $angle = $this->lineAngle($lineSlope);
+        $otherAngle = $this->otherAngle($angle);
+        $bc = $this->BCLength($dis,$angle);
+        $ac = $this->ACLength($dis,$otherAngle);
+        $locationPoint = $this->location($fx,$fy,$tx,$lineSlope,$ac,$bc);
+
+        dd($lineSlope);
+
+        return $locationPoint;
     }
 
 }

@@ -82,28 +82,21 @@ class ExampleTest extends TestCase
         dd(date('Y-m-d H:i:s',time()));
     }
 
-    /**
-     *         {
-    points: [{
-    longitude: 113.3245211,
-    latitude: 23.10229
-    },
-    {
-    longitude: 109.324520,
-    latitude: 26.21229
-    },
-    {
-    longitude: 103.324520,
-    latitude: 29.21229
-    }],
-    color: "#66CDAA",
-    width: 2,
-    dottedLine: false
-     */
     public function testMap()
     {
-        $result = app(MathService::class)->locationY(23.1022,113.3245,29.2122,103.3245,26);
+        $result = app(MathService::class)->lineAngle(0.611);
 
+        dd($result);
+    }
+
+    public function testLocation()
+    {
+        $fx = 108.2045;
+        $fy = 26.2304;
+        $tx = 100;
+        $ty = 20;
+        $dis = 2;
+        $result = app(MathService::class)->getLocationPoint($fx,$fy,$tx,$ty,$dis);
         dd($result);
     }
 }
