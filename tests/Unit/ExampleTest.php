@@ -99,4 +99,20 @@ class ExampleTest extends TestCase
         $result = app(MathService::class)->getLocationPoint($fx,$fy,$tx,$ty,$dis);
         dd($result);
     }
+
+    public function testDistance()
+    {
+        $fx = 108.2045;
+        $fy = 26.2304;
+        $tx = 100;
+        $ty = 20;
+        $result = app(MathService::class)->distanceBetweenPoint($fx,$fy,$tx,$ty);
+        dd($result);
+    }
+
+    public function testStepToMeter()
+    {
+        $result = app(MathService::class)->stepToMeter(3671);
+        dd($result);
+    }
 }

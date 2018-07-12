@@ -113,6 +113,18 @@ class MathService
         return ['x'=>$x,'y'=>$y];
     }
 
+    /**
+     * 获取两地理坐标直线上的任意距离的地理坐标点
+     * 
+     * @author yezi
+     * 
+     * @param $fx
+     * @param $fy
+     * @param $tx
+     * @param $ty
+     * @param $dis
+     * @return array
+     */
     public function getLocationPoint($fx,$fy,$tx,$ty,$dis)
     {
         $lineSlope = $this->lineSlope($fx,$fy,$tx,$ty);
@@ -121,10 +133,38 @@ class MathService
         $bc = $this->BCLength($dis,$angle);
         $ac = $this->ACLength($dis,$otherAngle);
         $locationPoint = $this->location($fx,$fy,$tx,$lineSlope,$ac,$bc);
-
-        dd($lineSlope);
-
+        
         return $locationPoint;
+    }
+
+    /**
+     * 计算两点间的距离
+     *
+     * @author yezi
+     *
+     * @param $fx
+     * @param $fy
+     * @param $tx
+     * @param $ty
+     * @return float
+     */
+    public function distanceBetweenPoint($fx,$fy,$tx,$ty)
+    {
+        $distance = sqrt((($fx-$tx)*($fx-$tx))+(($fy-$ty)*($fy-$ty)));
+        return $distance;
+    }
+
+    /**
+     * 步数转化成米单位
+     *
+     * @author yezi
+     *
+     * @param $step
+     * @return mixed
+     */
+    public function stepToMeter($step)
+    {
+        return $step * 0.55;
     }
 
 }
