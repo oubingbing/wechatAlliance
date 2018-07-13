@@ -15,6 +15,7 @@ use Carbon\Carbon;
 
 class StepTravelService
 {
+    private $builder;
     /**
      * 格式化步数日期
      * 
@@ -57,18 +58,35 @@ class StepTravelService
     {
         $date = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
-            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(30),Carbon::now()])
+            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
             ->select([RunStep::FIELD_ID,RunStep::FIELD_ID_USER,RunStep::FIELD_STEP,RunStep::FIELD_RUN_AT])
             ->get();
         return $date;
     }
 
+    /**
+     * 只获取步数的日期
+     *
+     * @author yezi
+     *
+     * @param $data
+     * @return array
+     */
     public function getUserRunDate($data)
     {
         $dates = collect($data)->pluck(RunStep::FIELD_RUN_AT);
         return collect($dates)->toArray();
     }
 
+    /**
+     * 获取用户最新的步数信息
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $newSteps
+     * @return array
+     */
     public function getUserNewRunStep($userId,$newSteps)
     {
         $checkResult = $this->userIfNotStep($userId);
@@ -81,13 +99,14 @@ class StepTravelService
             $item = Carbon::parse($item)->toDateString();
             return $item;
         });
-        $newDate = $this->getUserRunDate($newSteps);
 
-        $diffResult = collect(collect($oldDate)->diff($newDate))->toArray();
+        $newDate = $this->getUserRunDate($newSteps);
+        $diffResult = collect(collect($newDate)->diff($oldDate))->all();
+
         $saveData = [];
         if($diffResult){
             foreach ($newSteps as $step){
-                if(in_array($step['timestamp'],$diffResult)){
+                if(in_array($step['run_at'],$diffResult)){
                     array_push($saveData,$step);
                 }
             }
@@ -96,6 +115,15 @@ class StepTravelService
         return $saveData;
     }
 
+    /**
+     * 保存用户步数信息
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $steps
+     * @return bool
+     */
     public function saveSteps($userId,$steps)
     {
         $stepArray = [];
@@ -105,7 +133,8 @@ class StepTravelService
                 RunStep::FIELD_STEP=>$item['step'],
                 RunStep::FIELD_RUN_AT=>$item['run_at'],
                 RunStep::FIELD_CREATED_AT=>Carbon::now(),
-                RunStep::FIELD_UPDATED_AT=>Carbon::now()
+                RunStep::FIELD_UPDATED_AT=>Carbon::now(),
+                RunStep::FIELD_TYPE=>$item['run_at'] == Carbon::now()->toDateString()?RunStep::ENUM_TYPE_TODAY:RunStep::ENUM_TYPE_NOT_TODAY
             ]);
         }
 
@@ -115,5 +144,129 @@ class StepTravelService
         }
 
         return $result;
+    }
+
+    /**
+     * 判断用户当天是否有记录数据
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function ifRunDataInToday($userId)
+    {
+        $result = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->first();
+        return $result;
+    }
+
+    /**
+     * 更新用户当天的步数
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $runData
+     */
+    public function updateTodayRunData($userId,$runData)
+    {
+        $todayRunData = '';
+        foreach ($runData as $item){
+            if($item[RunStep::FIELD_RUN_AT] == Carbon::now()->toDateString()){
+                $todayRunData = $item;
+                break;
+            }
+        }
+        if($todayRunData){
+            //更新数据
+            $step = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->first();
+            if($step){
+                $step->{RunStep::FIELD_STEP} = $todayRunData['step'];
+                $step->save();
+            }
+        }
+    }
+
+    /**
+     * 更新以往当天的数据
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @param $runData
+     */
+    public function updateTypeIsTodayRunData($userId,$runData)
+    {
+        $date = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
+            ->where(RunStep::FIELD_TYPE,RunStep::ENUM_TYPE_TODAY)
+            ->pluck(RunStep::FIELD_RUN_AT);
+        $date = collect($date)->map(function ($item){
+            return Carbon::parse($item)->toDateString();
+        });
+        $date = collect($date)->toArray();
+        foreach ($runData as $item){
+            if(in_array($item[RunStep::FIELD_RUN_AT],$date)){
+                RunStep::query()
+                    ->where(RunStep::FIELD_ID_USER,$userId)
+                    ->where(RunStep::FIELD_RUN_AT,$item[RunStep::FIELD_RUN_AT])
+                    ->update([RunStep::FIELD_STEP=>$item['step'],RunStep::FIELD_TYPE=>RunStep::ENUM_TYPE_NOT_TODAY]);
+            }
+        }
+    }
+
+    /**
+     * 获取用户当天的步数
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function todayStep($userId)
+    {
+        $step = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->value(RunStep::FIELD_STEP);
+        return $step;
+    }
+
+    /**
+     * 统计用户全部步数
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function statisticStep($userId)
+    {
+        $total = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->sum(RunStep::FIELD_STEP);
+        return $total;
+    }
+
+    public function stepBuilder($userId)
+    {
+        $builder = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId);
+        $this->builder = $builder;
+
+        return $this;
+    }
+
+    public function sort($orderBy,$sortBy)
+    {
+        $this->builder->orderBy($orderBy,$sortBy);
+        return $this;
+    }
+
+    public function done()
+    {
+        return $this->builder;
+    }
+
+    public function formatStep($step)
+    {
+        $step->{RunStep::FIELD_RUN_AT} = Carbon::parse($step->{RunStep::FIELD_RUN_AT})->toDateString();
+
+        return $step;
     }
 }

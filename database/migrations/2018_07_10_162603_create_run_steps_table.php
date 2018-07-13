@@ -17,6 +17,7 @@ class CreateRunStepsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index()->comment('用户id');
 
+            $table->tinyInteger('type')->default(1)->comment('是否是当天的步数');
             $table->bigInteger('step')->default(0)->comment('用户的步数');
             $table->timestamp('run_at')->nullable()->index()->comment('步数的日期');
 

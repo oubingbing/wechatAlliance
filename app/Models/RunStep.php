@@ -20,11 +20,18 @@ class RunStep extends BaseModel
     /** Field user_id */
     const FIELD_ID_USER = 'user_id';
 
+    /** Field type 是否是当天的数据，后期获取需要更新 */
+    const FIELD_TYPE = 'type';
+
     /** Field step */
     const FIELD_STEP = 'step';
 
     /** Field run_at */
     const FIELD_RUN_AT = 'run_at';
+
+    /** 是否是当天的数据，1=不是，2=是 */
+    const ENUM_TYPE_NOT_TODAY = 1;
+    const ENUM_TYPE_TODAY = 2;
 
     protected $fillable = [
         self::FIELD_ID,

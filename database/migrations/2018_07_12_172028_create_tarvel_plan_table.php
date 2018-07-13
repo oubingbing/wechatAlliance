@@ -19,7 +19,7 @@ class CreateTarvelPlanTable extends Migration
             $table->bigInteger('user_id')->index()->comment('用户ID');
 
             $table->string('title')->default('')->comment('旅行的目标');
-            $table->bigInteger('distance')->comment('旅行的路程，单位是米');
+            $table->bigInteger('distance')->comment('旅行的总路程，单位是米');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

@@ -238,6 +238,12 @@ $api->version('v1', function ($api) {
 
             /** 获取用户微信步数 */
             $api->post('/run_data',StepTravelController::class . '@saveStep');
+
+            /** 用户步数统计数据 */
+            $api->get('/run_statistic',StepTravelController::class . '@statisticStep');
+
+            /** 步数数据 */
+            $api->get('/run_steps',StepTravelController::class . '@steps');
         });
 
     });
