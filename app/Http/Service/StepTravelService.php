@@ -244,6 +244,14 @@ class StepTravelService
         return $total;
     }
 
+    /**
+     * 构建查询构造器
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return $this
+     */
     public function stepBuilder($userId)
     {
         $builder = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId);
@@ -252,17 +260,41 @@ class StepTravelService
         return $this;
     }
 
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @param $sortBy
+     * @return $this
+     */
     public function sort($orderBy,$sortBy)
     {
         $this->builder->orderBy($orderBy,$sortBy);
         return $this;
     }
 
+    /**
+     * 返回查询构造器
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function done()
     {
         return $this->builder;
     }
 
+    /**
+     * 格式化数据
+     *
+     * @author yezi
+     *
+     * @param $step
+     * @return mixed
+     */
     public function formatStep($step)
     {
         $step->{RunStep::FIELD_RUN_AT} = Carbon::parse($step->{RunStep::FIELD_RUN_AT})->toDateString();
