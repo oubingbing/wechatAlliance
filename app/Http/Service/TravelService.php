@@ -126,6 +126,8 @@ class TravelService
             $stepLength = $rate * $step['step_meter'];
             $locationPoint = $mathService->getLocationPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude'],$stepLength);
             $travelLength += $stepLength;
+            $nextPoint['latitude'] = $locationPoint['x'];
+            $nextPoint['longitude'] = $locationPoint['y'];
             if($travelLength > $pointLength){
                 //重新换下一个坐标开始计算
                 $index += 1;
