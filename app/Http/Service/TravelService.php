@@ -124,10 +124,8 @@ class TravelService
         foreach ($stepData as $step){
             //根据比例获取实际的地理坐标
             $stepLength = $rate * $step['step_meter'];
-            $locationPoint = $mathService->getLocationPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude'],$stepLength);
             $travelLength += $stepLength;
-            $nextPoint['latitude'] = $locationPoint['x'];
-            $nextPoint['longitude'] = $locationPoint['y'];
+            $locationPoint = $mathService->getLocationPoint($point['longitude'],$point['latitude'],$nextPoint['longitude'],$nextPoint['latitude'],$travelLength);
             if($travelLength > $pointLength){
                 //重新换下一个坐标开始计算
                 $index += 1;
@@ -139,6 +137,7 @@ class TravelService
 
                 $point = $nextPoint;
                 $nextPoint = $points[$index];
+                $travelLength = 0;
                 //重新计算两点间的距离和距离比例
                 $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
                 $rate = $this->getDistanceWithLocationRate($point,$nextPoint);
@@ -147,8 +146,8 @@ class TravelService
             array_push($logArray,[
                 TravelLog::FIELD_ID_TRAVEL_PLAN=>$plan->id,
                 TravelLog::FIELD_ID_USER=>$userId,
-                TravelLog::FIELD_LATITUDE=>$locationPoint['x'],
-                TravelLog::FIELD_LONGITUDE=>$locationPoint['y'],
+                TravelLog::FIELD_LATITUDE=>$locationPoint['y'],
+                TravelLog::FIELD_LONGITUDE=>$locationPoint['x'],
                 TravelLog::FIELD_DISTANCE=>$step['step_meter'],
                 TravelLog::FIELD_STEP=>$step['step'],
                 TravelLog::FIELD_RUN_AT=>$step['run_at']
