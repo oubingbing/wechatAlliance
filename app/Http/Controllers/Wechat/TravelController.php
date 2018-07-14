@@ -11,6 +11,7 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
 
@@ -87,8 +88,26 @@ class TravelController extends Controller
     {
         $user = request()->input('user');
 
-        $result = $this->travelService->travelingPlan($user->id);
+        $plan = $this->travelService->travelingPlan($user->id);
+
+        $result = $this->travelService->format($plan);
 
         return $result;
+    }
+
+    public function travelLogs()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size', 10);
+        $pageNumber = request()->input('page_number', 1);
+
+        $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
+
+        $query = $this->travelService->travelLogBuilder($user->id);
+        $logs = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+            return $this->travelService->formatTravelLog($item);
+        });
+
+        return $logs;
     }
 }

@@ -44,6 +44,8 @@ class TravelLog extends BaseModel
     /** Field run_at 行程的日期 */
     const FIELD_RUN_AT = 'run_at';
 
+    const REL_PLAN = 'plan';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_TRAVEL_PLAN,
@@ -56,5 +58,10 @@ class TravelLog extends BaseModel
         self::FIELD_STEP,
         self::FIELD_RUN_AT
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(TravelPlan::class,self::FIELD_ID_TRAVEL_PLAN,TravelLog::FIELD_ID);
+    }
 
 }

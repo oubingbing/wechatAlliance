@@ -251,6 +251,9 @@ $api->version('v1', function ($api) {
 
             /** 获取用户进行中的旅行计划 */
             $api->get('/plan',TravelController::class . '@plan');
+
+            /** 获取在旅行中的日志 */
+            $api->get('/ravel_logs',TravelController::class . '@travelLogs');
         });
 
     });

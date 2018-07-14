@@ -83,7 +83,15 @@ class TravelService
         $plans = TravelPlan::query()
             ->with([
                 TravelPlan::REL_POINTS,
-                TravelPlan::REL_TRAVEL_LOGS
+                TravelPlan::REL_TRAVEL_LOGS=>function($query){
+                    $query->select([
+                        TravelLog::FIELD_ID,
+                        TravelLog::FIELD_ID_TRAVEL_PLAN,
+                        TravelLog::FIELD_DISTANCE,
+                        TravelLog::FIELD_LATITUDE,
+                        TravelLog::FIELD_LONGITUDE
+                    ]);
+                }
             ])
             ->where(TravelPlan::FIELD_ID_USER,$userId)
             ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
@@ -235,6 +243,71 @@ class TravelService
         $rate = $pointLength / $pointLengthMeter;
 
         return $rate;
+    }
+
+    /**
+     * 格式化单条
+     *
+     * @author yezi
+     *
+     * @param $plan
+     * @return mixed
+     */
+    public function format($plan)
+    {
+        if($plan){
+            $travelLogs = $plan['travelLogs'];
+            if($travelLogs){
+                foreach ($travelLogs as $log){
+                    $plan['travelLogs'] = $this->formatTravelLog($log);
+                }
+            }
+        }
+
+        return $plan;
+    }
+
+    public function traveling($userId)
+    {
+        $result = TravelPlan::query()
+            ->where(TravelPlan::FIELD_ID_USER,$userId)
+            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
+            ->first();
+
+        return $result;
+    }
+
+    public function travelLogBuilder($userId)
+    {
+        $builder = TravelLog::query()
+            ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId){
+            $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+            })->where(TravelLog::FIELD_ID_USER,$userId)
+            ->orderBy(TravelLog::FIELD_RUN_AT,'desc');
+
+        return $builder;
+    }
+
+    /**
+     * 格式化旅游日志
+     *
+     * @author yezi
+     *
+     * @param $log
+     * @return mixed
+     */
+    public function formatTravelLog($log)
+    {
+        $log['format_latitude'] = round($log->{TravelLog::FIELD_LATITUDE},4);
+        $log['format_longitude'] = round($log->{TravelLog::FIELD_LONGITUDE},4);
+        $log['run_at'] = Carbon::parse($log->{TravelLog::FIELD_RUN_AT})->toDateString();
+        $log['distance'] = round($log->{TravelLog::FIELD_DISTANCE} / 1000,2);
+        $log['log'] = '';
+        $log['hotel'] = '';
+        $log['views'] = '';
+        $log['foods'] = '';
+
+        return $log;
     }
 
 }
