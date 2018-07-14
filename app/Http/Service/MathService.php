@@ -29,6 +29,23 @@ class MathService
     }
 
     /**
+     * 两点间的距离公式
+     *
+     * @author yezi
+     *
+     * @param $fx
+     * @param $fy
+     * @param $tx
+     * @param $ty
+     * @return number
+     */
+    public function towPointDistance($fx,$fy,$tx,$ty)
+    {
+        $result = abs(sqrt(($fx - $tx) * ($fx -$tx) + ($fy - $ty) * ($fy - $ty)));
+        return $result;
+    }
+
+    /**
      * 知道两个地理坐标形成的直线斜率，求该直线与水平直线形成的夹角
      *
      * @author yezi
@@ -165,6 +182,41 @@ class MathService
     public function stepToMeter($step)
     {
         return $step * 0.55;
+    }
+
+    /**
+     * 计算地理坐标
+     *
+     * @author yezi
+     *
+     * @param $d
+     * @return float|int
+     */
+    public function toRadians($d) {
+        return $d * M_PI / 180;
+    }
+
+    /**
+     * 计算地理坐标距离
+     *
+     * @author yez
+     *
+     * @param $lat1
+     * @param $lng1
+     * @param $lat2
+     * @param $lng2
+     * @return int
+     */
+    public function getDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $dis = 0;
+        $radLat1 = $this->toRadians($lat1);
+        $radLat2 = $this->toRadians($lat2);
+        $deltaLat = $radLat1 - $radLat2;
+        $deltaLng = $this->toRadians($lng1) - $this->toRadians($lng2);
+        $dis = 2 * asin(sqrt(pow(sin($deltaLat / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($deltaLng / 2), 2)));
+
+        return $dis * 6378137;
     }
 
 }

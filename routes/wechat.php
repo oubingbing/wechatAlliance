@@ -27,6 +27,7 @@ use App\Http\Wechat\PraiseController;
 use App\Http\Wechat\SaleFriendController;
 use App\Http\Wechat\StepTravelController;
 use App\Http\Wechat\TopicController;
+use App\Http\Wechat\TravelController;
 use App\Http\Wechat\UserController;
 use Illuminate\Support\Facades\Log;
 
@@ -244,6 +245,12 @@ $api->version('v1', function ($api) {
 
             /** 步数数据 */
             $api->get('/run_steps',StepTravelController::class . '@steps');
+
+            /** 步数数据 */
+            $api->post('/create_travel_plan',TravelController::class . '@createTravelPlan');
+
+            /** 获取用户进行中的旅行计划 */
+            $api->get('/plan',TravelController::class . '@plan');
         });
 
     });

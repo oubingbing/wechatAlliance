@@ -21,6 +21,8 @@ class CreateTarvelPlanTable extends Migration
             $table->string('title')->default('')->comment('旅行的目标');
             $table->bigInteger('distance')->comment('旅行的总路程，单位是米');
 
+            $table->tinyInteger('status')->default(1)->comment('旅行计划的状态，1=旅行中，2=已终止，3等于已完成');
+
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();
             $table->softDeletes();

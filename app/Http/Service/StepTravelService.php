@@ -59,7 +59,26 @@ class StepTravelService
         $date = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
             ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
+            ->orderBy(RunStep::FIELD_RUN_AT,'asc')
             ->select([RunStep::FIELD_ID,RunStep::FIELD_ID_USER,RunStep::FIELD_STEP,RunStep::FIELD_RUN_AT])
+            ->get();
+        return $date;
+    }
+
+    /**
+     * 获取用户所有的步数信息
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getUserAllRunData($userId)
+    {
+        $date = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
+            ->orderBy(RunStep::FIELD_RUN_AT,'asc')
             ->get();
         return $date;
     }

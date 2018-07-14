@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use App\Http\Service\Http;
 use App\Http\Service\MathService;
+use App\Http\Service\StepTravelService;
+use App\Http\Service\TravelService;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
@@ -113,6 +115,27 @@ class ExampleTest extends TestCase
     public function testStepToMeter()
     {
         $result = app(MathService::class)->stepToMeter(3671);
+        dd($result);
+    }
+
+    public function testGetDist()
+    {
+        $result = app(MathService::class)->getDistance(29.21229, 103.324520, 26.21229, 108.58195102022);
+        dd($result);
+    }
+
+    public function testTowPointDistance()
+    {
+        $result = app(MathService::class)->towPointDistance(29.21229, 103.324520, 26.21229, 108.58195102022);
+        dd($result);
+    }
+
+    public function testMoveTravel()
+    {
+        $userId = 5318;
+        $stepData = app(StepTravelService::class)->getUserAllRunData($userId);
+        $result = app(TravelService::class)->travelLog(5318,$stepData);
+
         dd($result);
     }
 }

@@ -51,12 +51,15 @@ class WeChatRequestService
     }
 
     /**
-     * 检验数据的真实性，并且获取解密后的明文.
-     * @param $encryptedData string 加密的用户数据
-     * @param $iv string 与用户数据一同返回的初始向量
-     * @param $data string 解密后的原文
+     * 解密数据
      *
-     * @return int 成功0，失败返回对应的错误码
+     * @author 叶子
+     *
+     * @param $encryptedData
+     * @param $iv
+     * @param $sessionKey
+     * @return string
+     * @throws ApiException
      */
     public function decryptData( $encryptedData, $iv,$sessionKey)
     {
