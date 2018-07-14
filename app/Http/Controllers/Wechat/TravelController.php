@@ -142,6 +142,14 @@ class TravelController extends Controller
         return $result;
     }
 
+    /**
+     * 更新旅行日志
+     *
+     * @author yezi
+     *
+     * @return int
+     * @throws ApiException
+     */
     public function updateLog()
     {
         $user = request()->input('user');

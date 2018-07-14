@@ -60,7 +60,6 @@ class StepTravelController extends Controller
             //如果当天有数据就只更新数据
             if($checkToday){
                 $this->stepTravelService->updateTodayRunData($user->id,$formatResult);
-                return 'update';
             }
     
             $result = $this->stepTravelService->getUserNewRunStep($user->id,$formatResult);

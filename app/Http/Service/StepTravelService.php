@@ -196,6 +196,7 @@ class StepTravelService
                 break;
             }
         }
+
         if($todayRunData){
             //更新数据
             $step = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->first();
