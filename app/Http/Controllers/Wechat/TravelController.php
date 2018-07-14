@@ -95,6 +95,13 @@ class TravelController extends Controller
         return $result;
     }
 
+    /**
+     * 旅行日志
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function travelLogs()
     {
         $user = request()->input('user');
@@ -109,5 +116,44 @@ class TravelController extends Controller
         });
 
         return $logs;
+    }
+
+    /**
+     * 保存咨询
+     *
+     * @author yezi
+     *
+     * @return mixed
+     * @throws ApiException
+     */
+    public function createPoi()
+    {
+        $user = request()->input('user');
+        $logId = request()->input('log_id');
+        $title = request()->input('title');
+        $address = request()->input('address');
+        $type = request()->input('type');
+
+        $result = $this->travelService->savePoi($logId,$title,$address,$type);
+        if(!$result){
+            throw new ApiException('保存失败！',500);
+        }
+
+        return $result;
+    }
+
+    public function updateLog()
+    {
+        $user = request()->input('user');
+        $logId = request()->input('log_id');
+        $name = request()->input('name');
+        $address = request()->input('address');
+
+        $result = $this->travelService->updateLogNameAndAddress($logId,$name,$address);
+        if(!$result){
+            throw new ApiException('更新失败！',500);
+        }
+
+        return $result;
     }
 }

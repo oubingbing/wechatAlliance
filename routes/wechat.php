@@ -254,6 +254,12 @@ $api->version('v1', function ($api) {
 
             /** 获取在旅行中的日志 */
             $api->get('/ravel_logs',TravelController::class . '@travelLogs');
+
+            /** 保存旅途咨询 */
+            $api->post('/create_poi',TravelController::class . '@createPoi');
+
+            /** 更新log */
+            $api->put('/update_log',TravelController::class . '@updateLog');
         });
 
     });

@@ -18,7 +18,7 @@ class TravelLogPoi extends BaseModel
     const FIELD_ID = 'id';
 
     /** Field travel_log_id 所属旅行日志 */
-    const FIELD_ID_TRAVEL_ID = 'travel_log_pois';
+    const FIELD_ID_TRAVEL_ID = 'travel_log_id';
 
     /** Field title 周边的名字，例如酒店名字，景点名字 */
     const FIELD_TITLE = 'title';
@@ -33,5 +33,13 @@ class TravelLogPoi extends BaseModel
     const ENUM_TYPE_HOTEL = 1;
     const ENUM_TYPE_FOOD = 2;
     const ENUM_TYPE_VIEW_SPOT = 3;
+
+    protected $fillable = [
+        self::FIELD_ID,
+        self::FIELD_ID_TRAVEL_ID,
+        self::FIELD_TITLE,
+        self::FIELD_ADDRESS,
+        self::FIELD_TYPE
+    ];
 
 }

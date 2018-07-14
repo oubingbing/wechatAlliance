@@ -11,6 +11,7 @@ namespace App\Http\Service;
 
 use App\Exceptions\ApiException;
 use App\Models\TravelLog;
+use App\Models\TravelLogPoi;
 use App\Models\TravelPlan;
 use App\Models\TravelPlanPoint;
 use Carbon\Carbon;
@@ -259,7 +260,7 @@ class TravelService
             $travelLogs = $plan['travelLogs'];
             if($travelLogs){
                 foreach ($travelLogs as $log){
-                    $plan['travelLogs'] = $this->formatTravelLog($log);
+                    $plan['travel_logs'] = $this->formatTravelLog($log);
                 }
             }
         }
@@ -303,11 +304,114 @@ class TravelService
         $log['run_at'] = Carbon::parse($log->{TravelLog::FIELD_RUN_AT})->toDateString();
         $log['distance'] = round($log->{TravelLog::FIELD_DISTANCE} / 1000,2);
         $log['log'] = '';
-        $log['hotel'] = '';
-        $log['views'] = '';
-        $log['foods'] = '';
+        $log['hotel'] = $this->getTravelHotel($log->id);
+        $log['views'] = $this->getViews($log->id);
+        $log['foods'] = $this->getFoods($log->id);
 
         return $log;
+    }
+
+    /**
+     * 获取景点
+     *
+     * @author yezi
+     *
+     * @param $logId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getViews($logId)
+    {
+        $views = TravelLogPoi::query()
+            ->where(TravelLogPoi::FIELD_ID_TRAVEL_ID,$logId)
+            ->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_VIEW_SPOT)
+            ->get();
+
+        return $views;
+    }
+
+    /**
+     * 获取美食
+     *
+     * @author yezi
+     *
+     * @param $logId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getFoods($logId)
+    {
+        $foods = TravelLogPoi::query()
+            ->where(TravelLogPoi::FIELD_ID_TRAVEL_ID,$logId)
+            ->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_FOOD)
+            ->get();
+
+        return $foods;
+    }
+
+    /**
+     * 获取旅行酒店
+     *
+     * @author yezi
+     *
+     * @param $logId
+     * @return mixed
+     */
+    public function getTravelHotel($logId)
+    {
+        $hotel = TravelLogPoi::query()
+            ->where(TravelLogPoi::FIELD_ID_TRAVEL_ID,$logId)
+            ->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_HOTEL)
+            ->value(TravelLogPoi::FIELD_TITLE);
+
+        return $hotel;
+    }
+
+    /**
+     * 保存沿途咨询
+     *
+     * @author yezi
+     *
+     * @param $logId
+     * @param $title
+     * @param $address
+     * @param $type
+     * @return mixed
+     */
+    public function savePoi($logId,$title,$address,$type)
+    {
+        if($type == TravelLogPoi::ENUM_TYPE_HOTEL){
+            $poi = TravelLogPoi::query()
+                ->where(TravelLogPoi::FIELD_ID_TRAVEL_ID,$logId)
+                ->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_HOTEL)
+                ->value(TravelLogPoi::FIELD_ID);
+            if($poi){
+                return $poi;
+            }
+        }
+
+        $poi = TravelLogPoi::create([
+            TravelLogPoi::FIELD_ID_TRAVEL_ID=>$logId,
+            TravelLogPoi::FIELD_TITLE=>$title,
+            TravelLogPoi::FIELD_ADDRESS=>$address,
+            TravelLogPoi::FIELD_TYPE=>$type
+        ]);
+
+        return $poi;
+    }
+
+    /**
+     * 更新途径点的地名
+     *
+     * @author yezi
+     *
+     * @param $logId
+     * @param $name
+     * @param $address
+     * @return int
+     */
+    public function updateLogNameAndAddress($logId,$name,$address)
+    {
+        $result = TravelLog::query()->where(TravelLog::FIELD_ID,$logId)->update([TravelLog::FIELD_NAME=>$name,TravelLog::FIELD_ADDRESS=>$address]);
+        return $result;
     }
 
 }
