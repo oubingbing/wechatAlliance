@@ -26,8 +26,15 @@ class RunStep extends BaseModel
     /** Field step */
     const FIELD_STEP = 'step';
 
+    /** Field status 是否已使用，1=未使用，2=已使用 */
+    const FIELD_STATUS = 'status';
+
     /** Field run_at */
     const FIELD_RUN_AT = 'run_at';
+
+    /** status 是否已使用，1=未使用，2=已使用 */
+    const ENUM_STATUS_CAN_USE = 1;
+    const ENUM_STATUS_BE_USE = 2;
 
     /** 是否是当天的数据，1=不是，2=是 */
     const ENUM_TYPE_NOT_TODAY = 1;
@@ -37,6 +44,7 @@ class RunStep extends BaseModel
         self::FIELD_ID,
         self::FIELD_ID_USER,
         self::FIELD_STEP,
-        self::FIELD_RUN_AT
+        self::FIELD_RUN_AT,
+        self::FIELD_STATUS,
     ];
 }
