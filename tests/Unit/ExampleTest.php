@@ -142,7 +142,12 @@ class ExampleTest extends TestCase
 
     public function testUpdate()
     {
-        //RunStep::updateBatch([]);
-        dd('test');
+        $arr = [
+            ['id'=>34,'status'=>2],
+            ['id'=>35,'status'=>2],
+            ['id'=>37,'status'=>2],
+        ];
+        //$result = RunStep::updateBatch(RunStep::class,$arr);
+        dd($result);
     }
 }

@@ -11,9 +11,9 @@ namespace App\Models;
 
 use App\Exceptions\ApiException;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\ModelIdentifier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
 class BaseModel extends Model
 {
@@ -37,10 +37,10 @@ class BaseModel extends Model
      * @return bool
      * @throws ApiException
      */
-    public static function updateBatch($multipleData = array())
+    public static function updateBatch($model,$multipleData = array())
     {
-        $tableName = \DB::getTablePrefix() . app(User::class)->getTable();
-
+        $tableName = \DB::getTablePrefix() . app($model)->getTable();
+        
         if(!is_array($multipleData)){
             throw new ApiException('必须是数组',500);
         }
@@ -72,6 +72,8 @@ class BaseModel extends Model
                 $whereIn .= "'" . $data[$referenceColumn] . "', ";
             }
             $q = rtrim($q, ", ") . " WHERE " . $referenceColumn . " IN (" . rtrim($whereIn, ', ') . ")";
+
+            dd($q);
 
             return \DB::update(\DB::raw($q));
 
