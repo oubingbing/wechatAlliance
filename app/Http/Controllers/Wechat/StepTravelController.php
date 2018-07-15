@@ -13,8 +13,10 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
+use App\Http\Service\TravelService;
 use App\Http\Service\WeChatRequestService;
 use App\Models\RunStep;
+use App\Models\TravelLog;
 use App\Models\User;
 use App\Models\WechatApp;
 use Carbon\Carbon;
@@ -63,8 +65,27 @@ class StepTravelController extends Controller
             }
     
             $result = $this->stepTravelService->getUserNewRunStep($user->id,$formatResult);
+            $newStepData = $result;
             if($result){
                 $result = $this->stepTravelService->saveSteps($user->id,$result);
+            }
+
+            $travelService = app(TravelService::class);
+            $plan = $travelService->traveling($user->id);
+
+            if($plan){
+                $travelLog = $travelService->getLastTravelLog($plan->id);
+                $points = $travelService->getNotFinishPoint($plan->id);
+                if($travelLog){
+                    $length = $travelLog->{TravelLog::FIELD_TOTAL_LENGTH};
+                }else{
+                    $length = 0;
+                }
+                //步数旅行
+                $travelLogData = $travelService->travelLog($user->id,$newStepData,$plan,$points,$length);
+                if($travelLogData){
+                    $travelService->saveTravelLogs($travelLogData);
+                }
             }
             
             $this->stepTravelService->updateTypeIsTodayRunData($user->id,$formatResult);

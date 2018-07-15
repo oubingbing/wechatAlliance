@@ -25,6 +25,7 @@ class CreateTarvelPlanPointTable extends Migration
 
             $table->integer('sort')->default(0)->comment('站点的顺序');
             $table->tinyInteger('type')->default(1)->comment('站点的类型，1=起点，2=途径站点，3=终点');
+            $table->tinyInteger('status')->default(1)->comment('是否经过站点，1=未抵达，2=已抵达，3=用户已走出站点范围');
 
             $table->timestamp('created_at')->nullable()->index();
             $table->timestamp('updated_at')->nullable()->index();

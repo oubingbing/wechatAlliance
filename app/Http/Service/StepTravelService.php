@@ -77,7 +77,7 @@ class StepTravelService
     {
         $date = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
-            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
+            ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()->subDay(1)])
             ->orderBy(RunStep::FIELD_RUN_AT,'asc')
             ->get();
         return $date;

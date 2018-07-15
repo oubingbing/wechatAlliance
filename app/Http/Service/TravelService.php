@@ -9,7 +9,6 @@
 namespace App\Http\Service;
 
 
-use App\Exceptions\ApiException;
 use App\Models\TravelLog;
 use App\Models\TravelLogPoi;
 use App\Models\TravelPlan;
@@ -106,16 +105,18 @@ class TravelService
      *
      * @param $userId
      * @param $stepData
+     * @param $travelPoints
+     * @param $plan
+     * @param $theTravelLength
      * @return array
      */
-    public function travelLog($userId,$stepData)
+    public function travelLog($userId,$stepData,$plan,$travelPoints,$theTravelLength=0)
     {
         if(collect($stepData)->isEmpty()){
             return false;
         }
 
-        $plan = $this->travelingPlan($userId);
-        $points = $plan['points'];
+        $points = $travelPoints;
         $mathService = app(MathService::class);
 
         foreach ($stepData as $step){
@@ -125,22 +126,28 @@ class TravelService
         //计算站点之间的两点距离和实际的地理距离，然后再按照步数的地理距离与站点之间的距离的比例进行转换
         $index = 1;
         $logArray = [];
-        $travelLength = 0;
+        $travelLength = $theTravelLength;
         $point = $points[0];
         $nextPoint = $points[$index];
         $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
         $rate = $this->getDistanceWithLocationRate($point,$nextPoint);
+        $this->updatePointStatus($point['id'],TravelPlanPoint::ENUM_STATUS_ARRIVE);
         foreach ($stepData as $step){
             //根据比例获取实际的地理坐标
             $stepLength = $rate * $step['step_meter'];
             $travelLength += $stepLength;
             $locationPoint = $mathService->getLocationPoint($point['longitude'],$point['latitude'],$nextPoint['longitude'],$nextPoint['latitude'],$travelLength);
             if($travelLength > $pointLength){
+                //更新坐标点的状态
+                $this->updatePointStatus($point['id'],TravelPlanPoint::ENUM_STATUS_OVERRIDE);
+                $this->updatePointStatus($nextPoint['id'],TravelPlanPoint::ENUM_STATUS_ARRIVE);
+
                 //重新换下一个坐标开始计算
                 $index += 1;
 
                 if($index >= count($points)){
-                    //已经计算全部的站点了，循环结束
+                    //已经计算全部的站点了，旅行结束
+                    $this->finishTravel($plan->id);
                     break;
                 }
 
@@ -159,11 +166,37 @@ class TravelService
                 TravelLog::FIELD_LONGITUDE=>$locationPoint['x'],
                 TravelLog::FIELD_DISTANCE=>$step['step_meter'],
                 TravelLog::FIELD_STEP=>$step['step'],
-                TravelLog::FIELD_RUN_AT=>$step['run_at']
+                TravelLog::FIELD_RUN_AT=>$step['run_at'],
+                TravelLog::FIELD_ID_POINT=>$point['id'],
+                TravelLog::FIELD_LENGTH=>$stepLength,
+                TravelLog::FIELD_TOTAL_LENGTH=>$travelLength
             ]);
         }
 
         return $logArray;
+    }
+
+    /**
+     * 旅行结束
+     *
+     * @author yezi
+     *
+     * @param $planId
+     */
+    public function finishTravel($planId)
+    {
+        TravelPlanPoint::query()
+            ->where(TravelPlanPoint::FIELD_ID_TRAVEL_PLAN,$planId)
+            ->where(TravelPlanPoint::FIELD_STATUS,'!=',TravelPlanPoint::ENUM_STATUS_OVERRIDE)
+            ->update([TravelPlanPoint::FIELD_STATUS=>TravelPlanPoint::ENUM_STATUS_OVERRIDE]);
+
+        TravelPlan::query()->where(TravelPlan::FIELD_ID,$planId)->update([TravelPlan::FIELD_STATUS=>TravelPlan::ENUM_STATUS_SUCCESS]);
+    }
+
+    public function updatePointStatus($pointId,$status)
+    {
+        $result = TravelPlanPoint::query()->where(TravelPlanPoint::FIELD_ID,$pointId)->update([TravelPlanPoint::FIELD_STATUS=>$status]);
+        return $result;
     }
 
     /**
@@ -414,4 +447,24 @@ class TravelService
         return $result;
     }
 
+    public function getLastTravelLog($planId)
+    {
+        $log = TravelLog::query()
+            ->where(TravelLog::FIELD_ID_TRAVEL_PLAN,$planId)
+            ->orderBy(TravelLog::FIELD_RUN_AT,'desc')
+            ->first();
+
+        return $log;
+    }
+
+    public function getNotFinishPoint($planId)
+    {
+        $points = TravelPlanPoint::query()
+            ->where(TravelPlanPoint::FIELD_ID_TRAVEL_PLAN,$planId)
+            ->where(TravelPlanPoint::FIELD_STATUS,'!=',TravelPlanPoint::ENUM_STATUS_OVERRIDE)
+            ->orderBy(TravelPlanPoint::FIELD_SORT,'asc')
+            ->get();
+
+        return $points;
+    }
 }

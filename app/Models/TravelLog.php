@@ -44,6 +44,16 @@ class TravelLog extends BaseModel
     /** Field run_at 行程的日期 */
     const FIELD_RUN_AT = 'run_at';
 
+    /** Field point_id 所属站点 */
+    const FIELD_ID_POINT = 'point_id';
+
+
+    /** Field point_distance 地图坐标的距离 */
+    const FIELD_LENGTH = 'length';
+
+    /** Field total_distance 总的地图坐标的距离 */
+    const FIELD_TOTAL_LENGTH = 'total_length';
+
     const REL_PLAN = 'plan';
 
     protected $fillable = [
@@ -56,7 +66,10 @@ class TravelLog extends BaseModel
         self::FIELD_LONGITUDE,
         self::FIELD_DISTANCE,
         self::FIELD_STEP,
-        self::FIELD_RUN_AT
+        self::FIELD_RUN_AT,
+        self::FIELD_ID_POINT,
+        self::FIELD_LENGTH,
+        self::FIELD_TOTAL_LENGTH
     ];
 
     public function plan()

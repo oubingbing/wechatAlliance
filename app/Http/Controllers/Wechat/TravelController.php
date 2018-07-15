@@ -14,6 +14,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
+use App\Models\RunStep;
+use Carbon\Carbon;
 
 class TravelController extends Controller
 {
@@ -58,7 +60,15 @@ class TravelController extends Controller
             $firstTravel = $this->travelService->ifFirstTravel($user->id);
             if($firstTravel){
                 $stepData = app(StepTravelService::class)->getUserAllRunData($user->id);
-                $travelLogData = $this->travelService->travelLog($user->id,$stepData);
+                $stepData = collect($stepData)->filter(function ($item){
+                    //过滤掉当天的数据
+                    if(Carbon::parse($item->{RunStep::FIELD_RUN_AT})->toDateString() != Carbon::now()->toDateString()){
+                        return $item;
+                    }
+                });
+                $plan = $this->travelService->travelingPlan($user->id);
+
+                $travelLogData = $this->travelService->travelLog($user->id,$stepData,$plan,$plan['points']);
                 if(!$travelLogData){
                     throw new ApiException("获取数据失败！",500);
                 }

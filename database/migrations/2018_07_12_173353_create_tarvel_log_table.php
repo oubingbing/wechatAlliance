@@ -21,6 +21,12 @@ class CreateTarvelLogTable extends Migration
 
             $table->string('name')->default('')->comment('抵达点的名字');
             $table->string('address')->default('')->comment('抵达点的地址');
+            $table->string('province')->default('')->comment('省');
+            $table->string('city')->default('')->comment('城市');
+
+            $table->bigInteger('point_id')->nullable()->comment('所属站点');
+            $table->float('length')->default(0)->comment('地图坐标的距离');
+            $table->float('total_length')->default(0)->comment('总的地图坐标的距离');
 
             $table->float('distance')->default(0)->comment('行程');
             $table->float('step')->default(0)->comment('步数');

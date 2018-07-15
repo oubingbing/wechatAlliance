@@ -38,6 +38,14 @@ class TravelPlanPoint extends BaseModel
     /** Field type 站点的类型 1=起点，2=途径站点，3=终点 */
     const FIELD_TYPE = 'type';
 
+    /** Field status 是否经过站点，1=未抵达，2=已抵达，3=用户已走出站点范围 */
+    const FIELD_STATUS = 'status';
+
+    /** Field status 是否经过站点，1=未抵达，2=已抵达，3=用户已走出站点范围 */
+    const ENUM_STATUS_NOT_ARRIVE = 1;
+    const ENUM_STATUS_ARRIVE = 2;
+    const ENUM_STATUS_OVERRIDE = 3;
+
     /** type 站点的类型 1=起点，2=途径站点，3=终点 */
     const ENUM_TYPE_START_POINT = 1;
     const ENUM_TYPE_ROUTE_POINT = 2;
@@ -51,6 +59,7 @@ class TravelPlanPoint extends BaseModel
         self::FIELD_LATITUDE,
         self::FIELD_LONGITUDE,
         self::FIELD_SORT,
-        self::FIELD_TYPE
+        self::FIELD_TYPE,
+        self::FIELD_STATUS
     ];
 }
