@@ -71,12 +71,10 @@ class BaseModel extends Model
             foreach ($multipleData as $data) {
                 $whereIn .= "'" . $data[$referenceColumn] . "', ";
             }
+            
             $q = rtrim($q, ", ") . " WHERE " . $referenceColumn . " IN (" . rtrim($whereIn, ', ') . ")";
 
-            dd($q);
-
             return \DB::update(\DB::raw($q));
-
         } else {
             return false;
         }
