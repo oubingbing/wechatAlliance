@@ -65,7 +65,6 @@ class StepTravelController extends Controller
             }
     
             $result = $this->stepTravelService->getUserNewRunStep($user->id,$formatResult);
-            $newStepData = $result;
             if($result){
                 $result = $this->stepTravelService->saveSteps($user->id,$result);
             }
@@ -82,10 +81,11 @@ class StepTravelController extends Controller
                     $length = 0;
                 }
                 //步数旅行
+                /*$newStepData = $this->stepTravelService->canTravelRunData($user->id);
                 $travelLogData = $travelService->travelLog($user->id,$newStepData,$plan,$points,$length);
                 if($travelLogData){
                     $travelService->saveTravelLogs($travelLogData);
-                }
+                }*/
             }
             
             $this->stepTravelService->updateTypeIsTodayRunData($user->id,$formatResult);

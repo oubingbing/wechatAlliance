@@ -321,4 +321,13 @@ class StepTravelService
 
         return $step;
     }
+
+    public function canTravelRunData($userId)
+    {
+        $steps = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->get();
+
+        return $steps;
+    }
 }
