@@ -182,7 +182,7 @@ class TravelService
         }
 
         if($updateStep){
-            RunStep::updateBatch($updateStep);
+            RunStep::updateBatch(RunStep::class,$updateStep);
         }
 
         return $logArray;

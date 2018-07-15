@@ -40,7 +40,7 @@ class BaseModel extends Model
     public static function updateBatch($model,$multipleData = array())
     {
         $tableName = \DB::getTablePrefix() . app($model)->getTable();
-        
+
         if(!is_array($multipleData)){
             throw new ApiException('必须是数组',500);
         }
