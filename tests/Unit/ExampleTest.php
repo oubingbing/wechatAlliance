@@ -6,6 +6,7 @@ use App\Http\Service\Http;
 use App\Http\Service\MathService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
+use App\Models\RunStep;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
@@ -137,5 +138,11 @@ class ExampleTest extends TestCase
         $result = app(TravelService::class)->travelLog(5318,$stepData);
 
         dd($result);
+    }
+
+    public function testUpdate()
+    {
+        //RunStep::updateBatch([]);
+        dd('test');
     }
 }

@@ -9,6 +9,7 @@
 namespace App\Http\Service;
 
 
+use App\Models\RunStep;
 use App\Models\TravelLog;
 use App\Models\TravelLogPoi;
 use App\Models\TravelPlan;
@@ -132,6 +133,7 @@ class TravelService
         $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
         $rate = $this->getDistanceWithLocationRate($point,$nextPoint);
         $this->updatePointStatus($point['id'],TravelPlanPoint::ENUM_STATUS_ARRIVE);
+        $updateStep = [];
         foreach ($stepData as $step){
             //根据比例获取实际的地理坐标
             $stepLength = $rate * $step['step_meter'];
@@ -171,6 +173,16 @@ class TravelService
                 TravelLog::FIELD_LENGTH=>$stepLength,
                 TravelLog::FIELD_TOTAL_LENGTH=>$travelLength
             ]);
+
+            array_push($updateStep,[
+                RunStep::FIELD_ID=>$step['id'],
+                RunStep::FIELD_STATUS=>RunStep::ENUM_STATUS_BE_USE,
+                RunStep::FIELD_UPDATED_AT=>Carbon::now()
+            ]);
+        }
+
+        if($updateStep){
+            RunStep::updateBatch($updateStep);
         }
 
         return $logArray;
