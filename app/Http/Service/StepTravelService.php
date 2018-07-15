@@ -328,6 +328,7 @@ class StepTravelService
         $steps = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
             ->where(RunStep::FIELD_STATUS,RunStep::ENUM_STATUS_CAN_USE)
+            ->where(RunStep::FIELD_RUN_AT,'!=',Carbon::now())
             ->orderBy(RunStep::FIELD_RUN_AT,'asc')
             ->get();
 
