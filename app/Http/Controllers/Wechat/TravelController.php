@@ -69,12 +69,11 @@ class TravelController extends Controller
                 $plan = $this->travelService->travelingPlan($user->id);
 
                 $travelLogData = $this->travelService->travelLog($user->id,$stepData,$plan,$plan['points']);
-                if(!$travelLogData){
-                    throw new ApiException("获取数据失败！",500);
-                }
-                $result = $this->travelService->saveTravelLogs($travelLogData);
-                if(!$result){
-                    throw new ApiException("保存数据失败！",500);
+                if($travelLogData){
+                    $result = $this->travelService->saveTravelLogs($travelLogData);
+                    if(!$result){
+                        throw new ApiException("保存数据失败！",500);
+                    }
                 }
             }
 
