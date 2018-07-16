@@ -262,7 +262,7 @@ $api->version('v1', function ($api) {
             $api->put('/update_log',TravelController::class . '@updateLog');
 
             /** 获取旅游报告 */
-            $api->get('/travel_report',TravelController::class . '@travelReport');
+            $api->get('/travel_report/{id}',TravelController::class . '@travelReport');
         });
 
     });

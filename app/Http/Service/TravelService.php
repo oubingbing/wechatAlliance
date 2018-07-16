@@ -533,7 +533,7 @@ class TravelService
             'province'=>$provinceCount,
             'city'=>$cityCount,
             'district'=>$districtCount,
-            'distance'=>$distanceSum,
+            'distance'=>round($distanceSum/1000,1),
             'step'=>$stepSum
         ];
     }
