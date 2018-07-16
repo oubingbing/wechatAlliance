@@ -453,9 +453,17 @@ class TravelService
      * @param $address
      * @return int
      */
-    public function updateLogNameAndAddress($logId,$name,$address)
+    public function updateLogNameAndAddress($logId,$name,$address,$province,$city,$district)
     {
-        $result = TravelLog::query()->where(TravelLog::FIELD_ID,$logId)->update([TravelLog::FIELD_NAME=>$name,TravelLog::FIELD_ADDRESS=>$address]);
+        $result = TravelLog::query()
+            ->where(TravelLog::FIELD_ID,$logId)
+            ->update([
+                TravelLog::FIELD_NAME=>$name,
+                TravelLog::FIELD_ADDRESS=>$address,
+                TravelLog::FIELD_PROVINCE=>$province,
+                TravelLog::FIELD_CITY=>$city,
+                TravelLog::FIELD_DISTRICT=>$district
+            ]);
         return $result;
     }
 

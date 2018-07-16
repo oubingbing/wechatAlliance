@@ -29,6 +29,15 @@ class TravelLog extends BaseModel
     /** Field address 抵达点的地址  */
     const FIELD_ADDRESS = 'address';
 
+    /** Field province 省份 */
+    const FIELD_PROVINCE = 'province';
+
+    /** Field city 城市 */
+    const FIELD_CITY = 'city';
+
+    /** Field district 县 */
+    const FIELD_DISTRICT = 'district';
+
     /** Field latitude 抵达点地理维度 */
     const FIELD_LATITUDE = 'latitude';
 
@@ -69,7 +78,10 @@ class TravelLog extends BaseModel
         self::FIELD_RUN_AT,
         self::FIELD_ID_POINT,
         self::FIELD_LENGTH,
-        self::FIELD_TOTAL_LENGTH
+        self::FIELD_TOTAL_LENGTH,
+        self::FIELD_PROVINCE,
+        self::FIELD_CITY,
+        self::FIELD_DISTRICT
     ];
 
     public function plan()
