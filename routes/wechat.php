@@ -260,6 +260,9 @@ $api->version('v1', function ($api) {
 
             /** 更新log */
             $api->put('/update_log',TravelController::class . '@updateLog');
+
+            /** 获取旅游报告 */
+            $api->get('/travel_report',TravelController::class . '@travelReport');
         });
 
     });
