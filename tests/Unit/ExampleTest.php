@@ -148,6 +148,20 @@ class ExampleTest extends TestCase
             ['id'=>37,'status'=>2],
         ];
         //$result = RunStep::updateBatch(RunStep::class,$arr);
+        dd();
+    }
+
+    public function testStas()
+    {
+        $result = app(TravelService::class)->statisticsTravel(37);
+
+        dd($result);
+    }
+
+    public function testPoi()
+    {
+        $result = app(TravelService::class)->statisticsPoi(37);
+
         dd($result);
     }
 }

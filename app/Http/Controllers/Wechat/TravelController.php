@@ -176,4 +176,43 @@ class TravelController extends Controller
 
         return $result;
     }
+
+    /**
+     * 旅行报告
+     *
+     * @param $planId
+     * @return array
+     */
+    public function travelReport($planId)
+    {
+        $user = request()->input('user');
+
+        $travel = $this->travelService->statisticsTravel($planId);
+        $poi = $this->travelService->statisticsPoi($planId);
+        $points = $this->travelService->getStartAndEndPoint($planId);
+
+        return [
+            'travel'=>$travel,
+            'poi'=>$poi,
+            'points'=>$points
+        ];
+    }
+
+    public function plans()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size', 10);
+        $pageNumber = request()->input('page_number', 1);
+        $orderBy = request()->input('order_by', 'created_at');
+        $sortBy = request()->input('sort_by', 'desc');
+
+        $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
+
+        $query = $this->travelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
+        $plans = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+            return $this->travelService->formatTravel($item);
+        });
+
+        return $plans;
+    }
 }

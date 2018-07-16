@@ -18,6 +18,8 @@ use Carbon\Carbon;
 
 class TravelService
 {
+    protected $builder;
+
     public function saveTravelPlan($userId,$title,$distance)
     {
         $plan = TravelPlan::create([
@@ -90,7 +92,8 @@ class TravelService
                         TravelLog::FIELD_ID_TRAVEL_PLAN,
                         TravelLog::FIELD_DISTANCE,
                         TravelLog::FIELD_LATITUDE,
-                        TravelLog::FIELD_LONGITUDE
+                        TravelLog::FIELD_LONGITUDE,
+                        TravelLog::FIELD_NAME
                     ]);
                 }
             ])
@@ -467,6 +470,14 @@ class TravelService
         return $result;
     }
 
+    /**
+     * 获取最后一天的旅行日志
+     * 
+     * @author yezi
+     * 
+     * @param $planId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function getLastTravelLog($planId)
     {
         $log = TravelLog::query()
@@ -477,6 +488,14 @@ class TravelService
         return $log;
     }
 
+    /**
+     * 获取未完成的旅行点
+     * 
+     * @author yezi
+     * 
+     * @param $planId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function getNotFinishPoint($planId)
     {
         $points = TravelPlanPoint::query()
@@ -486,5 +505,97 @@ class TravelService
             ->get();
 
         return $points;
+    }
+
+    /**
+     * 统计行程
+     *
+     * @author yezi
+     *
+     * @param $planId
+     * @return array
+     */
+    public function statisticsTravel($planId)
+    {
+        $travel = TravelLog::query()
+            ->where(TravelLog::FIELD_ID_TRAVEL_PLAN,$planId)
+            ->select([TravelLog::FIELD_DISTANCE,TravelLog::FIELD_PROVINCE,TravelLog::FIELD_CITY,TravelLog::FIELD_DISTRICT,TravelLog::FIELD_STEP])
+            ->get();
+
+        $provinceCount = collect($travel)->where(TravelLog::FIELD_PROVINCE,'!=','')->unique(TravelLog::FIELD_PROVINCE)->values()->count();
+        $cityCount = collect($travel)->where(TravelLog::FIELD_CITY,'!=','')->unique(TravelLog::FIELD_CITY)->values()->count();
+        $districtCount = collect($travel)->where(TravelLog::FIELD_DISTRICT,'!=','')->unique(TravelLog::FIELD_DISTRICT)->values()->count();
+
+        $distanceSum = collect($travel)->sum(TravelLog::FIELD_DISTANCE);
+        $stepSum = collect($travel)->sum(TravelLog::FIELD_STEP);
+
+        return [
+            'province'=>$provinceCount,
+            'city'=>$cityCount,
+            'district'=>$districtCount,
+            'distance'=>$distanceSum,
+            'step'=>$stepSum
+        ];
+    }
+
+    public function statisticsPoi($planId)
+    {
+        $result = TravelLogPoi::query()->whereHas(TravelLogPoi::REL_TRAVEL_LOG,function ($query)use($planId){
+           $query->where(TravelLog::FIELD_ID_TRAVEL_PLAN,$planId);
+        })
+        ->get([TravelLogPoi::FIELD_TYPE]);
+
+        $hotel = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_HOTEL)->count();
+        $food = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_FOOD)->count();
+        $view = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_VIEW_SPOT)->count();
+
+        return [
+            'hotel'=>$hotel,
+            'food'=>$food,
+            'view'=>$view
+        ];
+    }
+
+    /**
+     * 获取旅行的起点和终点
+     *
+     * @author yezi
+     *
+     * @param $planId
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getStartAndEndPoint($planId)
+    {
+        $points = TravelPlanPoint::query()
+            ->where(TravelPlanPoint::FIELD_ID_TRAVEL_PLAN,$planId)
+            ->whereIn(TravelPlanPoint::FIELD_TYPE,[TravelPlanPoint::ENUM_TYPE_START_POINT,TravelPlanPoint::ENUM_TYPE_END_POINT])
+            ->get([TravelPlanPoint::FIELD_TYPE,TravelPlanPoint::FIELD_NAME,TravelPlanPoint::FIELD_ADDRESS]);
+
+        return $points;
+    }
+
+    public function stepBuilder($userId)
+    {
+        $this->builder = TravelPlan::query()->with([TravelPlan::REL_POINTS=>function($query){
+            $query->select([TravelPlanPoint::FIELD_ID,TravelPlanPoint::FIELD_NAME,TravelPlanPoint::FIELD_TYPE,TravelPlanPoint::FIELD_LATITUDE,TravelPlanPoint::FIELD_LONGITUDE]);
+        }])->where(TravelPlan::FIELD_ID_USER);
+
+        return $this;
+    }
+
+    public function sort($orderBy,$sortBy)
+    {
+        $this->builder->orderBy($orderBy,$sortBy);
+        return $this;
+    }
+
+    public function done()
+    {
+        return $this->builder;
+    }
+
+    public function formatTravel($item)
+    {
+        return $item;
     }
 }

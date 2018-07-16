@@ -34,6 +34,8 @@ class TravelLogPoi extends BaseModel
     const ENUM_TYPE_FOOD = 2;
     const ENUM_TYPE_VIEW_SPOT = 3;
 
+    const REL_TRAVEL_LOG = 'travelLog';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_TRAVEL_ID,
@@ -41,5 +43,10 @@ class TravelLogPoi extends BaseModel
         self::FIELD_ADDRESS,
         self::FIELD_TYPE
     ];
+
+    public function travelLog()
+    {
+        return $this->belongsTo(TravelLog::class,self::FIELD_ID_TRAVEL_ID,TravelLog::FIELD_ID);
+    }
 
 }
