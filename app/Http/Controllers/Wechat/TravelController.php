@@ -165,9 +165,9 @@ class TravelController extends Controller
         $logId = request()->input('log_id');
         $name = request()->input('name');
         $address = request()->input('address');
-        $province = request()->input('province');
-        $city = request()->input('city');
-        $district = request()->input('district');
+        $province = request()->input('province','');
+        $city = request()->input('city','');
+        $district = request()->input('district','');
 
         $result = $this->travelService->updateLogNameAndAddress($logId,$name,$address,$province,$city,$district);
         if(!$result){
