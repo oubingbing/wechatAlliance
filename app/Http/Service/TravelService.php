@@ -47,9 +47,9 @@ class TravelService
         $length = count($points);
         foreach ($points as $key => $point){
             if($key == 0){
-                $type = TravelPlanPoint::ENUM_TYPE_START_POINT;
-            }elseif($key == ($length - 1)){
                 $type = TravelPlanPoint::ENUM_TYPE_END_POINT;
+            }elseif($key == ($length - 1)){
+                $type = TravelPlanPoint::ENUM_TYPE_START_POINT;
             }else{
                 $type = TravelPlanPoint::ENUM_TYPE_ROUTE_POINT;
             }
@@ -633,6 +633,20 @@ class TravelService
 
     public function formatTravel($item)
     {
+        $startPoint = '';
+        $endPoints = '';
+        foreach ($item['points'] as $point){
+            if($point->type == TravelPlanPoint::ENUM_TYPE_START_POINT){
+                $startPoint = $point->name;
+            }
+            if($point->type == TravelPlanPoint::ENUM_TYPE_END_POINT){
+                $endPoints = $point->name;
+            }
+        }
+
+        $item->start_point = $startPoint;
+        $item->end_point = $endPoints;
+
         return $item;
     }
 }
