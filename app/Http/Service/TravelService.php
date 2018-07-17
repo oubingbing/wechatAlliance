@@ -104,6 +104,30 @@ class TravelService
         return $plans;
     }
 
+    public function getPlanById($id)
+    {
+        $plans = TravelPlan::query()
+            ->with([
+                TravelPlan::REL_POINTS,
+                TravelPlan::REL_TRAVEL_LOGS=>function($query){
+                    $query->select([
+                        TravelLog::FIELD_ID,
+                        TravelLog::FIELD_ID_TRAVEL_PLAN,
+                        TravelLog::FIELD_DISTANCE,
+                        TravelLog::FIELD_LATITUDE,
+                        TravelLog::FIELD_LONGITUDE,
+                        TravelLog::FIELD_NAME
+                    ]);
+                }
+            ])
+            ->where(TravelPlan::FIELD_ID,$id)
+            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
+            ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
+            ->first();
+
+        return $plans;
+    }
+
     /**
      * 生成用户的移动数据
      *
@@ -326,11 +350,15 @@ class TravelService
         return $result;
     }
 
-    public function travelLogBuilder($userId)
+    public function travelLogBuilder($userId,$planId=null)
     {
         $builder = TravelLog::query()
-            ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId){
-            $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+            ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId,$planId){
+                if($planId){
+                    $query->where(TravelPlan::FIELD_ID,$planId);
+                }else{
+                    $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+                }
             })->where(TravelLog::FIELD_ID_USER,$userId)
             ->orderBy(TravelLog::FIELD_RUN_AT,'desc');
 
@@ -576,9 +604,18 @@ class TravelService
 
     public function stepBuilder($userId)
     {
-        $this->builder = TravelPlan::query()->with([TravelPlan::REL_POINTS=>function($query){
-            $query->select([TravelPlanPoint::FIELD_ID,TravelPlanPoint::FIELD_NAME,TravelPlanPoint::FIELD_TYPE,TravelPlanPoint::FIELD_LATITUDE,TravelPlanPoint::FIELD_LONGITUDE]);
-        }])->where(TravelPlan::FIELD_ID_USER);
+        $this->builder = TravelPlan::query()
+            ->with([TravelPlan::REL_POINTS=>function($query){
+                $query->select([
+                    TravelPlanPoint::FIELD_ID,
+                    TravelPlanPoint::FIELD_ID_TRAVEL_PLAN,
+                    TravelPlanPoint::FIELD_NAME,
+                    TravelPlanPoint::FIELD_TYPE,
+                    TravelPlanPoint::FIELD_LATITUDE,
+                    TravelPlanPoint::FIELD_LONGITUDE
+                ]);
+            }])
+            ->where(TravelPlan::FIELD_ID_USER,$userId);
 
         return $this;
     }

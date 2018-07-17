@@ -15,6 +15,8 @@ use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
 use App\Models\RunStep;
+use App\Models\TravelLog;
+use App\Models\TravelPlan;
 use Carbon\Carbon;
 
 class TravelController extends Controller
@@ -116,10 +118,11 @@ class TravelController extends Controller
         $user = request()->input('user');
         $pageSize = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
+        $planId = request()->input('plan_id',null);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
-        $query = $this->travelService->travelLogBuilder($user->id);
+        $query = $this->travelService->travelLogBuilder($user->id,$planId);
         $logs = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravelLog($item);
         });
@@ -214,5 +217,16 @@ class TravelController extends Controller
         });
 
         return $plans;
+    }
+
+    public function planDetail($id)
+    {
+        $user = request()->input('user');
+
+        $plan = $this->travelService->getPlanById($id);
+
+        $result = $this->travelService->format($plan);
+
+        return $result;
     }
 }

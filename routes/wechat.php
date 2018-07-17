@@ -263,6 +263,12 @@ $api->version('v1', function ($api) {
 
             /** 获取旅游报告 */
             $api->get('/travel_report/{id}',TravelController::class . '@travelReport');
+
+            /** 获取用户旅行记录 plans */
+            $api->get('/plans',TravelController::class . '@plans');
+
+            /** 获取具体的旅行详情 */
+            $api->get('/plan/{id}',TravelController::class . '@planDetail');
         });
 
     });
