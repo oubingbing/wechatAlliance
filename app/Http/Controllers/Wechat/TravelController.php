@@ -207,6 +207,13 @@ class TravelController extends Controller
         ];
     }
 
+    /**
+     * 旅行记录列表
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function plans()
     {
         $user = request()->input('user');
@@ -225,6 +232,14 @@ class TravelController extends Controller
         return $plans;
     }
 
+    /**
+     * 获取旅行计划的详情
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     */
     public function planDetail($id)
     {
         $user = request()->input('user');

@@ -104,6 +104,14 @@ class TravelService
         return $plans;
     }
 
+    /**
+     * 根据主键获取旅行计划
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function getPlanById($id)
     {
         $plans = TravelPlan::query()
@@ -121,7 +129,6 @@ class TravelService
                 }
             ])
             ->where(TravelPlan::FIELD_ID,$id)
-            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
             ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
             ->first();
 
@@ -340,6 +347,12 @@ class TravelService
         return $plan;
     }
 
+    /**
+     * 获取旅行中的线路
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function traveling($userId)
     {
         $result = TravelPlan::query()
@@ -566,6 +579,14 @@ class TravelService
         ];
     }
 
+    /**
+     * 统计旅行线路上的数据
+     *
+     * @author yezi
+     *
+     * @param $planId
+     * @return array
+     */
     public function statisticsPoi($planId)
     {
         $result = TravelLogPoi::query()->whereHas(TravelLogPoi::REL_TRAVEL_LOG,function ($query)use($planId){
@@ -602,6 +623,14 @@ class TravelService
         return $points;
     }
 
+    /**
+     * 构建查询构造器
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return $this
+     */
     public function stepBuilder($userId)
     {
         $this->builder = TravelPlan::query()
@@ -620,17 +649,41 @@ class TravelService
         return $this;
     }
 
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @param $sortBy
+     * @return $this
+     */
     public function sort($orderBy,$sortBy)
     {
         $this->builder->orderBy($orderBy,$sortBy);
         return $this;
     }
 
+    /**
+     * 返回查询构造器
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function done()
     {
         return $this->builder;
     }
 
+    /**
+     * 格式化数据
+     *
+     * @author yezi
+     *
+     * @param $item
+     * @return mixed
+     */
     public function formatTravel($item)
     {
         $startPoint = '';
