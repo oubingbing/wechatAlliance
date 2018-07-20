@@ -43,6 +43,10 @@ class TravelController extends Controller
         $distance = request()->input('distance');
         $title = request()->input('title');
 
+        if(collect($plans)->count() <= 1){
+            throw new ApiException('站点要两个以上',500);
+        }
+
         $plans = collect(collect($plans)->sortBy('id'))->toArray();
 
         try {
