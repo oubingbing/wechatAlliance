@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
+use App\Models\WechatApp;
 use Closure;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -16,8 +18,14 @@ class After
      */
     public function handle($request, Closure $next)
     {
-
-
-        return $next($request);
+        $user = $request->input('user');
+        $response = $next($request);
+        
+        $config = WechatApp::query()->where(WechatApp::FIELD_ID,$user[User::FIELD_ID_APP])->value(WechatApp::FIELD_STATUS);
+        if($config == WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+            return null;
+        }else{
+            return $response;
+        }
     }
 }
