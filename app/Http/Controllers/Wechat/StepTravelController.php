@@ -115,7 +115,7 @@ class StepTravelController extends Controller
 
         return [
             'today_step'=>$todayStep,
-            'total_step'=>$totalStep
+            'total_step'=>round($totalStep/10000,1)
         ];
     }
 

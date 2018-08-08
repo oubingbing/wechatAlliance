@@ -47,9 +47,9 @@ class TravelService
         $length = count($points);
         foreach ($points as $key => $point){
             if($key == 0){
-                $type = TravelPlanPoint::ENUM_TYPE_START_POINT;
-            }elseif($key == ($length - 1)){
                 $type = TravelPlanPoint::ENUM_TYPE_END_POINT;
+            }elseif($key == ($length - 1)){
+                $type = TravelPlanPoint::ENUM_TYPE_START_POINT;
             }else{
                 $type = TravelPlanPoint::ENUM_TYPE_ROUTE_POINT;
             }
@@ -101,6 +101,37 @@ class TravelService
             ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
             ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
             ->first();
+        return $plans;
+    }
+
+    /**
+     * 根据主键获取旅行计划
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function getPlanById($id)
+    {
+        $plans = TravelPlan::query()
+            ->with([
+                TravelPlan::REL_POINTS,
+                TravelPlan::REL_TRAVEL_LOGS=>function($query){
+                    $query->select([
+                        TravelLog::FIELD_ID,
+                        TravelLog::FIELD_ID_TRAVEL_PLAN,
+                        TravelLog::FIELD_DISTANCE,
+                        TravelLog::FIELD_LATITUDE,
+                        TravelLog::FIELD_LONGITUDE,
+                        TravelLog::FIELD_NAME
+                    ]);
+                }
+            ])
+            ->where(TravelPlan::FIELD_ID,$id)
+            ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
+            ->first();
+
         return $plans;
     }
 
@@ -316,6 +347,12 @@ class TravelService
         return $plan;
     }
 
+    /**
+     * 获取旅行中的线路
+     *
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function traveling($userId)
     {
         $result = TravelPlan::query()
@@ -326,11 +363,15 @@ class TravelService
         return $result;
     }
 
-    public function travelLogBuilder($userId)
+    public function travelLogBuilder($userId,$planId=null)
     {
         $builder = TravelLog::query()
-            ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId){
-            $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+            ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId,$planId){
+                if($planId){
+                    $query->where(TravelPlan::FIELD_ID,$planId);
+                }else{
+                    $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+                }
             })->where(TravelLog::FIELD_ID_USER,$userId)
             ->orderBy(TravelLog::FIELD_RUN_AT,'desc');
 
@@ -538,6 +579,14 @@ class TravelService
         ];
     }
 
+    /**
+     * 统计旅行线路上的数据
+     *
+     * @author yezi
+     *
+     * @param $planId
+     * @return array
+     */
     public function statisticsPoi($planId)
     {
         $result = TravelLogPoi::query()->whereHas(TravelLogPoi::REL_TRAVEL_LOG,function ($query)use($planId){
@@ -574,28 +623,83 @@ class TravelService
         return $points;
     }
 
+    /**
+     * 构建查询构造器
+     *
+     * @author yezi
+     *
+     * @param $userId
+     * @return $this
+     */
     public function stepBuilder($userId)
     {
-        $this->builder = TravelPlan::query()->with([TravelPlan::REL_POINTS=>function($query){
-            $query->select([TravelPlanPoint::FIELD_ID,TravelPlanPoint::FIELD_NAME,TravelPlanPoint::FIELD_TYPE,TravelPlanPoint::FIELD_LATITUDE,TravelPlanPoint::FIELD_LONGITUDE]);
-        }])->where(TravelPlan::FIELD_ID_USER);
+        $this->builder = TravelPlan::query()
+            ->with([TravelPlan::REL_POINTS=>function($query){
+                $query->select([
+                    TravelPlanPoint::FIELD_ID,
+                    TravelPlanPoint::FIELD_ID_TRAVEL_PLAN,
+                    TravelPlanPoint::FIELD_NAME,
+                    TravelPlanPoint::FIELD_TYPE,
+                    TravelPlanPoint::FIELD_LATITUDE,
+                    TravelPlanPoint::FIELD_LONGITUDE
+                ]);
+            }])
+            ->where(TravelPlan::FIELD_ID_USER,$userId);
 
         return $this;
     }
 
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @param $sortBy
+     * @return $this
+     */
     public function sort($orderBy,$sortBy)
     {
         $this->builder->orderBy($orderBy,$sortBy);
         return $this;
     }
 
+    /**
+     * 返回查询构造器
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function done()
     {
         return $this->builder;
     }
 
+    /**
+     * 格式化数据
+     *
+     * @author yezi
+     *
+     * @param $item
+     * @return mixed
+     */
     public function formatTravel($item)
     {
+        $startPoint = '';
+        $endPoints = '';
+        foreach ($item['points'] as $point){
+            if($point->type == TravelPlanPoint::ENUM_TYPE_START_POINT){
+                $startPoint = $point->name;
+            }
+            if($point->type == TravelPlanPoint::ENUM_TYPE_END_POINT){
+                $endPoints = $point->name;
+            }
+        }
+
+        $item->start_point = $startPoint;
+        $item->end_point = $endPoints;
+
         return $item;
     }
 }

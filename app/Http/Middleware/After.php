@@ -20,10 +20,9 @@ class After
     {
         $user = $request->input('user');
         $response = $next($request);
-        
         $config = WechatApp::query()->where(WechatApp::FIELD_ID,$user[User::FIELD_ID_APP])->value(WechatApp::FIELD_STATUS);
         if($config == WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
-            return null;
+            dd('hello world！');
         }else{
             return $response;
         }

@@ -15,6 +15,8 @@ use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
 use App\Models\RunStep;
+use App\Models\TravelLog;
+use App\Models\TravelPlan;
 use Carbon\Carbon;
 
 class TravelController extends Controller
@@ -41,6 +43,10 @@ class TravelController extends Controller
         $distance = request()->input('distance');
         $title = request()->input('title');
 
+        if(collect($plans)->count() <= 1){
+            throw new ApiException('站点要两个以上',500);
+        }
+
         $plans = collect(collect($plans)->sortBy('id'))->toArray();
 
         try {
@@ -58,6 +64,7 @@ class TravelController extends Controller
 
             //是否是首次旅行，是的话就是用用户的步数进行旅行
             $firstTravel = $this->travelService->ifFirstTravel($user->id);
+            $plan = $this->travelService->travelingPlan($user->id);
             if($firstTravel){
                 $stepData = app(StepTravelService::class)->getUserAllRunData($user->id);
                 $stepData = collect($stepData)->filter(function ($item){
@@ -66,8 +73,13 @@ class TravelController extends Controller
                         return $item;
                     }
                 });
-                $plan = $this->travelService->travelingPlan($user->id);
+            }else{
+                //或者是否有可用的步数
+                $stepData = app(StepTravelService::class)->canTravelRunData($user->id);
+            }
 
+            if($stepData){
+                //进行旅行操作
                 $travelLogData = $this->travelService->travelLog($user->id,$stepData,$plan,$plan['points']);
                 if($travelLogData){
                     $result = $this->travelService->saveTravelLogs($travelLogData);
@@ -116,10 +128,11 @@ class TravelController extends Controller
         $user = request()->input('user');
         $pageSize = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
+        $planId = request()->input('plan_id',null);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
-        $query = $this->travelService->travelLogBuilder($user->id);
+        $query = $this->travelService->travelLogBuilder($user->id,$planId);
         $logs = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravelLog($item);
         });
@@ -198,6 +211,13 @@ class TravelController extends Controller
         ];
     }
 
+    /**
+     * 旅行记录列表
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
     public function plans()
     {
         $user = request()->input('user');
@@ -214,5 +234,24 @@ class TravelController extends Controller
         });
 
         return $plans;
+    }
+
+    /**
+     * 获取旅行计划的详情
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function planDetail($id)
+    {
+        $user = request()->input('user');
+
+        $plan = $this->travelService->getPlanById($id);
+
+        $result = $this->travelService->format($plan);
+
+        return $result;
     }
 }
