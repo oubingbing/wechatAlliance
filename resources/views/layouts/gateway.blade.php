@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>小情书</title>
+    <title>阿地力·阿布力克木</title>
     <link rel="stylesheet" href="{{ asset('css/font.css') }}">
     <link rel="shortcut icon" href="{{ asset('img/logo.jfif') }}" type="image/x-icon">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -25,7 +25,7 @@
     <nav class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">小情书联盟</a>
+                <a class="navbar-brand" href="/">阿地力·阿布力克木</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -51,7 +51,7 @@
 
     <footer class="footer navbar-fixed-bottom">
         <div class="container footer">
-            @2016-2018 校园小情书 | 粤ICP备16004706号-1
+            <a href="http://www.miitbeian.gov.cn/">@2016-2018 阿地力·阿布力克木 | 粤ICP备16004706号-1</a>
         </div>
     </footer>
 </div>
