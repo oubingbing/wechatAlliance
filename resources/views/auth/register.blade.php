@@ -4,7 +4,7 @@
     <body class="login-bg">
 
     <div class="login layui-anim layui-anim-up">
-        <div class="message"><a href="{{ asset('/home') }}" style="color: white;">小情书 - 注册</a></div>
+        <div class="message"><a href="{{ asset('/home') }}" style="color: white;">湛江市赤坎区古卡饮品店 - 注册</a></div>
         <div id="darkbannerwrap"></div>
 
         <form method="POST" class="layui-form">
