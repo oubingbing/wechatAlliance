@@ -18,13 +18,8 @@ class After
      */
     public function handle($request, Closure $next)
     {
-        $user = $request->input('user');
         $response = $next($request);
-        $config = WechatApp::query()->where(WechatApp::FIELD_ID,$user[User::FIELD_ID_APP])->value(WechatApp::FIELD_STATUS);
-        if($config == WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
-            dd('hello world！');
-        }else{
-            return $response;
-        }
+
+        return $response;
     }
 }
