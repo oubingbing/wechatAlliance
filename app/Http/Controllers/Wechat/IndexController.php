@@ -10,6 +10,7 @@ use App\Http\Service\YunPianService;
 use App\Models\SaleFriend;
 use App\Models\User;
 use App\Models\WechatApp;
+use Illuminate\Support\Facades\DB;
 
 class IndexController extends Controller
 {
@@ -121,5 +122,14 @@ class IndexController extends Controller
         }
 
         return $result;
+    }
+
+    public function recordLocation(){
+        $latitude = request()->input("latitude");
+        $longitude = request()->input("longitude");
+
+        DB::table('location')->insert(
+            ['latitude' => $latitude,'longitude'=>$longitude]
+        );
     }
 }

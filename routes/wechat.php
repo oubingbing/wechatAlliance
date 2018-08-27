@@ -39,6 +39,8 @@ $api->version('v1', function ($api) {
 
         $api->get('/config',IndexController::class . '@config');
 
+        $api->POST('/location',IndexController::class . '@recordLocation');
+
         $api->group(['prefix' => 'auth', 'middleware' => 'before'], function ($api) {
 
             /** 登录 */
