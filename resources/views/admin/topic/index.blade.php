@@ -89,6 +89,7 @@
 
     </div>
     <script>
+        "use strict";
         new Vue({
             el: '#app',
             data: {
