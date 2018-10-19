@@ -47,6 +47,30 @@ class UserService
     }
 
     /**
+     * 新增用户
+     *
+     * @author yezi
+     * @param $userInfo
+     * @return mixed
+     */
+    public function createWeChatUserByModel($userInfo)
+    {
+        $result = User::create([
+            User::FIELD_ID_OPENID => $userInfo["openId"],
+            User::FIELD_NICKNAME  => $userInfo['nickName'],
+            User::FIELD_GENDER    => $userInfo['gender'] ? $userInfo['gender'] : 0,
+            User::FIELD_AVATAR    => $userInfo['avatarUrl'],
+            User::FIELD_CITY      => $userInfo['city'] ? $userInfo['city'] : '无',
+            User::FIELD_COUNTRY   => $userInfo['country'] ? $userInfo['country'] : '无',
+            User::FIELD_PROVINCE  => $userInfo['province'] ? $userInfo['province'] : '无',
+            User::FIELD_LANGUAGE  => $userInfo['language'],
+            User::FIELD_STATUS    => User::ENUM_STATUS_ACTIVITY
+        ]);
+
+        return $result;
+    }
+
+    /**
      * 新建查询构造器
      *
      * @author yezi

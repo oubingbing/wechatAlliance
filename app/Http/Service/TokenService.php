@@ -111,4 +111,29 @@ class TokenService
 
         return $token['token'];
     }
+
+    /**
+     * 获取token
+     *
+     * @author yezi
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function createApiToken($userInfo)
+    {
+        $user = User::where(User::FIELD_ID_OPENID,$userInfo["openId"])->first();
+        if(!$user){
+            $userLogin = new UserService();
+            $user = $userLogin->createWeChatUserByModel($userInfo);
+        }else{
+            $user->{User::FIELD_NICKNAME} = $userInfo['nickName'];
+            $user->{User::FIELD_AVATAR} = $userInfo['avatarUrl'];
+            $user->save();
+        }
+
+        $token = $this->getWecChatToken($user);
+
+        return $token;
+    }
 }

@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\WeChatLoginController;
 use App\Http\Controllers\QiNiuController;
 use App\Http\Wechat\ChatController;
 use App\Http\Wechat\CommentController;
@@ -45,6 +46,8 @@ $api->version('v1', function ($api) {
 
             /** 登录 */
             $api->post('/login', LoginController::class . '@apiLogin');
+
+            $api->post("/login_v2",WeChatLoginController::class . "@apiLogin");
 
         });
 
