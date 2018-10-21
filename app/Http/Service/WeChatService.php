@@ -29,6 +29,15 @@ class WeChatService
         $this->secretKey = env("WE_CHAT_SECRET");
     }
 
+    /**
+     * 获取session)id
+     *
+     * @param $code
+     * @param $iv
+     * @param $encryptedData
+     * @return int|mixed
+     * @throws ApiException
+     */
     public function getSessionInfo($code,$iv,$encryptedData){
         $url = $this->weChatLoginUrl."?appid={$this->appKey}&secret={$this->secretKey}&js_code=$code&grant_type=authorization_code";
 
