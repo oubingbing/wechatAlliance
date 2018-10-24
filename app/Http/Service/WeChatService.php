@@ -10,6 +10,7 @@ namespace App\Http\Service;
 
 
 use App\Exceptions\ApiException;
+use App\Models\WechatApp;
 use GuzzleHttp\Client;
 
 class WeChatService
@@ -18,23 +19,22 @@ class WeChatService
     private $appKey = '';
     private $secretKey = '';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->appKey = env("WE_CHAT_APP_ID");
-        $this->secretKey = env("WE_CHAT_SECRET");
-    }
+    public function getSessionInfo($appId,$code,$iv,$encryptedData){
 
-    public function getSessionInfo($code,$iv,$encryptedData){
+        $weChatApp = WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$appId)->first();
+        if(!$weChatApp){
+            throw new ApiException('不是有效的key',6000);
+        }
+
+        if($weChatApp->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            throw new ApiException('小程序处于审核中，无法使用后台服务！',6001);
+        }
+
+        $this->appKey = $weChatApp->{WechatApp::FIELD_APP_KEY};
+        $this->secretKey = $weChatApp->{WechatApp::FIELD_APP_SECRET};
         $url = $this->weChatLoginUrl."?appid={$this->appKey}&secret={$this->secretKey}&js_code=$code&grant_type=authorization_code";
-
         $http = new Client;
         $response = $http->get($url);
-
         $result = json_decode((string) $response->getBody(), true);
         if(!isset($result['openid'])){
             throw new ApiException('小程序登录失败，请检查您的app_id和app_secret是否正确！',5000);
@@ -43,6 +43,7 @@ class WeChatService
         $sessionKey = $result["session_key"];
         $userInfo = $this->decryptData($encryptedData,$iv,$sessionKey);
         $userInfo = json_decode($userInfo,true);
+        $userInfo["app_id"] = $weChatApp->id;
 
         return $userInfo;
     }

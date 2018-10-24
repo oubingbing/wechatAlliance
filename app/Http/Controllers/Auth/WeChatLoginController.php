@@ -40,11 +40,12 @@ class WeChatLoginController extends Controller
         $iv = request()->input('iv');
         $code = request()->input('code');
         $encryptedData = request()->input('encrypted_data');
+        $appId = request()->input("app_id");
 
         try{
             DB::beginTransaction();
 
-            $result = $this->wechatLogin($code,$iv,$encryptedData);
+            $result = $this->wechatLogin($appId,$code,$iv,$encryptedData);
 
             DB::commit();
         }catch (\Exception $e){
@@ -62,9 +63,9 @@ class WeChatLoginController extends Controller
      *
      * @return mixed
      */
-    public function weChatLogin($code,$iv,$encryptedData)
+    public function weChatLogin($appId,$code,$iv,$encryptedData)
     {
-        $userInfo = app(WeChatService::class)->getSessionInfo($code,$iv,$encryptedData);
+        $userInfo = app(WeChatService::class)->getSessionInfo($appId,$code,$iv,$encryptedData);
         $token = $this->tokenService->createApiToken($userInfo);
         return $token;
     }

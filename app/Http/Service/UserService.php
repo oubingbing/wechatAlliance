@@ -56,6 +56,7 @@ class UserService
     public function createWeChatUserByModel($userInfo)
     {
         $result = User::create([
+            User::FIELD_ID_APP    => $userInfo["app_id"],
             User::FIELD_ID_OPENID => $userInfo["openId"],
             User::FIELD_NICKNAME  => $userInfo['nickName'],
             User::FIELD_GENDER    => $userInfo['gender'] ? $userInfo['gender'] : 0,
