@@ -91,8 +91,11 @@ class LoginController extends Controller
      * 微信登录
      *
      * @author yezi
-     *
+     * @param $userInfo
+     * @param $code
+     * @param $appId
      * @return mixed
+     * @throws ApiException
      */
     public function weChatLogin($userInfo,$code,$appId)
     {

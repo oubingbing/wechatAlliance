@@ -9,9 +9,11 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\TokenService;
 use App\Http\Service\WeChatService;
+use App\Models\WechatApp;
 use Illuminate\Support\Facades\DB;
 
 class WeChatLoginController extends Controller
@@ -32,8 +34,8 @@ class WeChatLoginController extends Controller
      * 登录
      *
      * @author yezi
-     *
      * @return mixed
+     * @throws \Exception
      */
     public function apiLogin()
     {
@@ -57,16 +59,21 @@ class WeChatLoginController extends Controller
     }
 
     /**
-     * 微信登录
+     * 登录
      *
      * @author yezi
-     *
+     * @param $appKey
+     * @param $code
+     * @param $iv
+     * @param $encryptedData
      * @return mixed
+     * @throws ApiException
      */
     public function weChatLogin($appId,$code,$iv,$encryptedData)
     {
         $userInfo = app(WeChatService::class)->getSessionInfo($appId,$code,$iv,$encryptedData);
-        $token = $this->tokenService->createApiToken($userInfo);
+        $token = $this->tokenService->createApiToken($appId,$userInfo);
+
         return $token;
     }
 
