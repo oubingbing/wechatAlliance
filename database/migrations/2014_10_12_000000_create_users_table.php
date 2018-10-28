@@ -19,17 +19,17 @@ class CreateUsersTable extends Migration
             $table->bigInteger('app_id')->index()->comment('小程序id');
 
             $table->string('nickname')->comment('用户微信昵称');
-            $table->string('password')->nullable()->comment('预留账号密码');
-            $table->string('mobile')->nullable()->index()->comment('预留手机号码字段');
+            $table->string('password')->default("")->comment('预留账号密码');
+            $table->string('mobile')->default("")->index()->comment('预留手机号码字段');
 
-            $table->string('avatar')->nullable()->comment('微信头像');
+            $table->string('avatar')->default("")->comment('微信头像');
             $table->tinyInteger('gender')->default(0)->comment('默认一个性别');
-            $table->string('open_id')->nullable()->index();
-            $table->string('union_id')->nullable()->index();
-            $table->string('city')->default('无');
-            $table->string('country')->default('无');
+            $table->string('open_id')->default("")->index();
+            $table->string('union_id')->default("")->index();
+            $table->string('city')->default("");
+            $table->string('country')->default("");
             $table->string('language')->default("zh_CN");
-            $table->string('province')->default('无');
+            $table->string('province')->default("");
 
             $table->tinyInteger('type')->default(0)->comment('用户类型');
             $table->tinyInteger('status')->default(0)->comment('用户状态');
