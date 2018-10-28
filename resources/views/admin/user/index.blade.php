@@ -1,4 +1,9 @@
 @extends('layouts/admin')
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 @section('content')
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
@@ -15,7 +20,7 @@
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
             <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
-    <div class="x-body" id="app">
+    <div class="x-body" id="app" v-cloak>
         <div class="layui-row">
             <form class="layui-form layui-col-md12 x-so">
                 <input class="layui-input" placeholder="开始日" name="start" id="start">
