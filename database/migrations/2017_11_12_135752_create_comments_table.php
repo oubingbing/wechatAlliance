@@ -19,7 +19,7 @@ class CreateCommentsTable extends Migration
             $table->bigInteger('obj_id')->index()->comment('改评论所属的贴子');
             $table->bigInteger('college_id')->nullable()->comment('学校');
 
-            $table->longText('content')->comment('评论的内容');
+            $table->longText('content')->nullable()->comment('评论的内容');
             $table->jsonb('attachments')->nullable()->comment('评论的附件,例图片');
 
             $table->bigInteger('ref_comment_id')->nullable()->comment('改评论所评论的评论Id');

@@ -22,7 +22,7 @@ class CreateSaleFriendsTable extends Migration
             $table->tinyInteger('gender')->default(1)->comment('性别,默认是男');
             $table->string('major')->nullable()->comment('专业');
             $table->string('expectation',1024)->comment('简单介绍下喜欢什么样的人,期望');
-            $table->longText('introduce')->comment('介绍一下舍友');
+            $table->longText('introduce')->nullable()->comment('介绍一下舍友');
             $table->jsonb('attachments')->nullable()->comment('贴子的附件,例如图片');
 
             $table->integer('comment_number')->default(0)->comment('评论数量');
