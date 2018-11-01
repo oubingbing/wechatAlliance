@@ -15,8 +15,7 @@ github源码地址：https://github.com/oubingbing/wechatAlliance.git
 直接点击download下载源码即可
 
 ## 别忘了点star哈
-
-![](http://article.qiuhuiyi.cn/Fl9uqGovXBsPWr7LoianLXAjJS3w)
+<img src="http://article.qiuhuiyi.cn/Fl9uqGovXBsPWr7LoianLXAjJS3w" alt="Build Status">
 
 ##### 1.2使用git获取源码
 
@@ -41,8 +40,7 @@ composer下载地址：https://getcomposer.org/Composer-Setup.exe
 
 composer -v看到下图就说明安装成功了
 
-![](http://article.qiuhuiyi.cn/FlPyixDSp7YQPNRHwi8mrpm7gIiX)
-
+<img src="http://article.qiuhuiyi.cn/FlPyixDSp7YQPNRHwi8mrpm7gIiX" alt="Build Status">
 
 ### 三、安装PHP的laravel框架
 
@@ -55,8 +53,7 @@ php的laravel框架是一款非常优秀的php框架，如果有兴趣的可以�
     composer install
 
 安装laravel框架
-
-![](http://article.qiuhuiyi.cn/Fgau-lnInun7-SdCP330bCrIe-xG)
+<img src="http://article.qiuhuiyi.cn/Fgau-lnInun7-SdCP330bCrIe-xG" alt="Build Status">
 
 等他安装完成就可以了。
 
@@ -538,8 +535,7 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
 array_push($guards,'admin');
 
 如图所示：
-
-![](http://article.qiuhuiyi.cn/Fm6Co0R8ZTqxwwuyV4mp13YYvYPI)
+<img src="http://article.qiuhuiyi.cn/Fm6Co0R8ZTqxwwuyV4mp13YYvYPI" alt="">
 
 ### 七、运行项目
 
