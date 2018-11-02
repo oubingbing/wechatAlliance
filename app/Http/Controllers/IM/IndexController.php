@@ -13,7 +13,7 @@ class IndexController extends Controller
     {
         return view('test.redis');
     }
-    public function sendMessage()
+    public function sendSocket()
     {
         Gateway::sendToUid("7f0000010b5600000001", "你好呀");
     }
