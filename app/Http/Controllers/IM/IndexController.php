@@ -15,7 +15,9 @@ class IndexController extends Controller
     }
     public function sendSocket()
     {
-        Gateway::sendToUid("7f0000010b5600000001", "你好呀");
+        $client_id = request()->input("client_id");
+
+        Gateway::sendToClient($client_id, "你好");
     }
 
     public function socket()
