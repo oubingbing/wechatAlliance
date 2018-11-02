@@ -5,6 +5,7 @@ namespace App\Http\Controllers\IM;
 use App\Events\Chat;
 use App\Http\Controllers\Controller;
 use App\Http\Service\GatewayService;
+use GatewayClient\Gateway;
 
 class IndexController extends Controller
 {
@@ -14,9 +15,7 @@ class IndexController extends Controller
     }
     public function sendMessage()
     {
-        $content = request()->input('content');
-
-        event(new Chat('慧怡'));
+        Gateway::sendToUid("7f0000010b5600000001", "你好呀");
     }
 
     public function socket()
