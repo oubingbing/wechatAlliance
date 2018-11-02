@@ -6,7 +6,7 @@ use GatewayClient\Gateway;
 
 class GatewayService
 {
-    private $address = '47.106.131.223:1238';
+    private $address = '47.106.131.223:1236';
 
     public function __construct()
     {
