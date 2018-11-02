@@ -35,7 +35,7 @@
 </body>
 <script>
 
-    ws = new WebSocket("wss://lian.kucaroom.com:8585");
+    ws = new WebSocket("wss://lianyan.kucaroom.com:8585");
 
     // 服务端主动推送消息时会触发这里的onmessage
     ws.onmessage = function(e){
