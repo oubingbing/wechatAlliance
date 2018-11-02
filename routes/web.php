@@ -29,7 +29,7 @@ Route::get('/curl','BirthdayController@test');
 Route::get('test_socket','IM\IndexController@chatRoom');
 Route::get('socket','IM\IndexController@socket');
 Route::get('bind','IM\IndexController@bindSocket');
-Route::post('send','IM\IndexController@sendSocket');
+Route::get('send','IM\IndexController@sendSocket');
 
 
 
