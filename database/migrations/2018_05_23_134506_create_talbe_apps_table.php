@@ -20,7 +20,7 @@ class CreateTalbeAppsTable extends Migration
             $table->string('app_key')->index()->comment('小程序的APP key');
             $table->string('app_secret')->comment('小程序的密钥');
             $table->string('alliance_key')->index()->comment('联盟给的身份标识，接口需要传递这个key');
-            $table->string('domain')->comment('小程序的接口域名');
+            $table->string('domain')->default("")->comment('小程序的接口域名');
             $table->string('mobile')->comment('联系人手机号码');
             $table->jsonb('attachments')->nullable()->comment('小程序相关图片');
 
