@@ -71,8 +71,12 @@ class WeChatLoginController extends Controller
      */
     public function weChatLogin($appId,$code,$iv,$encryptedData)
     {
-        $userInfo = app(WeChatService::class)->getSessionInfo($appId,$code,$iv,$encryptedData);
-        $token = $this->tokenService->createApiToken($appId,$userInfo);
+        $weChatApp = WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$appId)->first();
+        if(!$weChatApp){
+            throw new ApiException('不是有效的key',6000);
+        }
+        $userInfo = app(WeChatService::class)->getSessionInfo($weChatApp,$code,$iv,$encryptedData);
+        $token = $this->tokenService->createApiToken($weChatApp->id,$userInfo);
 
         return $token;
     }

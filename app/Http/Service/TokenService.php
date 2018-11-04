@@ -122,7 +122,7 @@ class TokenService
      */
     public function createApiToken($appId,$userInfo)
     {
-        $user = User::where(User::FIELD_ID_APP,$appId)->where(User::FIELD_ID_OPENID,$userInfo["openId"])->first();
+        $user = User::where(User::FIELD_ID_APP,$appId)->orderBy(User::FIELD_CREATED_AT,'asc')->where(User::FIELD_ID_OPENID,$userInfo["openId"])->first();
         if(!$user){
             $userLogin = new UserService();
             $user = $userLogin->createWeChatUserByModel($appId,$userInfo);

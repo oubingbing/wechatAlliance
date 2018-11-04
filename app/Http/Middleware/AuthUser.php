@@ -19,7 +19,6 @@ class AuthUser
     public function handle($request, Closure $next)
     {
         $user = Auth::guard('admin')->user();
-
         $app = AdminApps::query()->where(AdminApps::FIELD_ID_ADMIN,$user->id)->first();
         if(!$app){
             //新建APP
