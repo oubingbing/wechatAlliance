@@ -58,38 +58,6 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe696;</i>
-                    <cite>卖舍友</cite>
-                    <i class="iconfont nav_right">&#xe697;</i>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a _href="">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>帖子列表</cite>
-
-                        </a>
-                    </li >
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe696;</i>
-                    <cite>暗恋匹配</cite>
-                    <i class="iconfont nav_right">&#xe697;</i>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a _href="">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>帖子列表</cite>
-
-                        </a>
-                    </li >
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;">
                     <i class="iconfont">&#xe6b8;</i>
                     <cite>话题讨论</cite>
                     <i class="iconfont nav_right">&#xe697;</i>

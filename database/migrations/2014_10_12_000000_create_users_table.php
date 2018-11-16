@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('language')->default("zh_CN");
             $table->string('province')->default("");
 
-            $table->tinyInteger('type')->default(0)->comment('用户类型');
+            $table->tinyInteger('type')->default(1)->comment('用户类型');
             $table->tinyInteger('status')->default(0)->comment('用户状态');
 
             $table->rememberToken();

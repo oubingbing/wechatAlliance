@@ -57,7 +57,7 @@
                     <td>@{{ user.created_at }}</td>
                     <td class="td-manage" style="float: left">
                             <button v-if="!user.service" class="layui-btn layui-btn-danger" v-on:click="setService(user.id)">设置为客服</button>
-                            <button v-if="user.type == 1" class="layui-btn" v-on:click="setSupervise(user.id)">设置超管</button>
+                            <button v-if="user.type == 1 || user.type == 0" class="layui-btn" v-on:click="setSupervise(user.id)">设置超管</button>
                             <button v-if="user.type == 2" class="layui-btn layui-btn-danger" v-on:click="removeSupervise(user.id)">取消超管</button>
                     </td>
                 </tr>

@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <div class="x-body layui-anim layui-anim-up" id="app" v-cloak>
-        <blockquote class="layui-elem-quote">你好：{{$user->username}}，小程序注册之后还需要经过叶子的审核才能用，请加叶子微信：13425144866</blockquote>
+        <blockquote class="layui-elem-quote">你好：{{$user->username}}，欢迎使用小情书后台</blockquote>
         <fieldset class="layui-elem-field">
             <legend>用户数据统计</legend>
             <div class="layui-field-box">
