@@ -75,7 +75,7 @@ class AppController extends Controller
         try {
             \DB::beginTransaction();
 
-            $domain = env('WECHAT_DOMAIN');
+            $domain = env('APP_URL');
             $result = $appService->create($appName,$appKey,$appSecret,$mobile,$collegeId,$domain);
             if($result){
                 $appService->connectAdminWithApp($result,$user);
