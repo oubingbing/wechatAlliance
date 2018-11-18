@@ -28,7 +28,7 @@ class CreateTableSecretMessagesTable extends Migration
 
             $table->tinyInteger('status')->default(1)->comment('是否已读，1=未读，2=已读');
 
-            $table->timestamp('delay_at')->index()->comment('延期发送的时间');
+            $table->timestamp('delay_at')->nullable()->index()->comment('延期发送的时间');
             $table->timestamp('send_at')->nullable()->comment('短信发送的日期');
 
             $table->timestamp('created_at')->nullable()->index();
