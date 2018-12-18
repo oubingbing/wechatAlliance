@@ -101,6 +101,35 @@ class SaleFriendController extends Controller
         return $saleFriends;
     }
 
+    /**
+     * 获取
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function saleFriendsV2()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size',10);
+        $pageNumber = request()->input('page_number',1);
+        $type = request()->input('type');
+        $just = request()->input('just');
+        $orderBy = request()->input('order_by','created_at');
+        $sortBy = request()->input('sort_by','desc');
+
+        $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
+
+        $query = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
+
+        $saleFriends = app(PaginateService::class)->paginate($query,$pageParams, '*',function($saleFriend)use($user){
+            $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
+            return $saleFriend;
+        });
+
+        return $saleFriends;
+    }
+
     public function mostNewSaleFriends()
     {
         $user = request()->input('user');

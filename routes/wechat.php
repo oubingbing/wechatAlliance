@@ -109,6 +109,9 @@ $api->version('v1', function ($api) {
                 /** 获取卖舍友列表 */
                 $api->get('/sale_friends', SaleFriendController::class . '@saleFriends');
 
+                /** 获取卖舍友瀑布流 **/
+                $api->get('/sale_friends_v2', SaleFriendController::class . '@saleFriendsV2');
+
                 /** 卖舍友详情 */
                 $api->get('/sale_friend/{id}', SaleFriendController::class . '@detail');
 
