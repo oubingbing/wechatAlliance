@@ -124,6 +124,18 @@ class SaleFriendController extends Controller
 
         $saleFriends = app(PaginateService::class)->paginate($query,$pageParams, '*',function($saleFriend)use($user){
             $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item){
+                $imageInfo = getimagesize(env('QI_NIU_DOMAIN').$item);
+                if($imageInfo){
+                    return [
+                        'url'=>$item,
+                        'width'=>$imageInfo[0],
+                        'height'=>$imageInfo[1]
+                    ];
+                }else{
+                    return [];
+                }
+            })->toArray();
             return $saleFriend;
         });
 
