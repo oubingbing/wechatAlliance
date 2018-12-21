@@ -66,6 +66,7 @@ class Handler extends ExceptionHandler
 
     public function handle($request, Exception $e){
         // 只处理自定义的APIException异常
+        //
         if($e instanceof ApiException) {
             $result = [
                 "error_code"    => $e->getCode(),
