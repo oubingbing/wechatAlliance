@@ -57,7 +57,7 @@ class UserController
 
         $query = app(UserService::class)->queryBuilder($appId)->sort($orderBy, $sortBy)->done();
 
-        $userList = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user,$app) {
+        $userList = paginate($query, $pageParams, '*', function ($item) use ($user,$app) {
 
             $item['gender'] = collect([
                 User::ENUM_GENDER_BOY=>'男',

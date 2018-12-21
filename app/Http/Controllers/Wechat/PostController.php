@@ -23,12 +23,10 @@ use League\Flysystem\Exception;
 class PostController extends Controller
 {
     protected $postLogic;
-    protected $paginateLogic;
 
-    public function __construct(PostService $postLogic, PaginateService $paginateLogic)
+    public function __construct(PostService $postLogic)
     {
         $this->postLogic = $postLogic;
-        $this->paginateLogic = $paginateLogic;
     }
 
     /**
@@ -108,7 +106,7 @@ class PostController extends Controller
 
         $query = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
 
-        $posts = $this->paginateLogic->paginate($query, $pageParams, '*', function ($post) use ($user) {
+        $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {
 
             return $this->postLogic->formatSinglePost($post, $user);
 

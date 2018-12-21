@@ -19,12 +19,10 @@ use App\Models\User;
 class MatchLoveController extends Controller
 {
     protected $match;
-    protected $paginate;
 
-    public function __construct(MatchLoveService $matchLoveLogic,PaginateService $paginateLogic)
+    public function __construct(MatchLoveService $matchLoveLogic)
     {
         $this->match = $matchLoveLogic;
-        $this->paginate = $paginateLogic;
     }
 
     /**
@@ -92,7 +90,7 @@ class MatchLoveController extends Controller
 
         $query = $this->match->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
 
-        $saleFriends = $this->paginate->paginate($query,$pageParams, '*',function($saleFriend)use($user){
+        $saleFriends = paginate($query,$pageParams, '*',function($saleFriend)use($user){
             return $this->match->formatSingle($saleFriend,$user);
         });
 

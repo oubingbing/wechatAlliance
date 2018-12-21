@@ -104,8 +104,8 @@
                         attachments:this.images
                     }).then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
-                            layer.msg(res.message);
+                        if(res.error_code === 200){
+                            layer.msg(res.error_message);
                             setTimeout(function () {
                                 window.location.href = "{{ asset('admin/topic') }}";
                                 var index = parent.layer.getFrameIndex(window.name);
@@ -140,7 +140,6 @@
                     if(this.image.name != '' && this.image.key != ''){
                         this.images.push(this.image);
                     }
-
                     this.image = {};
                 }
             }

@@ -288,7 +288,7 @@ class PartTimeJobController extends Controller
 
         $query = $this->partTimeJob->builder($user,$status)->filter($filter)->sort($orderBy,$sortBy)->done();
 
-        $jobs = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
+        $jobs = paginate($query, $pageParams, '*', function ($item) use ($user) {
 
             return $this->partTimeJob->formatSinglePost($item, $user);
 

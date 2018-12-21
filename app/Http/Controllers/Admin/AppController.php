@@ -77,6 +77,7 @@ class AppController extends Controller
 
             $domain = env('APP_URL');
             $result = $appService->create($appName,$appKey,$appSecret,$mobile,$collegeId,$domain);
+
             if($result){
                 $appService->connectAdminWithApp($result,$user);
 

@@ -67,6 +67,5 @@ class CompareFaceController extends Controller
             throw new ApiException('比对失败，请稍后再试！',500);
         }
 
-
     }
 }

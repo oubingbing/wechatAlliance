@@ -65,7 +65,7 @@
                  * @author yezi
                  */
                 getColleges:function () {
-                    axios.get("{{ asset('colleges') }}").then( response=> {
+                    axios.get("/admin/colleges").then( response=> {
                         response.data.data.map(item=>{
                             this.colleges.push(item);
                         });
@@ -80,8 +80,6 @@
                  */
                 createApp:function () {
                     this.college_id = this.selected.id;
-                    console.log(this.selected.id);
-
                     var college_id = this.college_id;
                     if(college_id == null || college_id === 0){
                         layer.msg('学校不能为空');
@@ -96,16 +94,15 @@
                         college_id:college_id
                     }).then( res=> {
 
-                        console.log(res.data);
                         var resData = res.data;
 
-                        if(resData.code === 200){
-                            layer.msg(resData.message);
+                        if(resData.error_code === 200){
+                            layer.msg(resData.error_message);
                             setTimeout(function () {
                                 window.location.href = resData.data;
                             },1500);
                         }else{
-                            layer.msg(resData.message)
+                            layer.msg(resData.error_message)
                         }
 
                     }).catch(function (error) {

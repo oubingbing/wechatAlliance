@@ -120,7 +120,7 @@
         $("#logout-button").on("click",function(){
             $.post("{{asset('/logout')}}", {}, function (res) {
                 console.log(res);
-                window.location.href = "{{route('login')}}";
+                window.location.href = "/login";
             });
         });
     });

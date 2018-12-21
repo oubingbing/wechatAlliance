@@ -1,17 +1,21 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2018/10/10 0010
+ * Time: 15:49
+ */
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Service;
 
 use App\Exceptions\WebException;
-use App\Http\Service\EmailService;
-use App\Models\Admin;
-use App\Http\Controllers\Controller;
+use App\Models\Admin as Model;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+class AuthService
 {
-
     /**
      * Handle a registration request for the application.
      *
@@ -31,13 +35,13 @@ class RegisterController extends Controller
             $result = $this->createAdmin($request->input('username'),$request->input('email'),$request->input('password'));
 
             \DB::commit();
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             \DB::rollBack();
             throw new WebException($exception);
         }
 
         if($result){
-            $content = "您好，请点击链接激活您的小情书账号,".env('APP_URL')."/active?token={$result->{Admin::FIELD_ACTIVE_TOKEN}}";
+            $content = "您好，请点击链接激活您的小情书账号,".env('APP_URL')."/active?token={$result->{Model::FIELD_ACTIVE_TOKEN}}";
             app(EmailService::class)->sendRegisterEmail($request->input('email'),$content);
         }
 
@@ -46,13 +50,13 @@ class RegisterController extends Controller
 
     public function createAdmin($username,$email,$password)
     {
-        $admin = Admin::create([
-            Admin::FIELD_USER_NAME => $username,
-            Admin::FIELD_EMAIL=>$email,
-            Admin::FIELD_PASSWORD=>bcrypt($password),
-            Admin::FIELD_AVATAR=>[Admin::USER_AVATAR],
-            Admin::FIELD_ACTIVE_TOKEN=>str_random('18'),
-            Admin::FIELD_TOKEN_EXPIRE=>Carbon::now()->addMonth()
+        $admin = Model::create([
+            Model::FIELD_USER_NAME => $username,
+            Model::FIELD_EMAIL=>$email,
+            Model::FIELD_PASSWORD=>bcrypt($password),
+            Model::FIELD_AVATAR=>[Model::USER_AVATAR],
+            Model::FIELD_ACTIVE_TOKEN=>str_random('18'),
+            Model::FIELD_TOKEN_EXPIRE=>Carbon::now()->addMonth()
         ]);
 
         return $admin;
@@ -87,41 +91,68 @@ class RegisterController extends Controller
         }
     }
 
+    public function getAdminByEmail($email)
+    {
+        $result = Model::query()->where(Model::FIELD_EMAIL,$email)->first();
+        return $result;
+    }
+
+    public function attempt($email,$password)
+    {
+        $admin = $this->getAdminByEmail($email);
+        if(!$admin){
+            throw new WebException("用户不存在");
+        }
+
+        if(!Hash::check($password, $admin->{Model::FIELD_PASSWORD})){
+            return false;
+        }else{
+            session(['admin_id' => $admin->id,'email'=>$admin->{Model::FIELD_EMAIL}]);
+        }
+
+        return true;
+    }
+
+    public function getAdminById($id)
+    {
+        $result = Model::query()->where(Model::FIELD_ID,$id)->first();
+        return $result;
+    }
+
     /**
-     * 激活账号
+     * 判断用户是否登录
      *
      * @author yezi
-     *
-     * @return obj
+     * @return bool
      */
-    public function active()
+    public static function auth()
     {
-        $token = request()->input('token');
-
-        if(!$token){
-            abort(404);
-        }
-
-        $result = Admin::query()
-            ->where(Admin::FIELD_ACTIVE_TOKEN,$token)
-            ->where(Admin::FIELD_STATUS,Admin::ENUM_STATUS_SLEEP)
-            ->first();
-        if(!$result){
-            abort('404');
-        }
-
-        if(Carbon::now()->gt(Carbon::parse($result->{Admin::FIELD_TOKEN_EXPIRE}))){
-            return redirect('login');
+        if(session()->has("admin_id")){
+            return true;
         }else{
-            $result->{Admin::FIELD_STATUS} = Admin::ENUM_STATUS_ACTIVATED;
-            $result->{Admin::FIELD_TOKEN_EXPIRE} = Carbon::now();
-            $result->save();
-            return view('auth.active');
+            return false;
         }
     }
 
-    public function registerView()
+    /**
+     * 获取认证用户
+     *
+     * @author yezi
+     * @return \Illuminate\Session\SessionManager|\Illuminate\Session\Store|mixed
+     */
+    public static function authUser()
     {
-        return view('auth.register');
+        return session("admin_id");
     }
+
+    /**
+     * 退出登录
+     *
+     * @author yezi
+     */
+    public function clearAdmin()
+    {
+        session()->forget('admin_id');
+    }
+
 }

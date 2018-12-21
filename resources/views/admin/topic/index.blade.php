@@ -99,8 +99,6 @@
                 current_page:1
             },
             created:function () {
-                console.log('用户首页');
-
                 this.getTopic();
             },
             methods:{
@@ -112,10 +110,9 @@
                     axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc')
                         .then( response=> {
                             var res = response.data;
-                            if(res.code === 200){
+                            if(res.error_code === 200){
                                 this.topics = res.data.page_data;
                                 this.total = res.data.page.total_items;
-                                console.log('总数'+this.total);
                             }else{
                                 console.log('error:'+res);
                             }
@@ -127,7 +124,6 @@
                  * 监听分页
                  **/
                 handleCurrentChange:function (e) {
-                    console.log(e);
                     this.current_page = e;
                     this.getTopic();
                 },
@@ -138,8 +134,8 @@
                     axios.patch('/admin/topic/'+id+'/up')
                         .then( response=> {
                             var res = response.data;
-                            if(res.code === 200){
-                                layer.msg(res.message);
+                            if(res.error_code === 200){
+                                layer.msg(res.error_message);
                                 this.getTopic();
                             }else{
                                 console.log('error:'+res);
@@ -157,8 +153,8 @@
                     axios.patch('/admin/topic/'+id+'/down')
                         .then( response=> {
                             var res = response.data;
-                            if(res.code === 200){
-                                layer.msg(res.message);
+                            if(res.error_code === 200){
+                                layer.msg(res.error_message);
                                 this.getTopic();
                             }else{
                                 console.log('error:'+res);

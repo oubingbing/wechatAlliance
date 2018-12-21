@@ -52,8 +52,8 @@
                     layer.msg('初始化中，请稍后...');
                     axios.post("{{ asset("admin/templates") }}",{}).then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
-                            layer.msg(res.message);
+                        if(res.error_code === 200){
+                            layer.msg(res.error_message);
                             this.templates = res.data;
                         }else{
                             console.log('error:'+res);
@@ -67,7 +67,7 @@
                     axios.get(url)
                             .then( response=> {
                                 var res = response.data;
-                                if(res.code === 200){
+                                if(res.error_code === 200){
                                     console.log(res);
                                     this.templates = res.data;
                                 }else{

@@ -23,21 +23,16 @@
         $(function  () {
             layui.use('form', function(){
                 var form = layui.form;
-
                 form.on('submit(login)', function(data){
                     var fields = data.field;
-                    $.post("{{route('login')}}",fields,function(res){
-                        if(res.code === 404){
-                            layer.msg(res.message)
+                    $.post("/login",fields,function(res){
+                        if(res.error_code === 200){
+                            layer.msg(res.error_message);
+                            setTimeout(function () {
+                                window.location.href = '/admin';
+                            },1000)
                         }else{
-                            if(res.code === 200){
-                                layer.msg(res.message);
-                                setTimeout(function () {
-                                    window.location.href = res.data;
-                                },1000)
-                            }else{
-                                layer.msg(res.message)
-                            }
+                            layer.msg(res.error_message)
                         }
                     });
 

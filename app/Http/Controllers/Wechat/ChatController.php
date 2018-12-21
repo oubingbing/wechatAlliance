@@ -18,13 +18,11 @@ class ChatController extends Controller
 {
     protected $chat;
     protected $friend;
-    protected $paginateLogic;
 
-    public function __construct(ChatService $chatLogic,FriendService $friendLogic,PaginateService $paginateLogic)
+    public function __construct(ChatService $chatLogic,FriendService $friendLogic)
     {
         $this->chat = $chatLogic;
         $this->friend = $friendLogic;
-        $this->paginateLogic = $paginateLogic;
     }
 
     /**
@@ -67,7 +65,7 @@ class ChatController extends Controller
             \DB::commit();
         }catch (Exception $exception){
             \DB::rollBack();
-            throw new ApiException($exception);
+            throw new ApiException($exception->getMessage());
         }
 
         return $result;
@@ -84,8 +82,7 @@ class ChatController extends Controller
     public function chatList($friendId)
     {
         $user = request()->input('user');
-        //$pageSize = request()->input('page_size',10);
-        $pageSize = 5;
+        $pageSize = request()->input('page_size',10);
         $pageNumber = request()->input('page_number',1);
         $orderBy = request()->input('order_by','created_at');
         $sortBy = request()->input('sort_by','desc');
@@ -94,7 +91,7 @@ class ChatController extends Controller
 
         $query = $this->chat->builder($user->id,$friendId)->sort($orderBy,$sortBy)->done();
 
-        $result = $this->paginateLogic->paginate($query,$pageParams, '*',function($item)use($user){
+        $result = paginate($query,$pageParams, '*',function($item)use($user){
             return $this->chat->format($item);
         });
 

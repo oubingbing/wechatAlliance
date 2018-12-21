@@ -65,11 +65,6 @@
                             </a>
                         </td></tr>
                     <tr>
-                        <th>状态</th>
-                        <td style="color: orangered">
-                            @{{ app_status_string }} <button class="layui-btn layui-btn-danger" v-if="open_audit_status" v-on:click="openAudit">开启审核模式</button><button class="layui-btn" v-if="close_audit_status" v-on:click="closeAudit">关闭审核模式</button>
-                        </td></tr>
-                    <tr>
                         <th>学校</th>
                         <td>@{{ college }}</td></tr>
                     <tr>
@@ -159,9 +154,8 @@
                     name:name,
                     value:value
                 },function(res){
-                    console.log(res);
                     layer.msg(res.message);
-                    if(res.code == 200){
+                    if(res.error_code == 200){
                         setTimeout(function () {
                             window.location.href = '';
                         },1500)
@@ -207,7 +201,7 @@
                 getUserInfo:function () {
                     axios.get("{{ asset('admin/user_statistics') }}").then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
+                        if(res.error_code === 200){
                             this.new_user = res.data.new_user;
                             this.visit_user = res.data.visit_user;
                             this.all_user = res.data.all_user;
@@ -226,7 +220,7 @@
                 getAppInfo:function () {
                     axios.get("{{ asset('admin/app') }}").then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
+                        if(res.error_code === 200){
                             this.app_name = res.data.name;
                             this.app_status_string = res.data.status_string;
                             this.app_key = res.data.app_key;
@@ -254,7 +248,7 @@
                 openAudit:function () {
                     axios.patch("{{ asset('admin/open_audit') }}").then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
+                        if(res.error_code === 200){
                             layer.msg(res.message);
                             this.open_audit_status = false;
                             this.close_audit_status = true;
@@ -269,7 +263,7 @@
                 closeAudit:function () {
                     axios.patch("{{ asset('admin/close_audit') }}").then( response=> {
                         var res = response.data;
-                        if(res.code === 200){
+                        if(res.error_code === 200){
                             layer.msg(res.message);
                             this.open_audit_status = true;
                             this.close_audit_status = false;
@@ -297,8 +291,7 @@
                     axios.patch('/admin/update_qr_code',{image:this.appImageUrl})
                         .then( response=> {
                             var res = response.data;
-                            console.log(res);
-                            if(res.code == 200){
+                            if(res.error_code == 200){
                                 this.attachments = res.data.attachments;
                                 layer.msg('修改成功！');
                             }else{

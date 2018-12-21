@@ -30,22 +30,21 @@
                 //监听提交
                 form.on('submit(login)', function(data){
                     var fields = data.field;
-
                     if(fields.password_confirmation !== fields.password){
                         layer.msg('两次输入密码不一致！');
                         return false;
                     }
 
-                    $.post("{{route('register')}}",fields,function(res){
-                        if(res.code === 500){
-                            layer.msg(res.message)
+                    $.post("/register",fields,function(res){
+                        if(res.error_code === 500){
+                            layer.msg(res.error_message)
                         }else{
-                            if(res.code === 201){
-                                layer.msg(res.message,function () {
-                                    window.location.href = "{{route('login')}}";
+                            if(res.error_code === 201){
+                                layer.msg(res.error_message,function () {
+                                    window.location.href = "/login";
                                 })
                             }else{
-                                layer.msg(res.message)
+                                layer.msg(res.error_message)
                             }
                         }
                     });

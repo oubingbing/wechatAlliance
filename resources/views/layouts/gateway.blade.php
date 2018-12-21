@@ -32,7 +32,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url('/home') }}">首页</a></li>
-                    @if (\Auth::guard('admin')->check())
+                    @if (session('admin_id'))
                     <li><a href="{{ url('/admin') }}">控制台</a></li>
                     @else
                         <li><a href="{{ url('login') }}">登录</a></li>
@@ -41,7 +41,7 @@
                     <li><a href="{{ url('contact') }}">联系</a></li>
                     <li><a href="{{ url('about') }}">公众号</a></li>
                     <!--<li><a href="https://www.jianshu.com/p/6f3091d4193c" target="_blank">部署教程</a></li>-->
-                        @if (\Auth::guard('admin')->check())
+                        @if (session('admin_id'))
                             <li><a href="{{ asset('/logout') }}">退出</a></li>
                         @endif
                 </ul>

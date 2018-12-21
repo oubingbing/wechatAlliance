@@ -73,7 +73,7 @@ class TopicController extends Controller
             ->where(Topic::FIELD_USER_TYPE,Topic::ENUM_USER_TYPE_ADMIN)
             ->orderBy(Topic::FIELD_CREATED_AT, 'desc');
 
-        $topics = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($topic){
+        $topics = paginate($query, $pageParams, '*', function ($topic){
 
             $topic->{Topic::FIELD_ATTACHMENTS} = collect($topic->{Topic::FIELD_ATTACHMENTS})->map(function ($item){
                return 'http://image.kucaroom.com/'.$item;

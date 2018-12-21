@@ -105,7 +105,7 @@ class TopicController extends Controller
             ->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_TOPIC)
             ->orderBy($orderBy,$sortBy);
 
-        $comments = app(PaginateService::class)->paginate($query,$pageParams, '*',function($comment)use($user){
+        $comments = paginate($query,$pageParams, '*',function($comment)use($user){
             $comment = app(CommentService::class)->formatSingleComments($comment, $user);
 
             if($comment['can_delete'] == false){

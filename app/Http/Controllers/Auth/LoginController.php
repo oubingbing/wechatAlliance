@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ApiException;
+use App\Exceptions\WebException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AuthService;
 use App\Http\Service\TokenService;
 use App\Models\WechatApp;
 use Exception;
@@ -35,16 +37,18 @@ class LoginController extends Controller
     //protected $redirectTo = '/admin';
     protected $weChatLoginUrl = "https://api.weixin.qq.com/sns/jscode2session";
     protected $tokenService;
+    protected $authService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuthService $authService)
     {
         $this->middleware('guest')->except('logout');
         $this->tokenService = app(TokenService::class);
+        $this->authService = $authService;
     }
 
     /**
@@ -124,6 +128,55 @@ class LoginController extends Controller
         $token = $this->tokenService->createToken($userInfo,$result['openid'],$weChatApp->{WechatApp::FIELD_ID});
 
         return $token;
+    }
+
+    /**
+     * 后台登录视图
+     *
+     * @author yezi
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function loginView()
+    {
+        if($this->authService->auth()){
+            return redirect("/admin");
+        }
+
+        return view("auth.login");
+    }
+
+    /**
+     * 管理员登录
+     *
+     * @author yezi
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
+     * @throws WebException
+     */
+    public function login()
+    {
+        $email = request()->input("email");
+        $password = request()->input("password");
+
+        $result = $this->authService->attempt($email,$password);
+        if(!$result){
+            throw new WebException("邮箱或密码错误");
+        }
+
+        return webResponse("登录成功",200,$result);
+    }
+
+    /**
+     * 退出登录
+     *
+     * @author yezi
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logout()
+    {
+        $this->authService->clearAdmin();
+
+
+        return redirect("/login");
     }
 
 }

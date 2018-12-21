@@ -11,11 +11,4 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public function colleges()
-    {
-        $colleges = Colleges::query()->get([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
-
-        return webResponse('ok',200,$colleges);
-    }
 }

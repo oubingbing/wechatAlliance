@@ -14,8 +14,8 @@ if( ! function_exists('webResponse') ){
     function webResponse($msg='',$code=200,$data=null){
         $response = array();
 
-        $response['code']=$code;
-        $response['message'] = $msg;
+        $response['error_code']=$code;
+        $response['error_message'] = $msg;
         $response['data']=$data;
         $response['json_api'] = [
             'meta'=>[
@@ -78,5 +78,48 @@ if( ! function_exists('sendMessage') ){
     function sendMessage($appId,$phone,$message){
         $job = new SendPhoneMessage($appId,$phone,$message);
         dispatch($job)->onQueue('send_message');
+    }
+}
+
+/**
+ * 生成随机字符串
+ */
+if(!function_exists("randomKeys")){
+    function randomKeys($length){
+        $output='';
+        for ($a = 0; $a<$length; $a++) {
+            $output .= chr(mt_rand(33, 126));
+        }
+        return $output;
+    }
+}
+
+/**
+ * 分页
+ */
+if(!function_exists("paginate")){
+    function paginate($query, $pageParams, $columns = null, $map = null){
+        if ($columns === null || !is_array($columns)) {
+            $columns = ['*'];
+        }
+
+        $perPage     = $pageParams['page_size'] ? $pageParams['page_size'] : 10;
+        $currentPage = $pageParams['page_number'] ? $pageParams['page_number'] : 1;
+
+        $result = $query->paginate($perPage, $columns, null, $currentPage);
+        $items  = $result->getCollection();
+        if ($map != null) {
+            $items = $items->map($map);
+        }
+
+        return [
+            'page'      => [
+                'size'        => $perPage,
+                'number'      => $currentPage,
+                'total-pages' => $result->lastPage(),
+                'total_items' => $result->total(),
+            ],
+            'page_data' => $items
+        ];
     }
 }

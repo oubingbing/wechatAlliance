@@ -239,29 +239,20 @@
                  * 删除评论
                  */
                 deleteComment:function (obj_id,comment_id) {
-
                     var _this = this;
-
                     layer.confirm('确认要删除吗？',function(index){
-
                         var url = "/admin/delete/"+comment_id+"/comment";
-
                         axios.delete(url).then( response=> {
-
                             var res = response.data;
-                            if(res.code === 200){
+                            if(res.error_code === 200){
                                 layer.msg('删除成功！');
                                 _this.getPosts();
                             }else{
                                 console.log('error:'+res);
                             }
-
-                            console.log(res);
                         }).catch(function (error) {
                             console.log(error);
                         });
-
-
                     });
                 },
                 /**
@@ -278,7 +269,6 @@
                 getPosts:function () {
                     var _this = this;
                     var url = "{{ asset('admin/post/list') }}";
-
                     axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc',{
                         page_size:this.page_size,
                         page_number:this.current_page,
@@ -288,7 +278,6 @@
                         var res = response.data;
                         _this.posts = res.data.page_data;
                         _this.total = res.data.page.total_items;
-                        console.log(res);
                     }).catch(function (error) {
                         console.log(error);
                     });

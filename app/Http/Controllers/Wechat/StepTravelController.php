@@ -137,7 +137,7 @@ class StepTravelController extends Controller
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
         $query = $this->stepTravelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
-        $steps = app(PaginateService::class)->paginate($query, $pageParams, [RunStep::FIELD_ID,RunStep::FIELD_RUN_AT,RunStep::FIELD_STEP], function ($item) use ($user) {
+        $steps = paginate($query, $pageParams, [RunStep::FIELD_ID,RunStep::FIELD_RUN_AT,RunStep::FIELD_STEP], function ($item) use ($user) {
             return $this->stepTravelService->formatStep($item);
         });
 

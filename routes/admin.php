@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','auth']], function () {
+Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']], function () {
 
     Route::group(['middleware'=>['authUser']], function () {
         /** 后台首页 */
@@ -57,24 +57,49 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web','a
         Route::get('/templates','AppController@template');
         /** 微信模板列表 */
         Route::post('/templates','AppController@createTemplate');
+
     });
 
     Route::group(['middleware'=>['createApp']], function () {
+
         /** 新建小程序视图 */
         Route::get('/create_app','AppController@createApp');
+
         /** 新建小程序 */
         Route::post('/create_app','AppController@store');
+
+        /** 获取学校资料 */
+        Route::get('/colleges','IndexController@colleges');
     });
 
 });
 
+Route::group(['namespace' => 'Auth','middleware'=>['web']], function () {
+
+    /** 登录视图 **/
+    Route::get('/','LoginController@loginView');
+
+    /** 登录视图 **/
+    Route::get('/login','LoginController@loginView');
+
+    /** 登录 **/
+    Route::post("/login","LoginController@login");
+
+    /** 退出登录 */
+    Route::get("/logout","LoginController@logout");
+
+    /** 注册 **/
+    Route::post("register","RegisterController@register");
+
+    /** 注册视图 **/
+    Route::get("register","RegisterController@registerView");
+});
+
 /** 激活账号 */
 Route::get('/active','Auth\RegisterController@active');
+
 /** 退出登录 */
 Route::get('/logout','Auth\LoginController@logout')->middleware(['guest','web']);
-
-/** 获取学校资料 */
-Route::get('colleges','Controller@colleges');
 
 /** 部署教程 */
 Route::get('deploy','Admin\AppController@deployStep');

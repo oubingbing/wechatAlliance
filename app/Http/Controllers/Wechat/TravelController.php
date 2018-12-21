@@ -133,7 +133,7 @@ class TravelController extends Controller
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
         $query = $this->travelService->travelLogBuilder($user->id,$planId);
-        $logs = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+        $logs = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravelLog($item);
         });
 
@@ -229,7 +229,7 @@ class TravelController extends Controller
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
         $query = $this->travelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
-        $plans = app(PaginateService::class)->paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+        $plans = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravel($item);
         });
 

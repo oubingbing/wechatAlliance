@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Service\QiNiuService;
+use App\Models\Colleges;
 
 class IndexController extends Controller
 {
@@ -43,6 +44,13 @@ class IndexController extends Controller
         $token = app(QiNiuService::class)->uploadToken();
 
         return webResponse('ok',200,$token);
+    }
+
+    public function colleges()
+    {
+        $colleges = Colleges::query()->get([Colleges::FIELD_ID,Colleges::FIELD_NAME]);
+
+        return webResponse('ok',200,$colleges);
     }
 
 }

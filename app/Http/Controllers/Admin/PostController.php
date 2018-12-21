@@ -47,7 +47,7 @@ class PostController extends Controller
             })
             ->orderBy(Post::FIELD_CREATED_AT, 'desc');
 
-        $posts = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($post) use ($user) {
+        $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {
 
             return $this->postService->formatSinglePost($post, $user);
 
