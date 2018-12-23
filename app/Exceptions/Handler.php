@@ -76,6 +76,15 @@ class Handler extends ExceptionHandler
             return response()->json($result);
         }
 
+        if($e instanceof WebException) {
+            $result = [
+                "error_code"    => $e->getCode(),
+                "error_message" => $e->getMessage(),
+                "data"          => null,
+            ];
+            return response()->json($result);
+        }
+
         if(env("APP_ENV") != "dev"){
             $result = [
                 "error_code"    => $e->getCode(),
