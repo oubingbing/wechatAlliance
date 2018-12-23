@@ -114,4 +114,16 @@ class FollowService
         return $result;
     }
 
+    public function countFollow($objId,$type)
+    {
+        $result = Follow::query()
+            ->where([
+                Follow::FIELD_ID_OBJ => $objId,
+                Follow::FIELD_OBJ_TYPE => $type,
+                Follow::FIELD_STATUS => Follow::ENUM_STATUS_FOLLOW
+            ])->count();
+
+        return $result;
+    }
+
 }

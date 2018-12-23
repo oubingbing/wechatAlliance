@@ -122,7 +122,14 @@ class SaleFriendController extends Controller
 
         $query = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
 
-        $saleFriends = paginate($query,$pageParams, '*',function($saleFriend)use($user){
+        $selectData = [
+            SaleFriend::FIELD_ID,
+            SaleFriend::FIELD_ATTACHMENTS,
+            SaleFriend::FIELD_ID_OWNER,
+            SaleFriend::FIELD_COMMENT_NUMBER
+        ];
+
+        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user){
             $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
             $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item){
                 $imageInfo = getimagesize(env('QI_NIU_DOMAIN').$item);

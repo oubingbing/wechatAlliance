@@ -137,20 +137,13 @@ class SaleFriendService
     {
         $saleFriend->can_delete = $this->canDeleteSaleFriend($saleFriend, $user);
 
-        $saleFriend->can_chat = $this->canChat($saleFriend, $user);
-
         $saleFriend['comments'] = collect($this->commentLogic->formatBatchComments($saleFriend['comments'], $user))->sortByDesc(Comment::FIELD_CREATED_AT)->values();
 
-        $saleFriend['follow'] = app(FollowService::class)->checkFollow($user->id, $saleFriend['id'], Follow::ENUM_OBJ_TYPE_SALE_FRIEND) ? true : false;
+        $followService = app(FollowService::class);
 
-        $saleFriend['show_college'] = false;
-        $saleFriend['college'] = null;
-        if(!$user->{User::FIELD_ID_COLLEGE}){
-            if($saleFriend['college_id']){
-                $saleFriend['show_college'] = true;
-                $saleFriend['college'] = Colleges::where(Colleges::FIELD_ID,$saleFriend['college_id'])->value(Colleges::FIELD_NAME);
-            }
-        }
+        $saleFriend['follow'] = $followService->checkFollow($user->id, $saleFriend['id'], Follow::ENUM_OBJ_TYPE_SALE_FRIEND) ? true : false;
+
+        $saleFriend['follow_number'] = $followService->countFollow($saleFriend['id'], Follow::ENUM_OBJ_TYPE_SALE_FRIEND);
 
         return $saleFriend;
     }
