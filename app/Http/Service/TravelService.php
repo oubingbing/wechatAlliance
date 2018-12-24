@@ -98,7 +98,7 @@ class TravelService
                 }
             ])
             ->where(TravelPlan::FIELD_ID_USER,$userId)
-            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
+            //->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
             ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
             ->first();
         return $plans;
@@ -370,7 +370,7 @@ class TravelService
                 if($planId){
                     $query->where(TravelPlan::FIELD_ID,$planId);
                 }else{
-                    $query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+                    //$query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
                 }
             })->where(TravelLog::FIELD_ID_USER,$userId)
             ->orderBy(TravelLog::FIELD_RUN_AT,'desc');
