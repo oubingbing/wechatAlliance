@@ -273,11 +273,28 @@ class StepTravelService
      * @param $userId
      * @return $this
      */
-    public function stepBuilder($userId)
+    public function stepBuilder($userId=null)
     {
-        $builder = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId);
+        $builder = RunStep::query();
+        if($userId){
+            $builder->where(RunStep::FIELD_ID_USER,$userId);
+        }
         $this->builder = $builder;
 
+        return $this;
+    }
+
+    public function selectToday()
+    {
+        $this->builder->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->startOfDay(),Carbon::now()->endOfDay()]);
+        return $this;
+    }
+
+    public function filterByApp($user)
+    {
+        $this->builder->whereHas(RunStep::REL_USER,function ($query)use($user){
+            $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
+        });
         return $this;
     }
 

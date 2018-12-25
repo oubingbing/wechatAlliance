@@ -150,4 +150,48 @@ class StepTravelController extends Controller
         return $steps;
     }
 
+    /**
+     * 获取用户微信步数列表
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    public function rankingList()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size', 10);
+        $pageNumber = request()->input('page_number', 1);
+        $orderBy = request()->input('order_by', 'created_at');
+        $sortBy = request()->input('sort_by', 'desc');
+
+        $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
+        $selectData = [
+            RunStep::FIELD_ID,
+            RunStep::FIELD_RUN_AT,
+            RunStep::FIELD_STEP,
+            RunStep::FIELD_ID_USER
+        ];
+
+        $query = $this->stepTravelService
+            ->stepBuilder()
+            //->selectToday()
+            ->filterByApp($user)
+            ->sort(RunStep::FIELD_STEP,'desc')
+            ->done()
+            ->with([RunStep::REL_USER=>function($query){
+                $query->select([
+                    User::FIELD_ID,
+                    User::FIELD_NICKNAME,
+                    User::FIELD_AVATAR
+                ]);
+            }]);
+
+        $steps = paginate($query, $pageParams, $selectData, function ($item) use ($user) {
+            return $this->stepTravelService->formatStep($item);
+        });
+
+        return $steps;
+    }
+
 }

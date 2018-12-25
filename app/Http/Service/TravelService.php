@@ -631,7 +631,7 @@ class TravelService
      * @param $userId
      * @return $this
      */
-    public function stepBuilder($userId)
+    public function stepBuilder($userId=null)
     {
         $this->builder = TravelPlan::query()
             ->with([TravelPlan::REL_POINTS=>function($query){
@@ -643,8 +643,11 @@ class TravelService
                     TravelPlanPoint::FIELD_LATITUDE,
                     TravelPlanPoint::FIELD_LONGITUDE
                 ]);
-            }])
-            ->where(TravelPlan::FIELD_ID_USER,$userId);
+            }]);
+
+        if($userId){
+            $this->builder->where(TravelPlan::FIELD_ID_USER,$userId);
+        }
 
         return $this;
     }
@@ -702,4 +705,5 @@ class TravelService
 
         return $item;
     }
+
 }

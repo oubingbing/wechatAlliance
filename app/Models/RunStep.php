@@ -40,6 +40,8 @@ class RunStep extends BaseModel
     const ENUM_TYPE_NOT_TODAY = 1;
     const ENUM_TYPE_TODAY = 2;
 
+    const REL_USER = 'user';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_USER,
@@ -47,4 +49,9 @@ class RunStep extends BaseModel
         self::FIELD_RUN_AT,
         self::FIELD_STATUS,
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,self::FIELD_ID_USER,User::FIELD_ID);
+    }
 }
