@@ -175,7 +175,7 @@ class StepTravelController extends Controller
 
         $query = $this->stepTravelService
             ->stepBuilder()
-            //->selectToday()
+            ->selectToday()
             ->filterByApp($user)
             ->sort(RunStep::FIELD_STEP,'desc')
             ->done()
@@ -192,6 +192,49 @@ class StepTravelController extends Controller
         });
 
         return $steps;
+    }
+
+    public function getMyRank()
+    {
+        $user = request()->input("user");
+
+        $selectData = [
+            RunStep::FIELD_ID,
+            RunStep::FIELD_RUN_AT,
+            RunStep::FIELD_STEP,
+            RunStep::FIELD_ID_USER
+        ];
+
+        $stepRanks = $this->stepTravelService
+            ->stepBuilder()
+            ->selectToday()
+            ->filterByApp($user)
+            ->sort(RunStep::FIELD_STEP,'desc')
+            ->done()
+            ->select($selectData)
+            ->with([RunStep::REL_USER=>function($query){
+                $query->select([
+                    User::FIELD_ID,
+                    User::FIELD_NICKNAME,
+                    User::FIELD_AVATAR
+                ]);
+            }])
+            ->get();
+
+        $index = 0;
+        $userStep = '';
+        foreach ($stepRanks as $key => $item){
+            if($item->{RunStep::FIELD_ID_USER} == $user->id){
+                $userStep = $item;
+                $index = $key+1;
+                break;
+            }
+        }
+
+        return [
+            'rank'=>$index,
+            'data'=>$userStep
+        ];
     }
 
 }
