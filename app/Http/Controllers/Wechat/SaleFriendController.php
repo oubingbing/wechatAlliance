@@ -129,10 +129,11 @@ class SaleFriendController extends Controller
             SaleFriend::FIELD_COMMENT_NUMBER
         ];
 
-        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user){
+        $qiNiuDomain = env('QI_NIU_DOMAIN');
+        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user,$qiNiuDomain){
             $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
-            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item){
-                $imageInfo = getimagesize(env('QI_NIU_DOMAIN').$item);
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item)use($qiNiuDomain){
+                $imageInfo = getimagesize($qiNiuDomain.$item);
                 if($imageInfo){
                     return [
                         'url'=>$item,
