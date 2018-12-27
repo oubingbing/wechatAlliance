@@ -184,17 +184,6 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
 
 需要你在云片备案相关的短信模板，根据自己的需求，填入模板的信息。
 
-##### 9、配置阿里云开发者信息
-
-    ALI_ID=
-    ALI_SECRET=
-    ALI_URL=
-
-阿里人脸识别地址：
-
-    https://data.aliyun.com/product/face?spm=5176.10609282.1146454.885.21d538010MzGRj#face-verify
-
-
 ### 五、生成数据库表
 
 在项目根目录运行
