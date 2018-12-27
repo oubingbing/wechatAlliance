@@ -36,7 +36,6 @@ class CompareFaceController extends Controller
         }
 
         $compareService = app(CompareFaceService::class);
-
         $compareResult = app(Http::class)->compareFace($yourFace,$hisFace);
 
         if($compareResult){

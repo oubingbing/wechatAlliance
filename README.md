@@ -175,6 +175,16 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
         YUN_PIAN_SINGLE_URL=
         YUN_PIAN_MULTI=
         YUN_PIAN_KEY=
+        
+##### 9、配置阿里云开发者信息
+
+    ALI_ID=
+    ALI_SECRET=
+    ALI_URL=
+
+阿里人脸识别地址：
+
+    https://data.aliyun.com/product/face?spm=5176.10609282.1146454.885.21d538010MzGRj#face-verify
 
 短信验证码的文字信息在
     wechatAlliance\app\Http\Service\YunPianService.php中的sendMessageCode($phone)修改。

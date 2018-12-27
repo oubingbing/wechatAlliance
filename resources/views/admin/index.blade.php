@@ -72,7 +72,7 @@
                     </li >
                 </ul>
             </li>
-            <li>
+            <!--<li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe696;</i>
                     <cite>微信消息模板</cite>
@@ -87,7 +87,7 @@
                         </a>
                     </li >
                 </ul>
-            </li>
+            </li>-->
         </ul>
       </div>
     </div>
