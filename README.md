@@ -107,6 +107,7 @@ php的laravel框架是一款非常优秀的php框架，如果有兴趣的可以�
     QI_NIU_ACCESS_KEY=
     QI_NIU_SECRET_KEY=
     BUCKET_NAME=
+    QI_NIU_DOMAIN=
     
     SEND_CLOUD_API_USER=
     SEND_CLOUD_APP_KEY=
@@ -157,6 +158,7 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
         QI_NIU_ACCESS_KEY=
         QI_NIU_SECRET_KEY=
         BUCKET_NAME=
+        QI_NIU_DOMAIN= //你的七牛域名
 
 ##### 7、sendcloud邮件配置
 

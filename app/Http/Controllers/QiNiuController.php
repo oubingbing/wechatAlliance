@@ -22,7 +22,7 @@ class QiNiuController extends Controller
      */
     public function getUploadToken()
     {
-        $token = app(QiNiuService::class)->uploadToken();
+        $token = app(QiNiuService::class)->getToken();
 
         return ['uptoken'=>$token];
     }

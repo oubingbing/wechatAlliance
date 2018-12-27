@@ -41,7 +41,7 @@ class IndexController extends Controller
      */
     public function getUploadToken()
     {
-        $token = app(QiNiuService::class)->uploadToken();
+        $token = app(QiNiuService::class)->getToken();
 
         return webResponse('ok',200,$token);
     }
