@@ -137,6 +137,8 @@ class SaleFriendService
     {
         $saleFriend->can_delete = $this->canDeleteSaleFriend($saleFriend, $user);
 
+        $saleFriend->can_chat = $saleFriend->{SaleFriend::FIELD_ID_OWNER}==$user->id?true:false;
+
         $saleFriend['comments'] = collect($this->commentLogic->formatBatchComments($saleFriend['comments'], $user))->sortByDesc(Comment::FIELD_CREATED_AT)->values();
 
         $followService = app(FollowService::class);
