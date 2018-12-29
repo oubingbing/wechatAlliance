@@ -145,7 +145,7 @@ class CommentService
             if(isset($obj['private'])){
                 if($obj['private'] == 1){
                     if($comment['commenter_id'] == $obj['poster_id']){
-                        $nickname = '匿名の同学';
+                        $nickname = '楼主';
                     }
                 }
             }
@@ -168,7 +168,7 @@ class CommentService
                         if(isset($obj['private'])){
                             if($obj['private'] == 1){
                                 if($refComment->refCommenter->id == $obj['poster_id']){
-                                    $refComment->refCommenter->nickname = '匿名の同学';
+                                    $refComment->refCommenter->nickname = '楼主';
                                 }
                             }
                         }
