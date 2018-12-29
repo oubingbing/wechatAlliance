@@ -67,6 +67,16 @@ class SaleFriendController extends Controller
             throw new ApiException($messages->first(), 60001);
         }
 
+        $qiNiuDomain = env('QI_NIU_DOMAIN');
+        foreach ($attachments as &$attachment){
+            $imageInfo = getimagesize($qiNiuDomain.$attachment);
+            $attachment = [
+                'url'=>$attachment,
+                'width'=>$imageInfo[0],
+                'height'=>$imageInfo[1]
+            ];
+        }
+
         $result = $this->saleFriendLogic->save($user->id,$name,$gender,$major,$expectation,$introduce,$attachments,$user->{User::FIELD_ID_COLLEGE});
 
         return $result;

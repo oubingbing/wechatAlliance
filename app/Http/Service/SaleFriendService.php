@@ -136,6 +136,14 @@ class SaleFriendService
      */
     public function formatSingle($saleFriend, $user)
     {
+        if(is_array($saleFriend->{SaleFriend::FIELD_ATTACHMENTS}[0])){
+            $attachments = $saleFriend->{SaleFriend::FIELD_ATTACHMENTS};
+            foreach ($attachments as &$attachment){
+                $attachment = $attachment['url'];
+            }
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = $attachments;
+        }
+
         $saleFriend->can_delete = $this->canDeleteSaleFriend($saleFriend, $user);
 
         $saleFriend->can_chat = $saleFriend->{SaleFriend::FIELD_ID_OWNER}==$user->id?true:false;
