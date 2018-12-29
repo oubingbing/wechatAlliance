@@ -112,9 +112,6 @@ $api->version('v1', function ($api) {
                 /** 获取卖舍友瀑布流 **/
                 $api->get('/sale_friends_v2', SaleFriendController::class . '@saleFriendsV2');
 
-                /** 获取卖舍友瀑布流 **/
-                $api->get('/sale_friends_v3', SaleFriendController::class . '@saleFriendsV3');
-
                 /** 卖舍友详情 */
                 $api->get('/sale_friend/{id}', SaleFriendController::class . '@detail');
 

@@ -110,7 +110,7 @@ class SaleFriendController extends Controller
      *
      * @return mixed
      */
-    public function saleFriendsV2()
+    /*public function saleFriendsV2()
     {
         $user = request()->input('user');
         $pageSize = request()->input('page_size',10);
@@ -152,7 +152,7 @@ class SaleFriendController extends Controller
         });
 
         return $saleFriends;
-    }
+    }*/
 
     /**
      * 获取
@@ -161,7 +161,7 @@ class SaleFriendController extends Controller
      *
      * @return mixed
      */
-    public function saleFriendsV3()
+    public function saleFriendsV2()
     {
         $user = request()->input('user');
         $pageSize = request()->input('page_size',10);
