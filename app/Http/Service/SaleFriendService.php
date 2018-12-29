@@ -14,6 +14,7 @@ use App\Models\Comment;
 use App\Models\Follow;
 use App\Models\SaleFriend;
 use App\Models\User;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class SaleFriendService
 {
@@ -168,6 +169,18 @@ class SaleFriendService
             return false;
         }
 
+    }
+
+    public function convertAttachments($attachments)
+    {
+        if(is_array($attachments[0])){
+            $tempArray = [];
+            foreach ($attachments as $attachment){
+                array_push($tempArray,$attachment['url']);
+            }
+            $attachments = $tempArray;
+        }
+        return $attachments;
     }
 
     /**
