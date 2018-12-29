@@ -195,7 +195,7 @@ class PostService
             $post = collect($post)->toArray();
 
             if($post['private'] == Post::ENUM_PRIVATE){
-                $post['poster']['nickname'] = '匿名者';
+                $post['poster']['nickname'] = '校友';
                 $post['poster']['avatar'] = '';
             }
 
