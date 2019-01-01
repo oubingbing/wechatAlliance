@@ -69,7 +69,7 @@ class SaleFriendController extends Controller
 
         $qiNiuDomain = env('QI_NIU_DOMAIN');
         foreach ($attachments as &$attachment){
-            $imageInfo = getimagesize($qiNiuDomain.$attachment);
+            $imageInfo = getimagesize($qiNiuDomain.'/'.$attachment);
             $attachment = [
                 'url'=>$attachment,
                 'width'=>$imageInfo[0],
@@ -196,7 +196,7 @@ class SaleFriendController extends Controller
         $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user,$qiNiuDomain){
             if(!is_array($saleFriend->{SaleFriend::FIELD_ATTACHMENTS}[0])){
                 $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item)use($qiNiuDomain){
-                    $imageInfo = getimagesize($qiNiuDomain.$item);
+                    $imageInfo = getimagesize($qiNiuDomain.'/'.$item);
                     if($imageInfo){
                         return [
                             'url'=>$item,
