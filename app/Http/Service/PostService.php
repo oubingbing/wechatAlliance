@@ -194,6 +194,11 @@ class PostService
         if (collect($post)->toArray()) {
             $post = collect($post)->toArray();
 
+            if($post['private'] == Post::ENUM_PRIVATE){
+                $post['poster']['nickname'] = '校友';
+                $post['poster']['avatar'] = '';
+            }
+
             Carbon::setLocale('zh');
             $post[Post::FIELD_CREATED_AT] = Carbon::parse($post[Post::FIELD_CREATED_AT])->diffForHumans();
 

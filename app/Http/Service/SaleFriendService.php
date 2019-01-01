@@ -14,6 +14,7 @@ use App\Models\Comment;
 use App\Models\Follow;
 use App\Models\SaleFriend;
 use App\Models\User;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class SaleFriendService
 {
@@ -135,7 +136,17 @@ class SaleFriendService
      */
     public function formatSingle($saleFriend, $user)
     {
+        if(is_array($saleFriend->{SaleFriend::FIELD_ATTACHMENTS}[0])){
+            $attachments = $saleFriend->{SaleFriend::FIELD_ATTACHMENTS};
+            foreach ($attachments as &$attachment){
+                $attachment = $attachment['url'];
+            }
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = $attachments;
+        }
+
         $saleFriend->can_delete = $this->canDeleteSaleFriend($saleFriend, $user);
+
+        $saleFriend->can_chat = $saleFriend->{SaleFriend::FIELD_ID_OWNER}==$user->id?true:false;
 
         $saleFriend['comments'] = collect($this->commentLogic->formatBatchComments($saleFriend['comments'], $user))->sortByDesc(Comment::FIELD_CREATED_AT)->values();
 
@@ -166,6 +177,18 @@ class SaleFriendService
             return false;
         }
 
+    }
+
+    public function convertAttachments($attachments)
+    {
+        if(is_array($attachments[0])){
+            $tempArray = [];
+            foreach ($attachments as $attachment){
+                array_push($tempArray,$attachment['url']);
+            }
+            $attachments = $tempArray;
+        }
+        return $attachments;
     }
 
     /**

@@ -274,6 +274,11 @@ $api->version('v1', function ($api) {
                 /** 获取旅游报告 */
                 $api->get('/travel_report/{id}',TravelController::class . '@travelReport');
 
+                /** 获取排行榜 **/
+                $api->get('/rand_list',StepTravelController::class . '@rankingList');
+
+                /** 获取个人排行榜 **/
+                $api->get('/my_rank',StepTravelController::class . '@getMyRank');
             });
 
             /** 获取旅游报告 */

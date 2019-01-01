@@ -67,6 +67,16 @@ class SaleFriendController extends Controller
             throw new ApiException($messages->first(), 60001);
         }
 
+        $qiNiuDomain = env('QI_NIU_DOMAIN');
+        foreach ($attachments as &$attachment){
+            $imageInfo = getimagesize($qiNiuDomain.$attachment);
+            $attachment = [
+                'url'=>$attachment,
+                'width'=>$imageInfo[0],
+                'height'=>$imageInfo[1]
+            ];
+        }
+
         $result = $this->saleFriendLogic->save($user->id,$name,$gender,$major,$expectation,$introduce,$attachments,$user->{User::FIELD_ID_COLLEGE});
 
         return $result;
@@ -94,12 +104,65 @@ class SaleFriendController extends Controller
         $query = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
 
         $saleFriends = app(PaginateService::class)->paginate($query,$pageParams, '*',function($saleFriend)use($user){
+            $attachments = $this->saleFriendLogic->convertAttachments($saleFriend->{SaleFriend::FIELD_ATTACHMENTS});
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = $attachments;
             $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
             return $saleFriend;
         });
 
         return $saleFriends;
     }
+
+    /**
+     * 获取
+     *
+     * @author yezi
+     *
+     * @return mixed
+     */
+    /*public function saleFriendsV2()
+    {
+        $user = request()->input('user');
+        $pageSize = request()->input('page_size',10);
+        $pageNumber = request()->input('page_number',1);
+        $type = request()->input('type');
+        $just = request()->input('just');
+        $orderBy = request()->input('order_by','created_at');
+        $sortBy = request()->input('sort_by','desc');
+
+        $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
+
+        $query = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
+
+        $selectData = [
+            SaleFriend::FIELD_ID,
+            SaleFriend::FIELD_ATTACHMENTS,
+            SaleFriend::FIELD_ID_OWNER,
+            SaleFriend::FIELD_COMMENT_NUMBER
+        ];
+
+        $qiNiuDomain = env('QI_NIU_DOMAIN');
+        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user,$qiNiuDomain){
+            $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
+            $attachments = $this->saleFriendLogic->convertAttachments($saleFriend->{SaleFriend::FIELD_ATTACHMENTS});
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = $attachments;
+            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item)use($qiNiuDomain){
+                $imageInfo = getimagesize($qiNiuDomain.$item);
+                if($imageInfo){
+                    return [
+                        'url'=>$item,
+                        'width'=>$imageInfo[0],
+                        'height'=>$imageInfo[1]
+                    ];
+                }else{
+                    return [];
+                }
+            })->toArray();
+            return $saleFriend;
+        });
+
+        return $saleFriends;
+    }*/
 
     /**
      * 获取
@@ -129,20 +192,25 @@ class SaleFriendController extends Controller
             SaleFriend::FIELD_COMMENT_NUMBER
         ];
 
-        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user){
+        $qiNiuDomain = env('QI_NIU_DOMAIN');
+        $saleFriends = paginate($query,$pageParams, $selectData,function($saleFriend)use($user,$qiNiuDomain){
+            if(!is_array($saleFriend->{SaleFriend::FIELD_ATTACHMENTS}[0])){
+                $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item)use($qiNiuDomain){
+                    $imageInfo = getimagesize($qiNiuDomain.$item);
+                    if($imageInfo){
+                        return [
+                            'url'=>$item,
+                            'width'=>$imageInfo[0],
+                            'height'=>$imageInfo[1]
+                        ];
+                    }else{
+                        return [];
+                    }
+                })->toArray();
+                $saleFriend->save();
+            }
+
             $saleFriend->can_delete = $this->saleFriendLogic->canDeleteSaleFriend($saleFriend, $user);
-            $saleFriend->{SaleFriend::FIELD_ATTACHMENTS} = collect($saleFriend->{SaleFriend::FIELD_ATTACHMENTS})->map(function ($item){
-                $imageInfo = getimagesize(env('QI_NIU_DOMAIN').$item);
-                if($imageInfo){
-                    return [
-                        'url'=>$item,
-                        'width'=>$imageInfo[0],
-                        'height'=>$imageInfo[1]
-                    ];
-                }else{
-                    return [];
-                }
-            })->toArray();
             return $saleFriend;
         });
 

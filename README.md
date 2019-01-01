@@ -1,5 +1,9 @@
 小情书是一个开源项目，你可以使用叶子的后台服务，也可以自己搭建后台服务。本文档为独立部署小情书后台服务的教程。
 
+有问题可以联系叶子：13425144866
+
+前端源码在这里：https://github.com/oubingbing/school_wechat
+
 ### 项目环境要求
 
     PHP 7.0以上
@@ -107,6 +111,7 @@ php的laravel框架是一款非常优秀的php框架，如果有兴趣的可以�
     QI_NIU_ACCESS_KEY=
     QI_NIU_SECRET_KEY=
     BUCKET_NAME=
+    QI_NIU_DOMAIN=
     
     SEND_CLOUD_API_USER=
     SEND_CLOUD_APP_KEY=
@@ -157,6 +162,7 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
         QI_NIU_ACCESS_KEY=
         QI_NIU_SECRET_KEY=
         BUCKET_NAME=
+        QI_NIU_DOMAIN= //你的七牛域名
 
 ##### 7、sendcloud邮件配置
 
@@ -173,15 +179,7 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
         YUN_PIAN_SINGLE_URL=
         YUN_PIAN_MULTI=
         YUN_PIAN_KEY=
-
-短信验证码的文字信息在
-    wechatAlliance\app\Http\Service\YunPianService.php中的sendMessageCode($phone)修改。
-
-表白帖子的短信文本信息在
-    wechatAlliance\app\Http\Controllers\Wechat\PostController.php中的store()修改
-
-需要你在云片备案相关的短信模板，根据自己的需求，填入模板的信息。
-
+        
 ##### 9、配置阿里云开发者信息
 
     ALI_ID=
@@ -192,6 +190,13 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
 
     https://data.aliyun.com/product/face?spm=5176.10609282.1146454.885.21d538010MzGRj#face-verify
 
+短信验证码的文字信息在
+    wechatAlliance\app\Http\Service\YunPianService.php中的sendMessageCode($phone)修改。
+
+表白帖子的短信文本信息在
+    wechatAlliance\app\Http\Controllers\Wechat\PostController.php中的store()修改
+
+需要你在云片备案相关的短信模板，根据自己的需求，填入模板的信息。
 
 ### 五、生成数据库表
 
