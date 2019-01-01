@@ -8,6 +8,7 @@ use HttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
@@ -66,7 +67,8 @@ class Handler extends ExceptionHandler
 
     public function handle($request, Exception $e){
         // 只处理自定义的APIException异常
-        //
+
+
         if($e instanceof ApiException) {
             $result = [
                 "error_code"    => $e->getCode(),
@@ -86,6 +88,8 @@ class Handler extends ExceptionHandler
         }
 
         if(env("APP_ENV") != "dev"){
+            Log::info("未知异常：");
+            Log::info($e);
             $result = [
                 "error_code"    => $e->getCode(),
                 "error_message" => "未知错误",
