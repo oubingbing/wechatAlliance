@@ -73,6 +73,25 @@
                 </ul>
             </li>
 
+            @if ($app->id === 196)
+                <li>
+                    <a href="javascript:;">
+                        <i class="iconfont">&#xe6b8;</i>
+                        <cite>视频</cite>
+                        <i class="iconfont nav_right">&#xe697;</i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a _href="{{ asset('admin/videos_view') }}">
+                                <i class="iconfont">&#xe6a7;</i>
+                                <cite>列表</cite>
+
+                            </a>
+                        </li >
+                    </ul>
+                </li>
+            @endif
+
         </ul>
       </div>
     </div>

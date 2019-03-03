@@ -58,6 +58,20 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']],
         /** 微信模板列表 */
         Route::post('/templates','AppController@createTemplate');
 
+        /** 视频 **/
+        Route::get('/videos_view',"VideosController@index");
+
+        /** 添加视频链接视频 **/
+        Route::post('/videos/create',"VideosController@create");
+
+        /** 添加视频链接视频 **/
+        Route::get('/videos',"VideosController@videoList");
+
+        /** 删除 **/
+        Route::delete('/videos/{id}/delete',"VideosController@delete");
+
+        /** 更新 **/
+        Route::post('/videos/{id}/update',"VideosController@update");
     });
 
     Route::group(['middleware'=>['createApp']], function () {
