@@ -10,9 +10,12 @@ namespace App\Http\Service;
 
 
 use App\Models\CompareFace;
+use App\Models\User;
 
 class CompareFaceService
 {
+    private $builder;
+
     /**
      * 检测图片中是否有头像
      *
@@ -113,6 +116,49 @@ class CompareFaceService
             'message'=>$message,
             'confidence'=>round($compareResult['confidence'],1)
         ];
+    }
+
+    public function queryBuilder($appID,$username)
+    {
+        $this->builder = CompareFace::query()
+            ->with(['poster'=>function($query){
+                $query->select([
+                    User::FIELD_ID,
+                    User::FIELD_ID_APP,
+                    User::FIELD_NICKNAME,
+                    User::FIELD_AVATAR,
+                    User::FIELD_CREATED_AT
+                ]);
+            }])
+            ->whereHas(CompareFace::REL_POSTER,function ($query)use($appID,$username){
+                $query->where(User::FIELD_ID_APP,$appID);
+                if($username){
+                    $query->where(User::FIELD_NICKNAME,'like','%'.$username.'%');
+                }
+            });
+        return $this;
+    }
+
+    /**
+     * 排序
+     *
+     * @author yezi
+     *
+     * @param $orderBy
+     * @param $sortBy
+     *
+     * @return $this
+     */
+    public function sort($orderBy, $sortBy)
+    {
+        $this->builder->orderBy($orderBy, $sortBy);
+
+        return $this;
+    }
+
+    public function done()
+    {
+        return $this->builder;
     }
 
 }

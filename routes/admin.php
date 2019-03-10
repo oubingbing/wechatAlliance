@@ -79,8 +79,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']],
         /** 移除黑名单 **/
         Route::delete('user/blacklist/{id}',"UserController@removeBlackList");
 
-        /** 情侣脸列表 **/
+        /** 情侣脸视图 **/
         Route::get('/compare_face',"CompareFaceController@index");
+
+        /** 情侣脸列表 **/
+        Route::get('/compare_faces',"CompareFaceController@faceList");
     });
 
     Route::group(['middleware'=>['createApp']], function () {

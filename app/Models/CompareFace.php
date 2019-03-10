@@ -38,6 +38,8 @@ class CompareFace extends BaseModel
     /** status 比对失败 status=2 */
     const ENUM_STATUS_FAIL = 2;
 
+    const REL_POSTER = 'poster';
+
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_USER,
@@ -52,4 +54,15 @@ class CompareFace extends BaseModel
         self::FIELD_COMPARE_RESULT => 'array',
     ];
 
+    /**
+     * 发帖人
+     *
+     * @author yezi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function poster()
+    {
+        return $this->belongsTo(User::class,self::FIELD_ID_USER);
+    }
 }
