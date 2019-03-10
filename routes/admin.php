@@ -72,6 +72,12 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']],
 
         /** 更新 **/
         Route::post('/videos/{id}/update',"VideosController@update");
+
+        /** 设置黑名单 **/
+        Route::post('user/blacklist',"UserController@setBlackList");
+
+        /** 移除黑名单 **/
+        Route::delete('user/blacklist/{id}',"UserController@removeBlackList");
     });
 
     Route::group(['middleware'=>['createApp']], function () {

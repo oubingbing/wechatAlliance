@@ -9,9 +9,9 @@
 namespace App\Http\Service;
 
 
+use App\Models\BlackList;
 use App\Models\User;
 use App\Models\UserProfile;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class UserService
 {
@@ -81,7 +81,9 @@ class UserService
      */
     public function queryBuilder($appId)
     {
-        $builder = User::query()->where(User::FIELD_ID_APP,$appId);
+        $builder = User::query()->with([
+            User::REL_BLACK_LIST
+        ])->where(User::FIELD_ID_APP,$appId);
 
         $this->builder = $builder;
 
@@ -243,4 +245,31 @@ class UserService
         return User::query()->where(User::FIELD_ID,$id)->value(User::FIELD_MOBILE);
     }
 
+    /**
+     * 查找黑名单
+     *
+     * @author yezi
+     * @param $userId
+     * @return $this
+     */
+    public function getBlacklistByUserId($userId)
+    {
+        $result = BlackList::query()->where(BlackList::FIELD_ID_USER,$userId)->first();
+        return $result;
+    }
+
+    public function storeBlackList($userId)
+    {
+        $result = BlackList::create([
+            BlackList::FIELD_ID_USER=>$userId
+        ]);
+
+        return $result;
+    }
+
+    public function deleteBlackList($userId)
+    {
+        $result = BlackList::query()->where(BlackList::FIELD_ID_USER,$userId)->delete();
+        return $result;
+    }
 }

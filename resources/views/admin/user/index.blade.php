@@ -3,6 +3,18 @@
     [v-cloak] {
         display: none;
     }
+    .td-manage{
+        width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .td-manage .btn{
+        padding: 5px 5px;
+        cursor: pointer;
+    }
+
 </style>
 @section('content')
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
@@ -21,14 +33,6 @@
             <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body" id="app" v-cloak>
-        <div class="layui-row">
-            <form class="layui-form layui-col-md12 x-so">
-                <input class="layui-input" placeholder="开始日" name="start" id="start">
-                <input class="layui-input" placeholder="截止日" name="end" id="end">
-                <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-                <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-            </form>
-        </div>
         <blockquote class="layui-elem-quote">共有数据：@{{total}} 条</blockquote>
         <table class="layui-table">
             <thead>
@@ -55,10 +59,14 @@
                     <td>@{{ user.service?'客服':'' }}</td>
                     <td>@{{ user.type == 2?'超管':''}}</td>
                     <td>@{{ user.created_at }}</td>
-                    <td class="td-manage" style="float: left">
-                            <button v-if="!user.service" class="layui-btn layui-btn-danger" v-on:click="setService(user.id)">设置为客服</button>
-                            <button v-if="user.type != 2" class="layui-btn" v-on:click="setSupervise(user.id)">设置超管</button>
-                            <button v-else class="layui-btn layui-btn-danger" v-on:click="removeSupervise(user.id)">取消超管</button>
+                    <td>
+                        <div class="td-manage">
+                            <div v-if="!user.service" class="btn"  v-on:click="setService(user.id)">设置为客服</div>
+                            <div v-if="user.type != 2" class="btn" v-on:click="setSupervise(user.id)">设置超管</div>
+                            <div v-else v-on:click="removeSupervise(user.id)" class="btn">取消超管</div>
+                            <div class="btn" v-if="!user.blacklist" v-on:click="setBlackList(user.id)">加入黑名单</div>
+                            <div class="btn" v-if="user.blacklist" v-on:click="removeBlackList(user.id)">移除黑名单</div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -104,6 +112,51 @@
                         console.log(error);
                     });
                 },
+
+                removeBlackList:function (userId) {
+                    axios.delete("blacklist/"+userId,{
+                        black_id:userId
+                    }).then( response=> {
+                        var res = response.data;
+                        if(res.error_code === 200){
+                            layer.msg(res.error_message);
+                            console.log(res)
+                            this.users.map(item=>{
+                                if(item.id == userId){
+                                    item.blacklist = '';
+                                }
+                                return item;
+                            });
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+
+                setBlackList:function (userId) {
+                    axios.post("blacklist",{
+                        black_id:userId
+                    }).then( response=> {
+                        var res = response.data;
+                        if(res.error_code === 200){
+                            layer.msg(res.error_message);
+                            console.log(res)
+                            this.users.map(item=>{
+                                if(item.id == userId){
+                                    item.blacklist = res.data;
+                                }
+                                return item;
+                            });
+                        }else{
+                            console.log('error:'+res);
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+
                 /**
                  * 移除超管
                  * @param e

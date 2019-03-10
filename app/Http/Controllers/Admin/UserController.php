@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exceptions\WebException;
 use App\Http\Service\PaginateService;
 use App\Http\Service\UserService;
 use App\Models\AdminApps;
@@ -103,6 +104,43 @@ class UserController
         $allUser = User::query()->where(User::FIELD_ID_APP,$appId)->count(User::FIELD_ID);
 
         return webResponse('ok',200,['new_user'=>$newUserCount, 'visit_user'=>count($visitUserCount),'all_user'=>$allUser]);
+    }
+
+    public function setBlackList()
+    {
+        $user = request()->input('user');
+        $blackId = request()->input('black_id');
+
+        if(!$blackId){
+            throw new WebException("参数不能为空！",500);
+        }
+
+        $userService = app(UserService::class);
+        $black = $userService->getBlacklistByUserId($blackId);
+        if($black){
+            throw new WebException("用户已经加入黑名单，不可重复加入");
+        }
+
+        $result = $userService->storeBlackList($blackId);
+        return webResponse("加入黑名单成功",200,$result->toArray());
+    }
+
+    public function removeBlackList($blackId)
+    {
+        $user = request()->input('user');
+
+        if(!$blackId){
+            throw new WebException("参数不能为空！",500);
+        }
+
+        $userService = app(UserService::class);
+        $black = $userService->getBlacklistByUserId($blackId);
+        if(!$black){
+            throw new WebException("该用户不在黑名单中");
+        }
+
+        $result = $userService->deleteBlackList($blackId);
+        return webResponse("移除黑名单成功",200,$result);
     }
 
 }

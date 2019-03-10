@@ -32,6 +32,14 @@ class Wechat extends BaseMiddleware
             throw new ApiException('token缺失',5000);
         }
 
+
+        if(!$request->isMethod('get')){
+            $black = $user->{User::REL_BLACK_LIST};
+            if($black){
+                throw new ApiException("您已被列入黑名单，不可进行该操作",500);
+            }
+        }
+
         $request->offsetSet('user',$user);
 
         return $next($request);

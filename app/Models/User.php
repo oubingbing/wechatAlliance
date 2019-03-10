@@ -90,6 +90,7 @@ class User extends Authenticatable implements JWTSubject
 
     const REL_PROFILE = 'profile';
     const REL_APP = 'app';
+    const REL_BLACK_LIST = 'blacklist';
 
     /**
      * The attributes that are mass assignable.
@@ -157,6 +158,11 @@ class User extends Authenticatable implements JWTSubject
     public function app()
     {
         return $this->belongsTo(WechatApp::class,self::FIELD_ID_APP,WechatApp::FIELD_ID);
+    }
+
+    public function blacklist()
+    {
+        return $this->hasOne(BlackList::class,BlackList::FIELD_ID_USER,self::FIELD_ID);
     }
 
 }
