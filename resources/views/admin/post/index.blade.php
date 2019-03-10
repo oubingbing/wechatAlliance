@@ -152,12 +152,10 @@
     </div>
     <div class="x-body" id="app">
         <div class="layui-row">
-            <form class="layui-form layui-col-md12 x-so">
-                <input class="layui-input" placeholder="开始日" name="start" id="start">
-                <input class="layui-input" placeholder="截止日" name="end" id="end">
-                <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-                <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-            </form>
+            <div class="layui-form layui-col-md12 x-so">
+                <input type="text" name="username" v-model="content"  placeholder="请输入内容" autocomplete="off" class="layui-input">
+                <button class="layui-btn" v-on:click="seatch"><i class="layui-icon">&#xe615;</i></button>
+            </div>
         </div>
         <blockquote class="layui-elem-quote">共有数据：@{{total}} 条</blockquote>
 
@@ -228,7 +226,8 @@
                 total:0,
                 page_size:20,
                 current_page:1,
-                imageUrl:'http://image.kucaroom.com/'
+                imageUrl:'http://image.kucaroom.com/',
+                content:''
             },
             created:function () {
                 this.getPosts();
@@ -263,13 +262,17 @@
                     this.current_page = e;
                     this.getPosts();
                 },
+                seatch:function () {
+                    this.current_page=1;
+                    this.getPosts();
+                },
                 /**
                  * 获取一个帖子列表
                  */
                 getPosts:function () {
                     var _this = this;
                     var url = "{{ asset('admin/post/list') }}";
-                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc',{
+                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc&content='+this.content,{
                         page_size:this.page_size,
                         page_number:this.current_page,
                         order_by:'created_at',

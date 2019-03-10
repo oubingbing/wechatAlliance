@@ -189,12 +189,12 @@ class PostService
      *
      * @return $this
      */
-    public function formatSinglePost($post, $user)
+    public function formatSinglePost($post, $user,$private=true)
     {
         if (collect($post)->toArray()) {
             $post = collect($post)->toArray();
 
-            if($post['private'] == Post::ENUM_PRIVATE){
+            if($post['private'] == Post::ENUM_PRIVATE && $private){
                 $post['poster']['nickname'] = '校友';
                 $post['poster']['avatar'] = '';
             }

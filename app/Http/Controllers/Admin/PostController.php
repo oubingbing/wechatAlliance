@@ -37,19 +37,28 @@ class PostController extends Controller
         $pageNumber = request()->input('page_number', 1);
         $orderBy = request()->input('order_by', 'created_at');
         $sortBy = request()->input('sort_by', 'desc');
+        $content = request()->input('content');
         $app = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
         $query = Post::with(['poster', 'praises', 'comments'])
-            ->whereHas(Post::REL_USER,function ($query)use($app){
+            ->whereHas(Post::REL_USER,function ($query)use($app,$content){
                 $query->where(User::FIELD_ID_APP,$app->id);
+                if($content){
+                    $query->where(User::FIELD_NICKNAME,'like','%'.$content.'%');
+                }
             })
             ->orderBy(Post::FIELD_CREATED_AT, 'desc');
 
-        $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {
+        if($content){
+            $query->Orwhere(Post::FIELD_CONTENT,'like','%'.$content.'%');
+            $query->Orwhere(Post::FIELD_TOPIC,'like','%'.$content.'%');
+        }
 
-            return $this->postService->formatSinglePost($post, $user);
+        $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {
+            $private = false;
+            return $this->postService->formatSinglePost($post, $user,$private);
 
         });
 
