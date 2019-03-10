@@ -105,6 +105,15 @@ class UserService
         return $this;
     }
 
+    public function filter($username)
+    {
+        if($username){
+            $this->builder->where(User::FIELD_NICKNAME,'like','%'.$username.'%');
+        }
+
+        return $this;
+    }
+
     /**
      * 返回查询构造器
      *

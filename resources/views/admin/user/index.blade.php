@@ -33,6 +33,12 @@
             <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body" id="app" v-cloak>
+        <div class="layui-row">
+            <div class="layui-form layui-col-md12 x-so">
+                <input type="text" v-model="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                <button class="layui-btn" v-on:click="searchUser" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
         <blockquote class="layui-elem-quote">共有数据：@{{total}} 条</blockquote>
         <table class="layui-table">
             <thead>
@@ -90,7 +96,8 @@
                 users:[],
                 total:0,
                 page_size:20,
-                current_page:1
+                current_page:1,
+                username:''
             },
             created:function () {
                 this.getUsers();
@@ -195,9 +202,15 @@
                     this.current_page = e;
                     this.getUsers();
                 },
+
+                searchUser:function () {
+                    this.current_page=1;
+                    this.getUsers();
+                },
+
                 getUsers:function () {
                     var url = "{{ asset("admin/wechat_users") }}";
-                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc')
+                    axios.get(url+"?page_size="+this.page_size+'&page_number='+this.current_page+'&order_by=created_at&sort_by=desc&username='+this.username)
                             .then( response=> {
                                 var res = response.data;
                                 if(res.error_code === 200){

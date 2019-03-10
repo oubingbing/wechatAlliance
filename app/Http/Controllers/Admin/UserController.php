@@ -48,6 +48,7 @@ class UserController
         $sortBy = request()->input('sort_by', 'desc');
         $filter = request()->input('filter');
         $app = $user->app();
+        $username = request()->input('username');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
@@ -56,7 +57,7 @@ class UserController
             return webResponse('没有查询到应用',500);
         }
 
-        $query = app(UserService::class)->queryBuilder($appId)->sort($orderBy, $sortBy)->done();
+        $query = app(UserService::class)->queryBuilder($appId)->filter($username)->sort($orderBy, $sortBy)->done();
 
         $userList = paginate($query, $pageParams, '*', function ($item) use ($user,$app) {
 
