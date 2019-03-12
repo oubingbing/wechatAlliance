@@ -157,7 +157,7 @@ class AppController extends Controller
                 return webResponse('开启微信审核模式失败！',500);
             }
 
-        }catch (Exception $e){
+        }catch (\Exception $e){
             \DB::rollBack();
             return webResponse($e,500);
         }
