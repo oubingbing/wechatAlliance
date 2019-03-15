@@ -1,6 +1,6 @@
 小情书是一个开源项目，你可以使用叶子的后台服务，也可以自己搭建后台服务。本文档为独立部署小情书后台服务的教程。
 
-有问题可以联系叶子：13425144866
+有问题可以联系叶子：13425144866，有空帮忙点一下右上角的start，谢谢
 
 前端源码在这里：https://github.com/oubingbing/school_wechat
 
@@ -9,6 +9,10 @@
     PHP 7.0以上
     
     MySQL 5.7
+    
+#### 效果图
+
+![](http://image.kucaroom.com/tmp/wx0f587d7c97a68e2b.o6zAJs3oh85Zb1lJE8oWix57vny0.bRrrxT8E9R8A3280bf2c92be9407e0d8c55edc628c3d.png)
 
 ### 一、下载后台源码
 
@@ -18,7 +22,7 @@ github源码地址：https://github.com/oubingbing/wechatAlliance.git
 
 直接点击download下载源码即可
 
-## 别忘了点star哈
+## 别忘了点右上角的star哈
 <img src="http://article.qiuhuiyi.cn/Fl9uqGovXBsPWr7LoianLXAjJS3w" alt="Build Status">
 
 ##### 1.2使用git获取源码
