@@ -18,7 +18,7 @@ class FormIdController extends Controller
 {
     public function save()
     {
-        $user = request()->input('user');
+        $user   = request()->input('user');
         $formId = request()->input('form_id');
 
         if($formId == 'the formId is a mock one'){

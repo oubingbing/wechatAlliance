@@ -39,13 +39,13 @@ class PostController extends Controller
      */
     public function store()
     {
-        $user = request()->input('user');
-        $content = request()->input('content');
+        $user      = request()->input('user');
+        $content   = request()->input('content');
         $imageUrls = request()->input('attachments');
-        $location = request()->input('location');
-        $private = request()->input('private');
-        $topic = request()->input('username');
-        $mobile = request()->input('mobile');
+        $location  = request()->input('location');
+        $private   = request()->input('private');
+        $topic     = request()->input('username');
+        $mobile    = request()->input('mobile');
 
         try {
             \DB::beginTransaction();
@@ -64,7 +64,7 @@ class PostController extends Controller
                         throw new ApiException('超过发送数量！',500);
                     }
                     //发送短信
-                    $number = rand(10000,100000);
+                    $number  = rand(10000,100000);
                     $content = "【恋言网】您的消息编号：$number,信息：hi，有同学跟你表白了，登录微信小程序：{$user->{User::REL_APP}->{WechatApp::FIELD_NAME}}，在表白墙搜索你的手机号码即可查看！";
                     sendMessage($user->{User::FIELD_MOBILE},$mobile,$content);
                     //建立一个短信会话
@@ -93,20 +93,18 @@ class PostController extends Controller
      */
     public function postList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $just = request()->input('just');
-        $type = request()->input('type');
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
-        $filter = request()->input('filter');
+        $just       = request()->input('just');
+        $type       = request()->input('type');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
+        $filter     = request()->input('filter');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
-
-        $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {
+        $query      = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
+        $posts      = paginate($query, $pageParams, '*', function ($post) use ($user) {
 
             return $this->postLogic->formatSinglePost($post, $user);
 
@@ -125,10 +123,9 @@ class PostController extends Controller
      */
     public function detail($id)
     {
-        $user = request()->input('user');
+        $user   = request()->input('user');
 
-        $post = Post::query()->with(['poster', 'praises', 'comments'])->find($id);
-
+        $post   = Post::query()->with(['poster', 'praises', 'comments'])->find($id);
         $result = $this->postLogic->formatSinglePost($post, $user);
 
         return $result;
@@ -152,11 +149,8 @@ class PostController extends Controller
         }
 
         $posts = $this->postLogic->getPostList($user, $time);
-
         $posts = collect($posts)->map(function ($post) use ($user) {
-
             return $this->postLogic->formatSinglePost($post, $user);
-
         });
 
         return $posts;

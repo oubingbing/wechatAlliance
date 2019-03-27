@@ -24,10 +24,10 @@ class WeChatMessageService
 
     public function __construct($appId)
     {
-        $this->client = new Client;
+        $this->client  = new Client;
         $this->baseUrl = 'https://api.weixin.qq.com/cgi-bin/wxopen/template';
-        $this->token = app(TokenService::class)->getAccessToken($appId);
-        $this->appId = $appId;
+        $this->token   = app(TokenService::class)->getAccessToken($appId);
+        $this->appId   = $appId;
     }
 
     /**
@@ -63,16 +63,16 @@ class WeChatMessageService
     public function batchAddTemplate()
     {
         $template = [];
-        $keys = TemplateKeyWord::query()->get();
+        $keys     = TemplateKeyWord::query()->get();
         foreach ($keys as $item){
             $result = $this->addTemplate($item->{TemplateKeyWord::FIELD_KEY_WORD},$item->{TemplateKeyWord::FIELD_KEY_WORD_IDS});
             if($result['errcode'] == 0){
                 array_push($template,[
-                    WeChatTemplate::FIELD_ID_APP=>$this->appId,
-                    WeChatTemplate::FIELD_ID_TEMPLATE=>$result['template_id'],
-                    WeChatTemplate::FIELD_TITLE=>$item->{TemplateKeyWord::FIELD_TITLE},
-                    WeChatTemplate::FIELD_CONTENT=>$item->{TemplateKeyWord::FIELD_CONTENT},
-                    WeChatTemplate::FIELD_KEY_WORD_IDS=>json_encode($item->{TemplateKeyWord::FIELD_KEY_WORD_IDS})
+                    WeChatTemplate::FIELD_ID_APP       => $this->appId,
+                    WeChatTemplate::FIELD_ID_TEMPLATE  => $result['template_id'],
+                    WeChatTemplate::FIELD_TITLE        => $item->{TemplateKeyWord::FIELD_TITLE},
+                    WeChatTemplate::FIELD_CONTENT      => $item->{TemplateKeyWord::FIELD_CONTENT},
+                    WeChatTemplate::FIELD_KEY_WORD_IDS => json_encode($item->{TemplateKeyWord::FIELD_KEY_WORD_IDS})
                 ]);
             }else{
                 throw new \Exception('初始化错误！',500);
@@ -121,11 +121,11 @@ class WeChatMessageService
      */
     public function addTemplate($titleId,$keywordIds)
     {
-        $url = $this->baseUrl.'/add?access_token='.$this->token;
-        $data = ['id'=>$titleId,'keyword_id_list'=>$keywordIds];
+        $url      = $this->baseUrl.'/add?access_token='.$this->token;
+        $data     = ['id'=>$titleId,'keyword_id_list'=>$keywordIds];
         $response = $this->client->post($url,['json'=>$data]);
 
-        $result = json_decode((string) $response->getBody(), true);
+        $result   = json_decode((string) $response->getBody(), true);
         if($result['errcode'] != 0){
             throw new \Exception('添加模板失败！',500);
         }
@@ -158,8 +158,8 @@ class WeChatMessageService
      */
     public function deleteTemplate($templateId)
     {
-        $url = $this->baseUrl.'/del?access_token='.$this->token;
-        $data = ['template_id'=>$templateId];
+        $url      = $this->baseUrl.'/del?access_token='.$this->token;
+        $data     = ['template_id'=>$templateId];
         $response = $this->client->post($url,['json'=>$data]);
 
         $result = json_decode((string) $response->getBody(), true);
@@ -192,7 +192,7 @@ class WeChatMessageService
 
         $templateId = $template->{WeChatTemplate::FIELD_ID_TEMPLATE};
 
-        $content = [];
+        $content    = [];
         foreach ($template->{WeChatTemplate::FIELD_KEY_WORD_IDS} as $key => $item){
             $keyword = $key + 1;
             $content["keyword$keyword"] = ['value'=>$values[$key]];
@@ -200,18 +200,17 @@ class WeChatMessageService
 
         $url = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token='.$this->token;
         $data = [
-            'touser'=>$openId,
-            'template_id'=>$templateId,
-            'form_id'=>$fromId,
-            'data'=>$content
+            'touser'      => $openId,
+            'template_id' => $templateId,
+            'form_id'     => $fromId,
+            'data'        => $content
         ];
         if($page){
             $data['page'] = $page;
         }
 
         $response = $this->client->post($url,['json'=>$data]);
-
-        $result = json_decode((string) $response->getBody(), true);
+        $result   = json_decode((string) $response->getBody(), true);
 
         if($result['errcode'] == 0){
             $status = TemplateLog::ENUM_STATUS_SUCCESS;
@@ -220,13 +219,13 @@ class WeChatMessageService
         }
 
         TemplateLog::create([
-            TemplateLog::FIELD_ID_OPEN=>$openId,
-            TemplateLog::FIELD_ID_TEMPLATE=>$templateId,
-            TemplateLog::FIELD_ID_APP=>$this->appId,
-            TemplateLog::FIELD_CONTENT=>$data,
-            TemplateLog::FIELD_PAGE=>$page,
-            TemplateLog::FIELD_STATUS=>$status,
-            TemplateLog::FIELD_RESULT=>$result
+            TemplateLog::FIELD_ID_OPEN     => $openId,
+            TemplateLog::FIELD_ID_TEMPLATE => $templateId,
+            TemplateLog::FIELD_ID_APP      => $this->appId,
+            TemplateLog::FIELD_CONTENT     => $data,
+            TemplateLog::FIELD_PAGE        => $page,
+            TemplateLog::FIELD_STATUS      => $status,
+            TemplateLog::FIELD_RESULT      => $result
         ]);
 
         return $result;

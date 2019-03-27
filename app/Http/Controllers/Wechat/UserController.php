@@ -56,7 +56,7 @@ class UserController extends Controller
         $user = request()->input('user');
 
         //该接口已废弃，所以用来进行用户浏览记录接口
-        $job = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
+        $job  = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
         dispatch($job)->onQueue('record_visit_log');
 
         $college = $user->{User::FIELD_ID_COLLEGE};
@@ -90,7 +90,7 @@ class UserController extends Controller
      */
     public function setCollege($id)
     {
-        $user = request()->input('user');
+        $user    = request()->input('user');
 
         $college = Colleges::find($id);
 
@@ -136,10 +136,8 @@ class UserController extends Controller
      */
     public function clearSchool()
     {
-        $user = request()->input('user');
-
+        $user   = request()->input('user');
         $result = User::query()->where(User::FIELD_ID,$user->id)->update([User::FIELD_ID_COLLEGE=>null]);
-
         return $result;
     }
 
@@ -153,9 +151,9 @@ class UserController extends Controller
      */
     public function updateUser()
     {
-        $user = request()->input('user');
+        $user     = request()->input('user');
         $nickname = request()->input('nickname');
-        $avatar = request()->input('avatar');
+        $avatar   = request()->input('avatar');
 
         if(empty($nickname)){
             throw new ApiException('昵称不能为空！', 500);
@@ -171,7 +169,7 @@ class UserController extends Controller
         }
 
         $user->{User::FIELD_NICKNAME} = $nickname;
-        $user->{User::FIELD_AVATAR} = $avatar;
+        $user->{User::FIELD_AVATAR}   = $avatar;
         $result = $user->save();
         if(!$result){
             throw new ApiException('更新失败！', 500);
@@ -190,19 +188,19 @@ class UserController extends Controller
      */
     public function createProfile(\Illuminate\Http\Request $request)
     {
-        $user = $request->input('user');
-        $mobile = $request->input('mobile');
-        $name = $request->input('username');
-        $grade = $request->input('grade');
-        $college = $request->input('college');
-        $major = $request->input('major');
-        $studentNumber = $request->input('student_number');
-        $code = $request->input('code');
+        $user           = $request->input('user');
+        $mobile         = $request->input('mobile');
+        $name           = $request->input('username');
+        $grade          = $request->input('grade');
+        $college        = $request->input('college');
+        $major          = $request->input('major');
+        $studentNumber  = $request->input('student_number');
+        $code           = $request->input('code');
 
         app(SendMessageService::class)->validCode($code);
 
         $userService = app(UserService::class);
-        $valid = $userService->validProfile($request);
+        $valid       = $userService->validProfile($request);
         if(!$valid['valid']){
             throw new ApiException($valid['message'],500);
         }
@@ -243,8 +241,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $user = request()->input('user');
-
+        $user    = request()->input('user');
         $profile = app(UserService::class)->getProfileById($user->id);
         if($profile){
             $profile->phone = $user->{User::FIELD_MOBILE};
@@ -262,8 +259,7 @@ class UserController extends Controller
      */
     public function qrCode()
     {
-        $user = request()->input('user');
-
+        $user   = request()->input('user');
         $qrCode = WechatApp::query()->where(WechatApp::FIELD_ID,$user->{User::FIELD_ID_APP})->value(WechatApp::FIELD_ATTACHMENTS);
 
         return $qrCode;

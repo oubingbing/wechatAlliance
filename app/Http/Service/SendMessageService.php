@@ -33,12 +33,12 @@ class SendMessageService
     public function saveSendMessageLog($mobile,$code,$status,$type,$sessionId,$expire)
     {
         $result = SendMessage::create([
-            SendMessage::FIELD_CODE=>$code,
-            SendMessage::FIELD_MOBILE=>$mobile,
-            SendMessage::FIELD_STATUS=>$status,
-            SendMessage::FIELD_TYPE=>$type,
-            SendMessage::FIELD_ID_MESSAGE_SESSION=>$sessionId,
-            SendMessage::FIELD_EXPIRED_AT=>$expire
+            SendMessage::FIELD_CODE               => $code,
+            SendMessage::FIELD_MOBILE             => $mobile,
+            SendMessage::FIELD_STATUS             => $status,
+            SendMessage::FIELD_TYPE               =>$type,
+            SendMessage::FIELD_ID_MESSAGE_SESSION => $sessionId,
+            SendMessage::FIELD_EXPIRED_AT         => $expire
         ]);
 
         return $result;
@@ -88,11 +88,11 @@ class SendMessageService
     public function createMessageSession($userId,$postPhone,$receivePhone,$objId,$objType)
     {
         $result = MessageSession::create([
-            MessageSession::FIELD_ID_USER=>$userId,
-            MessageSession::FIELD_POST_PHONE=>$postPhone,
-            MessageSession::FIELD_RECEIVE_PHONE=>$receivePhone,
-            MessageSession::FIELD_OBJ_ID=>$objId,
-            MessageSession::FIELD_OBJ_TYPE=>$objType
+            MessageSession::FIELD_ID_USER       => $userId,
+            MessageSession::FIELD_POST_PHONE    => $postPhone,
+            MessageSession::FIELD_RECEIVE_PHONE => $receivePhone,
+            MessageSession::FIELD_OBJ_ID        => $objId,
+            MessageSession::FIELD_OBJ_TYPE      => $objType
         ]);
 
         return $result;
@@ -116,14 +116,14 @@ class SendMessageService
     public function saveSecretMessage($postId,$receiveId,$sessionId,$content,$attachments,$code,$number=0,$delayAt=null)
     {
         $result = SecretMessage::create([
-            SecretMessage::FIELD_ID_MESSAGE_SESSION=>$sessionId,
-            SecretMessage::FIELD_ID_POST_USER=>$postId,
-            SecretMessage::FIELD_ID_RECEIVE_USER=>$receiveId,
-            SecretMessage::FIELD_CONTENT=>$content,
-            SecretMessage::FIELD_ATTACHMENTS=>$attachments,
-            SecretMessage::FIELD_CODE=>$code,
-            SecretMessage::FIELD_NUMBER=>$number,
-            SecretMessage::FIELD_DELAY_AT=>$delayAt
+            SecretMessage::FIELD_ID_MESSAGE_SESSION => $sessionId,
+            SecretMessage::FIELD_ID_POST_USER       => $postId,
+            SecretMessage::FIELD_ID_RECEIVE_USER    => $receiveId,
+            SecretMessage::FIELD_CONTENT            => $content,
+            SecretMessage::FIELD_ATTACHMENTS        => $attachments,
+            SecretMessage::FIELD_CODE               => $code,
+            SecretMessage::FIELD_NUMBER             => $number,
+            SecretMessage::FIELD_DELAY_AT           => $delayAt
         ]);
 
         return $result;

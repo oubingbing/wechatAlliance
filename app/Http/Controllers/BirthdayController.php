@@ -21,12 +21,12 @@ class BirthdayController
 
 
     public function test(){
-        $stu_id = '152011052';
+        $stu_id   = '152011052';
         $password = 'luo622';
 
-        $user = ['stu_id' => $stu_id, 'stu_pwd' => $password];
+        $user     = ['stu_id' => $stu_id, 'stu_pwd' => $password];
 
-        $client = new Lcrawl('http://jwxt.nfsysu.cn/', $user);
+        $client   = new Lcrawl('http://jwxt.nfsysu.cn/', $user);
 
         $client->login();
 

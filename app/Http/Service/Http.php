@@ -124,42 +124,42 @@ class Http
           "request_id" => "406081ae-3a79-4562-a4db-6e7e0fc3b465"
         ]*/
 
-        $akId = env('ALI_ID');
+        $akId     = env('ALI_ID');
         $akSecret = env('ALI_SECRET');
-        $url = env('ALI_URL');
+        $url      = env('ALI_URL');
 
         $content = [
-            "type"=>$imageType,
-            "image_url_1"=>$image1,
-            "image_url_2"=>$image2
+            "type"        => $imageType,
+            "image_url_1" => $image1,
+            "image_url_2" => $image2
         ];
 
-        $options = array(
-            'http' => array(
-                'header' => array(
-                    'accept'=> "application/json",
-                    'content-type'=> "application/json",
-                    'date'=> gmdate("D, d M Y H:i:s \G\M\T"),
+        $options                    = array(
+            'http'                  => array(
+                'header'            => array(
+                    'accept'        => "application/json",
+                    'content-type'  => "application/json",
+                    'date'          => gmdate("D, d M Y H:i:s \G\M\T"),
                     'authorization' => ''
                 ),
-                'method' => "POST",
-                'content' => json_encode($content) //如有数据，请用json_encode()进行编码
+                'method'            => "POST",
+                'content'           => json_encode($content) //如有数据，请用json_encode()进行编码
             )
         );
-        $http = $options['http'];
+        $http   = $options['http'];
         $header = $http['header'];
         $urlObj = parse_url($url);
         if(empty($urlObj["query"]))
             $path = $urlObj["path"];
         else
             $path = $urlObj["path"]."?".$urlObj["query"];
-        $body = $http['content'];
+        $body     = $http['content'];
         if(empty($body))
             $bodymd5 = $body;
         else
-            $bodymd5 = base64_encode(md5($body,true));
+            $bodymd5  = base64_encode(md5($body,true));
         $stringToSign = $http['method']."\n".$header['accept']."\n".$bodymd5."\n".$header['content-type']."\n".$header['date']."\n".$path;
-        $signature = base64_encode(
+        $signature    = base64_encode(
             hash_hmac(
                 "sha1",
                 $stringToSign,

@@ -23,10 +23,10 @@ class TravelService
     public function saveTravelPlan($userId,$title,$distance)
     {
         $plan = TravelPlan::create([
-            TravelPlan::FIELD_ID_USER=>$userId,
-            TravelPlan::FIELD_TITLE=>empty($title)?'无':$title,
-            TravelPlan::FIELD_DISTANCE=>$distance,
-            TravelPlan::FIELD_STATUS=>TravelPlan::ENUM_STATUS_TRAVeLING
+            TravelPlan::FIELD_ID_USER  => $userId,
+            TravelPlan::FIELD_TITLE    => empty($title)?'无':$title,
+            TravelPlan::FIELD_DISTANCE => $distance,
+            TravelPlan::FIELD_STATUS   => TravelPlan::ENUM_STATUS_TRAVeLING
         ]);
 
         return $plan;
@@ -54,15 +54,15 @@ class TravelService
                 $type = TravelPlanPoint::ENUM_TYPE_ROUTE_POINT;
             }
             array_push($planArray,[
-                TravelPlanPoint::FIELD_ID_TRAVEL_PLAN=>$planId,
-                TravelPlanPoint::FIELD_NAME=>$point['name'],
-                TravelPlanPoint::FIELD_ADDRESS=>$point['address'],
-                TravelPlanPoint::FIELD_LATITUDE=>$point['latitude'],
-                TravelPlanPoint::FIELD_LONGITUDE=>$point['longitude'],
-                TravelPlanPoint::FIELD_SORT=>$point['id'],
-                TravelPlanPoint::FIELD_TYPE=>$type,
-                TravelPlanPoint::FIELD_CREATED_AT=>Carbon::now(),
-                TravelPlanPoint::FIELD_UPDATED_AT=>Carbon::now()
+                TravelPlanPoint::FIELD_ID_TRAVEL_PLAN => $planId,
+                TravelPlanPoint::FIELD_NAME           => $point['name'],
+                TravelPlanPoint::FIELD_ADDRESS        => $point['address'],
+                TravelPlanPoint::FIELD_LATITUDE       => $point['latitude'],
+                TravelPlanPoint::FIELD_LONGITUDE      => $point['longitude'],
+                TravelPlanPoint::FIELD_SORT           => $point['id'],
+                TravelPlanPoint::FIELD_TYPE           => $type,
+                TravelPlanPoint::FIELD_CREATED_AT     => Carbon::now(),
+                TravelPlanPoint::FIELD_UPDATED_AT     => Carbon::now()
             ]);
         }
 
@@ -159,19 +159,19 @@ class TravelService
         }
 
         //计算站点之间的两点距离和实际的地理距离，然后再按照步数的地理距离与站点之间的距离的比例进行转换
-        $index = 1;
-        $logArray = [];
+        $index        = 1;
+        $logArray     = [];
         $travelLength = $theTravelLength;
-        $point = $points[0];
-        $nextPoint = $points[$index];
-        $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
-        $rate = $this->getDistanceWithLocationRate($point,$nextPoint);
+        $point        = $points[0];
+        $nextPoint    = $points[$index];
+        $pointLength  = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
+        $rate         = $this->getDistanceWithLocationRate($point,$nextPoint);
         $this->updatePointStatus($point['id'],TravelPlanPoint::ENUM_STATUS_ARRIVE);
-        $updateStep = [];
+        $updateStep   = [];
         foreach ($stepData as $step){
             //根据比例获取实际的地理坐标
-            $stepLength = $rate * $step['step_meter'];
-            $travelLength += $stepLength;
+            $stepLength    = $rate * $step['step_meter'];
+            $travelLength  += $stepLength;
             $locationPoint = $mathService->getLocationPoint($point['longitude'],$point['latitude'],$nextPoint['longitude'],$nextPoint['latitude'],$travelLength);
             if($travelLength > $pointLength){
                 //更新坐标点的状态
@@ -187,31 +187,31 @@ class TravelService
                     break;
                 }
 
-                $point = $nextPoint;
-                $nextPoint = $points[$index];
+                $point        = $nextPoint;
+                $nextPoint    = $points[$index];
                 $travelLength = 0;
                 //重新计算两点间的距离和距离比例
-                $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
-                $rate = $this->getDistanceWithLocationRate($point,$nextPoint);
+                $pointLength  = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
+                $rate         = $this->getDistanceWithLocationRate($point,$nextPoint);
             }
 
             array_push($logArray,[
-                TravelLog::FIELD_ID_TRAVEL_PLAN=>$plan->id,
-                TravelLog::FIELD_ID_USER=>$userId,
-                TravelLog::FIELD_LATITUDE=>$locationPoint['y'],
-                TravelLog::FIELD_LONGITUDE=>$locationPoint['x'],
-                TravelLog::FIELD_DISTANCE=>$step['step_meter'],
-                TravelLog::FIELD_STEP=>$step['step'],
-                TravelLog::FIELD_RUN_AT=>$step['run_at'],
-                TravelLog::FIELD_ID_POINT=>$point['id'],
-                TravelLog::FIELD_LENGTH=>$stepLength,
-                TravelLog::FIELD_TOTAL_LENGTH=>$travelLength
+                TravelLog::FIELD_ID_TRAVEL_PLAN => $plan->id,
+                TravelLog::FIELD_ID_USER        => $userId,
+                TravelLog::FIELD_LATITUDE       => $locationPoint['y'],
+                TravelLog::FIELD_LONGITUDE      => $locationPoint['x'],
+                TravelLog::FIELD_DISTANCE       => $step['step_meter'],
+                TravelLog::FIELD_STEP           => $step['step'],
+                TravelLog::FIELD_RUN_AT         => $step['run_at'],
+                TravelLog::FIELD_ID_POINT       => $point['id'],
+                TravelLog::FIELD_LENGTH         => $stepLength,
+                TravelLog::FIELD_TOTAL_LENGTH   => $travelLength
             ]);
 
             array_push($updateStep,[
-                RunStep::FIELD_ID=>$step['id'],
-                RunStep::FIELD_STATUS=>RunStep::ENUM_STATUS_BE_USE,
-                RunStep::FIELD_UPDATED_AT=>Carbon::now()
+                RunStep::FIELD_ID         => $step['id'],
+                RunStep::FIELD_STATUS     => RunStep::ENUM_STATUS_BE_USE,
+                RunStep::FIELD_UPDATED_AT => Carbon::now()
             ]);
         }
 
@@ -312,8 +312,8 @@ class TravelService
      */
     public function getDistanceWithLocationRate($point,$nextPoint)
     {
-        $mathService = app(MathService::class);
-        $pointLength = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
+        $mathService      = app(MathService::class);
+        $pointLength      = $mathService->distanceBetweenPoint($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
         $pointLengthMeter = $mathService->getDistance($point['latitude'],$point['longitude'],$nextPoint['latitude'],$nextPoint['longitude']);
 
         if($pointLengthMeter == 0){
@@ -388,14 +388,14 @@ class TravelService
      */
     public function formatTravelLog($log)
     {
-        $log['format_latitude'] = round($log->{TravelLog::FIELD_LATITUDE},4);
+        $log['format_latitude']  = round($log->{TravelLog::FIELD_LATITUDE},4);
         $log['format_longitude'] = round($log->{TravelLog::FIELD_LONGITUDE},4);
-        $log['run_at'] = Carbon::parse($log->{TravelLog::FIELD_RUN_AT})->toDateString();
-        $log['distance'] = round($log->{TravelLog::FIELD_DISTANCE} / 1000,2);
-        $log['log'] = '';
-        $log['hotel'] = $this->getTravelHotel($log->id);
-        $log['views'] = $this->getViews($log->id);
-        $log['foods'] = $this->getFoods($log->id);
+        $log['run_at']           = Carbon::parse($log->{TravelLog::FIELD_RUN_AT})->toDateString();
+        $log['distance']         = round($log->{TravelLog::FIELD_DISTANCE} / 1000,2);
+        $log['log']              = '';
+        $log['hotel']            = $this->getTravelHotel($log->id);
+        $log['views']            = $this->getViews($log->id);
+        $log['foods']            = $this->getFoods($log->id);
 
         return $log;
     }
@@ -564,18 +564,18 @@ class TravelService
             ->get();
 
         $provinceCount = collect($travel)->where(TravelLog::FIELD_PROVINCE,'!=','')->unique(TravelLog::FIELD_PROVINCE)->values()->count();
-        $cityCount = collect($travel)->where(TravelLog::FIELD_CITY,'!=','')->unique(TravelLog::FIELD_CITY)->values()->count();
+        $cityCount     = collect($travel)->where(TravelLog::FIELD_CITY,'!=','')->unique(TravelLog::FIELD_CITY)->values()->count();
         $districtCount = collect($travel)->where(TravelLog::FIELD_DISTRICT,'!=','')->unique(TravelLog::FIELD_DISTRICT)->values()->count();
 
-        $distanceSum = collect($travel)->sum(TravelLog::FIELD_DISTANCE);
-        $stepSum = collect($travel)->sum(TravelLog::FIELD_STEP);
+        $distanceSum   = collect($travel)->sum(TravelLog::FIELD_DISTANCE);
+        $stepSum       = collect($travel)->sum(TravelLog::FIELD_STEP);
 
         return [
-            'province'=>$provinceCount,
-            'city'=>$cityCount,
-            'district'=>$districtCount,
-            'distance'=>round($distanceSum/1000,1),
-            'step'=>$stepSum
+            'province'  => $provinceCount,
+            'city'      => $cityCount,
+            'district'  => $districtCount,
+            'distance'  => round($distanceSum/1000,1),
+            'step'      => $stepSum
         ];
     }
 
@@ -589,19 +589,19 @@ class TravelService
      */
     public function statisticsPoi($planId)
     {
-        $result = TravelLogPoi::query()->whereHas(TravelLogPoi::REL_TRAVEL_LOG,function ($query)use($planId){
+        $result  = TravelLogPoi::query()->whereHas(TravelLogPoi::REL_TRAVEL_LOG,function ($query)use($planId){
            $query->where(TravelLog::FIELD_ID_TRAVEL_PLAN,$planId);
         })
         ->get([TravelLogPoi::FIELD_TYPE]);
 
         $hotel = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_HOTEL)->count();
-        $food = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_FOOD)->count();
-        $view = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_VIEW_SPOT)->count();
+        $food  = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_FOOD)->count();
+        $view  = collect($result)->where(TravelLogPoi::FIELD_TYPE,TravelLogPoi::ENUM_TYPE_VIEW_SPOT)->count();
 
         return [
-            'hotel'=>$hotel,
-            'food'=>$food,
-            'view'=>$view
+            'hotel' => $hotel,
+            'food'  => $food,
+            'view'  => $view
         ];
     }
 
@@ -690,18 +690,18 @@ class TravelService
     public function formatTravel($item)
     {
         $startPoint = '';
-        $endPoints = '';
+        $endPoints  = '';
         foreach ($item['points'] as $point){
             if($point->type == TravelPlanPoint::ENUM_TYPE_START_POINT){
                 $startPoint = $point->name;
             }
             if($point->type == TravelPlanPoint::ENUM_TYPE_END_POINT){
-                $endPoints = $point->name;
+                $endPoints  = $point->name;
             }
         }
 
         $item->start_point = $startPoint;
-        $item->end_point = $endPoints;
+        $item->end_point   = $endPoints;
 
         return $item;
     }

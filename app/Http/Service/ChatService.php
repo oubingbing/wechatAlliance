@@ -34,11 +34,11 @@ class ChatService
     {
         $result = ChatMessage::create([
             ChatMessage::FIELD_ID_FROM_USER => $fromId,
-            ChatMessage::FIELD_ID_TO => $toId,
-            ChatMessage::FIELD_CONTENT => $content,
-            ChatMessage::FIELD_ATTACHMENTS => $attachments,
-            ChatMessage::FIELD_TYPE => $type,
-            ChatMessage::FIELD_POST_AT => $post_at
+            ChatMessage::FIELD_ID_TO        => $toId,
+            ChatMessage::FIELD_CONTENT      => $content,
+            ChatMessage::FIELD_ATTACHMENTS  => $attachments,
+            ChatMessage::FIELD_TYPE         => $type,
+            ChatMessage::FIELD_POST_AT      => $post_at
         ]);
         return $result;
     }
@@ -168,8 +168,8 @@ class ChatService
      */
     public function format($message)
     {
-        $message->fromUser;
-        $message->toUser;
+        $message -> fromUser;
+        $message -> toUser;
 
         return $message;
     }

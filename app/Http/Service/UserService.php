@@ -188,22 +188,22 @@ class UserService
     {
         $profile = $this->getProfileById($user->id);
         if($profile){
-            $profile->{UserProfile::FIELD_NAME} = $name;
-            $profile->{UserProfile::FIELD_GRADE} = $grade;
+            $profile->{UserProfile::FIELD_NAME}           = $name;
+            $profile->{UserProfile::FIELD_GRADE}          = $grade;
             $profile->{UserProfile::FIELD_STUDENT_NUMBER} = $number;
-            $profile->{UserProfile::FIELD_COLLEGE} = $college;
-            $profile->{UserProfile::FIELD_MAJOR} = $major;
+            $profile->{UserProfile::FIELD_COLLEGE}        = $college;
+            $profile->{UserProfile::FIELD_MAJOR}          = $major;
             $profile->save();
         }else{
             $profile = UserProfile::create([
-                UserProfile::FIELD_ID_USER=>$user->id,
-                UserProfile::FIELD_NAME=>$name,
-                UserProfile::FIELD_GRADE=>$grade,
-                UserProfile::FIELD_STUDENT_NUMBER=>$number,
-                UserProfile::FIELD_COLLEGE=>$college,
-                UserProfile::FIELD_MAJOR=>$major,
-                UserProfile::FIELD_NICKNAME=>$user->{User::FIELD_NICKNAME},
-                UserProfile::FIELD_AVATAR=>$user->{User::FIELD_AVATAR}
+                UserProfile::FIELD_ID_USER        => $user->id,
+                UserProfile::FIELD_NAME           => $name,
+                UserProfile::FIELD_GRADE          => $grade,
+                UserProfile::FIELD_STUDENT_NUMBER => $number,
+                UserProfile::FIELD_COLLEGE        => $college,
+                UserProfile::FIELD_MAJOR          => $major,
+                UserProfile::FIELD_NICKNAME       => $user->{User::FIELD_NICKNAME},
+                UserProfile::FIELD_AVATAR         => $user->{User::FIELD_AVATAR}
             ]);
         }
 
@@ -221,23 +221,23 @@ class UserService
     public function validProfile($request)
     {
         $rules = [
-            'username' => 'required',
+            'username'       => 'required',
             'student_number' => 'required',
-            'grade' => 'required',
-            'major' => 'required',
-            'college' => 'required',
-            'mobile' => 'required',
-            'code' => 'required | numeric',
+            'grade'          => 'required',
+            'major'          => 'required',
+            'college'        => 'required',
+            'mobile'         => 'required',
+            'code'           => 'required | numeric',
         ];
         $message = [
-            'username.required' => '名字不能为空！',
+            'username.required'       => '名字不能为空！',
             'student_number.required' => '学号不能为空！',
-            'grade.numeric' => '年级不能为空！',
-            'major.required' => '专业不能为空！',
-            'college.required' => '学院不能为空！',
-            'mobile.numeric' => '手机不能为空！',
-            'code.required' => '验证码不能为空！',
-            'code.numeric' => '验证码必须是数字！'
+            'grade.numeric'           => '年级不能为空！',
+            'major.required'          => '专业不能为空！',
+            'college.required'        => '学院不能为空！',
+            'mobile.numeric'          => '手机不能为空！',
+            'code.required'           => '验证码不能为空！',
+            'code.numeric'            => '验证码必须是数字！'
         ];
         $validator = \Validator::make($request->all(),$rules,$message);
 

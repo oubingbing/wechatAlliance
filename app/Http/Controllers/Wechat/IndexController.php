@@ -50,8 +50,7 @@ class IndexController extends Controller
 
     public function service()
     {
-        $user = request()->input('user');
-
+        $user      = request()->input('user');
         $serviceId = WechatApp::query()->where(WechatApp::FIELD_ID,$user->{User::FIELD_ID_APP})->value(WechatApp::FIELD_ID_SERVICE);
 
         return $serviceId;
@@ -104,7 +103,7 @@ class IndexController extends Controller
      */
     public function getMessageCode()
     {
-        $user = request()->input('user');
+        $user  = request()->input('user');
         $phone = request()->input('phone');
 
         if(!$phone){
@@ -125,7 +124,7 @@ class IndexController extends Controller
     }
 
     public function recordLocation(){
-        $latitude = request()->input("latitude");
+        $latitude  = request()->input("latitude");
         $longitude = request()->input("longitude");
 
         DB::table('location')->insert(

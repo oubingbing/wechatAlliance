@@ -35,11 +35,11 @@ class TopicController extends Controller
      */
     public function store()
     {
-        $user = request()->input('user');
-        $title = request()->input('title');
-        $content = request()->input('content');
+        $user        = request()->input('user');
+        $title       = request()->input('title');
+        $content     = request()->input('content');
         $attachments = request()->input('attachments');
-        $app = $user->app();
+        $app         = $user->app();
 
         if(!$content){
             return webResponse('话题内容不能为空！',500);
@@ -57,14 +57,20 @@ class TopicController extends Controller
         return webResponse('新建成功',200,$topic);
     }
 
+    /**
+     * 话题列表
+     *
+     * @author yezi
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function topicList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
-        $app = $user->app();
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
+        $app        = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
@@ -85,6 +91,13 @@ class TopicController extends Controller
         return webResponse('ok',200,$topics);
     }
 
+    /**
+     * 上架话题
+     *
+     * @author yezi
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function upTopic($id)
     {
         $user = request()->input('user');
@@ -97,6 +110,13 @@ class TopicController extends Controller
         return webResponse('上架失败！',200);
     }
 
+    /**
+     * 下架话题
+     *
+     * @author 叶子
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function downTopic($id)
     {
         $user = request()->input('user');

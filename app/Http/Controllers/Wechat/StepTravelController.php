@@ -40,21 +40,21 @@ class StepTravelController extends Controller
      */
     public function saveStep()
     {
-        $user = request()->input('user');
+        $user          = request()->input('user');
         $encryptedData = request()->input('encrypted_data');
-        $iv = request()->input('iv');
-        $code = request()->input('code');
-        $app = $user->{User::REL_APP};
+        $iv            = request()->input('iv');
+        $code          = request()->input('code');
+        $app           = $user->{User::REL_APP};
 
         $service = new WeChatRequestService($app->{WechatApp::FIELD_APP_KEY},$app->{WechatApp::FIELD_APP_SECRET},$code);
         $runData = $service->getWeRunData($encryptedData,$iv);
         if(!$runData){
             throw new ApiException('您的步数为空！',500);
         }
-        $runData = json_decode($runData,true);
 
+        $runData      = json_decode($runData,true);
         $formatResult = $this->stepTravelService->formatRunDataToDateTimeString($runData['stepInfoList']);
-        $checkToday = $this->stepTravelService->ifRunDataInToday($user->id);
+        $checkToday   = $this->stepTravelService->ifRunDataInToday($user->id);
 
         try {
             \DB::beginTransaction();
@@ -70,18 +70,18 @@ class StepTravelController extends Controller
             }
 
             $travelService = app(TravelService::class);
-            $plan = $travelService->traveling($user->id);
+            $plan          = $travelService->traveling($user->id);
 
             if($plan){
                 $travelLog = $travelService->getLastTravelLog($plan->id);
-                $points = $travelService->getNotFinishPoint($plan->id);
+                $points    = $travelService->getNotFinishPoint($plan->id);
                 if($travelLog){
                     $length = $travelLog->{TravelLog::FIELD_TOTAL_LENGTH};
                 }else{
                     $length = 0;
                 }
                 //步数旅行
-                $newStepData = $this->stepTravelService->canTravelRunData($user->id);
+                $newStepData   = $this->stepTravelService->canTravelRunData($user->id);
                 $travelLogData = $travelService->travelLog($user->id,$newStepData,$plan,$points,$length);
                 if($travelLogData){
                     $travelService->saveTravelLogs($travelLogData);
@@ -128,16 +128,15 @@ class StepTravelController extends Controller
      */
     public function steps()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->stepTravelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
-        $steps = paginate($query, $pageParams, [RunStep::FIELD_ID,RunStep::FIELD_RUN_AT,RunStep::FIELD_STEP], function ($item) use ($user) {
+        $query      = $this->stepTravelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
+        $steps      = paginate($query, $pageParams, [RunStep::FIELD_ID,RunStep::FIELD_RUN_AT,RunStep::FIELD_STEP], function ($item) use ($user) {
             return $this->stepTravelService->formatStep($item);
         });
 
@@ -159,11 +158,11 @@ class StepTravelController extends Controller
      */
     public function rankingList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
         $selectData = [
@@ -221,19 +220,19 @@ class StepTravelController extends Controller
             }])
             ->get();
 
-        $index = 0;
+        $index    = 0;
         $userStep = '';
         foreach ($stepRanks as $key => $item){
             if($item->{RunStep::FIELD_ID_USER} == $user->id){
                 $userStep = $item;
-                $index = $key+1;
+                $index    = $key+1;
                 break;
             }
         }
 
         return [
-            'rank'=>$index,
-            'data'=>$userStep
+            'rank' => $index,
+            'data' => $userStep
         ];
     }
 

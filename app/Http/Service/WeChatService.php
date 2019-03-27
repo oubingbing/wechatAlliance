@@ -16,7 +16,7 @@ use GuzzleHttp\Client;
 class WeChatService
 {
     protected $weChatLoginUrl = "https://api.weixin.qq.com/sns/jscode2session";
-    private $appKey = '';
+    private $appKey    = '';
     private $secretKey = '';
 
     public function getSessionInfo($weChatApp,$code,$iv,$encryptedData){
@@ -24,12 +24,12 @@ class WeChatService
             throw new ApiException('小程序处于审核中，无法使用后台服务！',6001);
         }
 
-        $this->appKey = $weChatApp->{WechatApp::FIELD_APP_KEY};
+        $this->appKey    = $weChatApp->{WechatApp::FIELD_APP_KEY};
         $this->secretKey = $weChatApp->{WechatApp::FIELD_APP_SECRET};
-        $url = $this->weChatLoginUrl."?appid={$this->appKey}&secret={$this->secretKey}&js_code=$code&grant_type=authorization_code";
-        $http = new Client;
-        $response = $http->get($url);
-        $result = json_decode((string) $response->getBody(), true);
+        $url             = $this->weChatLoginUrl."?appid={$this->appKey}&secret={$this->secretKey}&js_code=$code&grant_type=authorization_code";
+        $http            = new Client;
+        $response        = $http->get($url);
+        $result          = json_decode((string) $response->getBody(), true);
         if(!isset($result['openid'])){
             throw new ApiException('小程序登录失败，请检查您的app_id和app_secret是否正确！',5000);
         }

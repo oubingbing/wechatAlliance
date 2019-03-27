@@ -32,13 +32,13 @@ class PostController extends Controller
 
     public function postList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
-        $content = request()->input('content');
-        $app = $user->app();
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
+        $content    = request()->input('content');
+        $app        = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 

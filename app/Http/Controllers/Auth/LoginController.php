@@ -48,7 +48,7 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->tokenService = app(TokenService::class);
-        $this->authService = $authService;
+        $this->authService  = $authService;
     }
 
     /**
@@ -70,10 +70,10 @@ class LoginController extends Controller
      */
     public function apiLogin()
     {
-        $type = request()->input('type');
-        $code = request()->input('code');
+        $type     = request()->input('type');
+        $code     = request()->input('code');
         $userInfo = request()->input('user_info');
-        $appId = request()->input('app_id');
+        $appId    = request()->input('app_id');
 
         try{
             DB::beginTransaction();
@@ -113,12 +113,10 @@ class LoginController extends Controller
         }
 
         $weChatAppId = $weChatApp->{WechatApp::FIELD_APP_KEY};
-        $secret = $weChatApp->{WechatApp::FIELD_APP_SECRET};
-
-        $url = $this->weChatLoginUrl.'?appid='.$weChatAppId.'&secret='.$secret.'&js_code='.$code.'&grant_type=authorization_code';
-
-        $http = new Client;
-        $response = $http->get($url);
+        $secret      = $weChatApp->{WechatApp::FIELD_APP_SECRET};
+        $url         = $this->weChatLoginUrl.'?appid='.$weChatAppId.'&secret='.$secret.'&js_code='.$code.'&grant_type=authorization_code';
+        $http        = new Client;
+        $response    = $http->get($url);
 
         $result = json_decode((string) $response->getBody(), true);
         if(!isset($result['openid'])){
@@ -154,7 +152,7 @@ class LoginController extends Controller
      */
     public function login()
     {
-        $email = request()->input("email");
+        $email    = request()->input("email");
         $password = request()->input("password");
 
         $result = $this->authService->attempt($email,$password);

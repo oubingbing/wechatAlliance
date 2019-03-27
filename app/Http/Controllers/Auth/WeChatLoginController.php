@@ -39,10 +39,10 @@ class WeChatLoginController extends Controller
      */
     public function apiLogin()
     {
-        $iv = request()->input('iv');
-        $code = request()->input('code');
+        $iv            = request()->input('iv');
+        $code          = request()->input('code');
         $encryptedData = request()->input('encrypted_data');
-        $appId = request()->input("app_id");
+        $appId         = request()->input("app_id");
 
         try{
             DB::beginTransaction();
@@ -76,7 +76,7 @@ class WeChatLoginController extends Controller
             throw new ApiException('不是有效的key',6000);
         }
         $userInfo = app(WeChatService::class)->getSessionInfo($weChatApp,$code,$iv,$encryptedData);
-        $token = $this->tokenService->createApiToken($weChatApp->id,$userInfo);
+        $token    = $this->tokenService->createApiToken($weChatApp->id,$userInfo);
 
         return $token;
     }

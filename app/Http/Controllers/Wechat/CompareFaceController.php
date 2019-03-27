@@ -27,16 +27,16 @@ class CompareFaceController extends Controller
      */
     public function store()
     {
-        $user = request()->input('user');
+        $user     = request()->input('user');
         $yourFace = request()->input('your_face');
-        $hisFace = request()->input('his_face');
+        $hisFace  = request()->input('his_face');
 
         if(empty($yourFace) || empty($hisFace)){
             throw new ApiException('照片不能为空',500);
         }
 
         $compareService = app(CompareFaceService::class);
-        $compareResult = app(Http::class)->compareFace($yourFace,$hisFace);
+        $compareResult  = app(Http::class)->compareFace($yourFace,$hisFace);
 
         if($compareResult){
             if($compareResult['errno'] == 0){

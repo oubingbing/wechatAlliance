@@ -22,8 +22,8 @@ class YunPianService
     public function __construct()
     {
         $this->singleUrl = env('YUN_PIAN_SINGLE_URL');
-        $this->multiUrl = env('YUN_PIAN_MULTI');
-        $this->apikey = env('YUN_PIAN_KEY');
+        $this->multiUrl  = env('YUN_PIAN_MULTI');
+        $this->apikey    = env('YUN_PIAN_KEY');
     }
 
     /**
@@ -36,7 +36,7 @@ class YunPianService
      */
     public function sendMessageCode($phone)
     {
-        $code = random_int(10000,100000);
+        $code    = random_int(10000,100000);
         $content = "【情书网】Hi，同学，您的验证码是".$code."。如非本人操作，请忽略本短信";
 
         $result = $this->sendMessage($content,$phone);
@@ -46,9 +46,9 @@ class YunPianService
             $status = SendMessage::ENUM_STATUS_FAIL;
         }
 
-        $type = SendMessage::ENUM_TYPE_MESSAGE_CODE;
+        $type      = SendMessage::ENUM_TYPE_MESSAGE_CODE;
         $sessionId = 0;
-        $expire = Carbon::now()->addSecond(90);
+        $expire    = Carbon::now()->addSecond(90);
         app(SendMessageService::class)->saveSendMessageLog($phone,$code,$status,$type,$sessionId,$expire);
 
         return $result;

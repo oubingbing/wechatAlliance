@@ -30,10 +30,9 @@ class FollowController extends Controller
      */
     public function contact()
     {
-        $user = request()->input('user');
-        $obj = request()->input('obj_id');
-        $type = request()->input('obj_type');
-
+        $user   = request()->input('user');
+        $obj    = request()->input('obj_id');
+        $type   = request()->input('obj_type');
         $follow = $this->follow->follow($user->id,$obj,$type);
 
         return $follow;
@@ -51,11 +50,10 @@ class FollowController extends Controller
      */
     public function cancelFollow($id,$type)
     {
-        $user = request()->input('user');
-        $objId = $id;
+        $user    = request()->input('user');
+        $objId   = $id;
         $objType = $type;
-
-        $result =  $this->follow->cancelFollow($user->id,$objId,$objType);
+        $result  =  $this->follow->cancelFollow($user->id,$objId,$objType);
 
         return collect($result)->toArray();
     }

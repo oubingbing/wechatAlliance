@@ -18,12 +18,12 @@ class VideosService
     public function storeVideos(Model $videos)
     {
         $result = Model::create([
-            Model::FIELD_ID_APP=>$videos->{Model::FIELD_ID_APP},
-            Model::FIELD_V_ID=>$videos->{Model::FIELD_V_ID},
-            Model::FIELD_ATTACHMENTS=>$videos->{Model::FIELD_ATTACHMENTS},
-            Model::FIELD_TITLE=>$videos->{Model::FIELD_TITLE},
-            Model::FIELD_SORT=>$videos->{Model::FIELD_SORT},
-            Model::FIELD_INTRODUCTION=>$videos->{Model::FIELD_INTRODUCTION},
+            Model::FIELD_ID_APP       => $videos->{Model::FIELD_ID_APP},
+            Model::FIELD_V_ID         => $videos->{Model::FIELD_V_ID},
+            Model::FIELD_ATTACHMENTS  => $videos->{Model::FIELD_ATTACHMENTS},
+            Model::FIELD_TITLE        => $videos->{Model::FIELD_TITLE},
+            Model::FIELD_SORT         => $videos->{Model::FIELD_SORT},
+            Model::FIELD_INTRODUCTION => $videos->{Model::FIELD_INTRODUCTION},
         ]);
         return $result;
     }

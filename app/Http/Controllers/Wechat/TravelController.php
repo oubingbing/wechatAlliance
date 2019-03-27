@@ -38,10 +38,10 @@ class TravelController extends Controller
      */
     public function createTravelPlan()
     {
-        $user = request()->input('user');
-        $plans = request()->input('plans');
+        $user     = request()->input('user');
+        $plans    = request()->input('plans');
         $distance = request()->input('distance');
-        $title = request()->input('title');
+        $title    = request()->input('title');
 
         if(collect($plans)->count() <= 1){
             throw new ApiException('站点要两个以上',500);
@@ -63,8 +63,8 @@ class TravelController extends Controller
             $this->travelService->saveTravelPlanPoint($travel->id,$plans);
 
             //是否是首次旅行，是的话就是用用户的步数进行旅行
-            $firstTravel = $this->travelService->ifFirstTravel($user->id);
-            $plan = $this->travelService->travelingPlan($user->id);
+            $firstTravel  = $this->travelService->ifFirstTravel($user->id);
+            $plan         = $this->travelService->travelingPlan($user->id);
             if($firstTravel){
                 $stepData = app(StepTravelService::class)->getUserAllRunData($user->id);
                 $stepData = collect($stepData)->filter(function ($item){
@@ -107,10 +107,8 @@ class TravelController extends Controller
      */
     public function plan()
     {
-        $user = request()->input('user');
-
-        $plan = $this->travelService->travelingPlan($user->id);
-
+        $user   = request()->input('user');
+        $plan   = $this->travelService->travelingPlan($user->id);
         $result = $this->travelService->format($plan);
 
         return $result;
@@ -125,15 +123,14 @@ class TravelController extends Controller
      */
     public function travelLogs()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $planId = request()->input('plan_id',null);
+        $planId     = request()->input('plan_id',null);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->travelService->travelLogBuilder($user->id,$planId);
-        $logs = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+        $query      = $this->travelService->travelLogBuilder($user->id,$planId);
+        $logs       = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravelLog($item);
         });
 
@@ -150,11 +147,11 @@ class TravelController extends Controller
      */
     public function createPoi()
     {
-        $user = request()->input('user');
-        $logId = request()->input('log_id');
-        $title = request()->input('title');
+        $user    = request()->input('user');
+        $logId   = request()->input('log_id');
+        $title   = request()->input('title');
         $address = request()->input('address');
-        $type = request()->input('type');
+        $type    = request()->input('type');
 
         $result = $this->travelService->savePoi($logId,$title,$address,$type);
         if(!$result){
@@ -174,15 +171,15 @@ class TravelController extends Controller
      */
     public function updateLog()
     {
-        $user = request()->input('user');
-        $logId = request()->input('log_id');
-        $name = request()->input('name');
-        $address = request()->input('address');
+        $user     = request()->input('user');
+        $logId    = request()->input('log_id');
+        $name     = request()->input('name');
+        $address  = request()->input('address');
         $province = request()->input('province','');
-        $city = request()->input('city','');
+        $city     = request()->input('city','');
         $district = request()->input('district','');
 
-        $result = $this->travelService->updateLogNameAndAddress($logId,$name,$address,$province,$city,$district);
+        $result   = $this->travelService->updateLogNameAndAddress($logId,$name,$address,$province,$city,$district);
         if(!$result){
             throw new ApiException('更新失败！',500);
         }
@@ -198,16 +195,16 @@ class TravelController extends Controller
      */
     public function travelReport($planId)
     {
-        $user = request()->input('user');
+        $user   = request()->input('user');
 
         $travel = $this->travelService->statisticsTravel($planId);
-        $poi = $this->travelService->statisticsPoi($planId);
+        $poi    = $this->travelService->statisticsPoi($planId);
         $points = $this->travelService->getStartAndEndPoint($planId);
 
         return [
-            'travel'=>$travel,
-            'poi'=>$poi,
-            'points'=>$points
+            'travel' => $travel,
+            'poi'    => $poi,
+            'points' => $points
         ];
     }
 
@@ -220,16 +217,15 @@ class TravelController extends Controller
      */
     public function plans()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->travelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
-        $plans = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
+        $query      = $this->travelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
+        $plans      = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravel($item);
         });
 
@@ -246,10 +242,8 @@ class TravelController extends Controller
      */
     public function planDetail($id)
     {
-        $user = request()->input('user');
-
-        $plan = $this->travelService->getPlanById($id);
-
+        $user   = request()->input('user');
+        $plan   = $this->travelService->getPlanById($id);
         $result = $this->travelService->format($plan);
 
         return $result;

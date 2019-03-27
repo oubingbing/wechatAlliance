@@ -28,9 +28,9 @@ class FormIdService
     public function save($userId,$openId,$formId,$expire)
     {
         $formId = FormIds::create([
-            FormIds::FIELD_ID_FORM=>$formId,
-            FormIds::FIELD_ID_USER=>$userId,
-            FormIds::FIELD_EXPIRED_AT=>$expire,
+            FormIds::FIELD_ID_FORM    => $formId,
+            FormIds::FIELD_ID_USER    => $userId,
+            FormIds::FIELD_EXPIRED_AT => $expire,
             FormIds::FIELD_ID_OPEN=>$openId
         ]);
 

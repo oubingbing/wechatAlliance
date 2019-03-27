@@ -40,14 +40,14 @@ class UserController
      */
     public function userList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 20);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 20);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
-        $filter = request()->input('filter');
-        $app = $user->app();
-        $username = request()->input('username');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
+        $filter     = request()->input('filter');
+        $app        = $user->app();
+        $username   = request()->input('username');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
 
@@ -56,8 +56,7 @@ class UserController
             return webResponse('没有查询到应用',500);
         }
 
-        $query = app(UserService::class)->queryBuilder($appId)->filter($username)->sort($orderBy, $sortBy)->done();
-
+        $query    = app(UserService::class)->queryBuilder($appId)->filter($username)->sort($orderBy, $sortBy)->done();
         $userList = paginate($query, $pageParams, '*', function ($item) use ($user,$app) {
 
             $item['gender'] = collect([
@@ -106,9 +105,16 @@ class UserController
         return webResponse('ok',200,['new_user'=>$newUserCount, 'visit_user'=>count($visitUserCount),'all_user'=>$allUser]);
     }
 
+    /**
+     * 设置黑名单
+     *
+     * @author 叶子
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @throws WebException
+     */
     public function setBlackList()
     {
-        $user = request()->input('user');
+        $user    = request()->input('user');
         $blackId = request()->input('black_id');
 
         if(!$blackId){
@@ -125,6 +131,14 @@ class UserController
         return webResponse("加入黑名单成功",200,$result->toArray());
     }
 
+    /**
+     * 移出黑名单
+     *
+     * @author 叶子
+     * @param $blackId
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @throws WebException
+     */
     public function removeBlackList($blackId)
     {
         $user = request()->input('user');
@@ -134,7 +148,7 @@ class UserController
         }
 
         $userService = app(UserService::class);
-        $black = $userService->getBlacklistByUserId($blackId);
+        $black       = $userService->getBlacklistByUserId($blackId);
         if(!$black){
             throw new WebException("该用户不在黑名单中");
         }

@@ -44,14 +44,14 @@ class PartTimeJobController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->input('user');
-        $title = $request->input('title');
-        $content = $request->input('content');
+        $user        = $request->input('user');
+        $title       = $request->input('title');
+        $content     = $request->input('content');
         $attachments = $request->input('attachments',[]);
-        $salary = $request->input('salary',0);
-        $endAt = $request->input('end_at',null);
+        $salary      = $request->input('salary',0);
+        $endAt       = $request->input('end_at',null);
 
-        $valid = $this->partTimeJob->validParam($request);
+        $valid       = $this->partTimeJob->validParam($request);
         if(!$valid['valid']){
             throw new ApiException($valid['message'],500);
         }
@@ -74,7 +74,7 @@ class PartTimeJobController extends Controller
      */
     public function receiptOrder()
     {
-        $user = request()->input('user');
+        $user    = request()->input('user');
         $orderId = request()->input('id');
 
         if(!$orderId){
@@ -119,16 +119,16 @@ class PartTimeJobController extends Controller
             throw new ApiException($exception,500);
         }
 
-        $boss = $parTimeJob->{PartTimeJob::REL_USER};
+        $boss            = $parTimeJob->{PartTimeJob::REL_USER};
         $employeeProfile = $user->{User::REL_PROFILE};
 
         //给悬赏人发送模板消息
-        $title = '任务接收通知';
+        $title  = '任务接收通知';
         $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的悬赏令【{$parTimeJob->{PartTimeJob::FIELD_TITLE}}】已被揭下,详情请登录小程序查看。"];
         senTemplateMessage($user->{User::FIELD_ID_APP},$boss->id,$title,$values);
 
         //给赏金猎人发送模板消息
-        $title = '任务接收通知';
+        $title  = '任务接收通知';
         $values = [$parTimeJob->{PartTimeJob::FIELD_TITLE},$employeeProfile->{UserProfile::FIELD_NAME},"您的揭下了【{$boss->{User::REL_PROFILE}->{UserProfile::FIELD_NAME}}】的悬赏令【{$parTimeJob->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$title,$values);
 
@@ -152,9 +152,9 @@ class PartTimeJobController extends Controller
      */
     public function commentPartTimeJob($id)
     {
-        $user = request()->input('user');
-        $score = request()->input('score');
-        $content = request()->input('content');
+        $user        = request()->input('user');
+        $score       = request()->input('score');
+        $content     = request()->input('content');
         $attachments = request()->input('attachments');
 
         if(!$score){
@@ -173,7 +173,7 @@ class PartTimeJobController extends Controller
         try{
             \DB::beginTransaction();
 
-            $result = $this->partTimeJob->commentJob($id,$score);
+            $result  = $this->partTimeJob->commentJob($id,$score);
             $content = empty($content)?'无':$content;
             app(CommentService::class)->saveComment($user->id, $partTimeJob->id, $content, Comment::ENUM_OBJ_TYPE_JOB, null, $attachments);
 
@@ -184,8 +184,8 @@ class PartTimeJobController extends Controller
         }
 
         $commentScore = collect(['1'=>'好评', '2'=>'中评', '3'=>'差评'])->get((string)$score);
-        $employeeJob = $partTimeJob->{PartTimeJob::REL_EMPLOYEE_JOB};
-        $employee = $employeeJob->{EmployeePartTimeJob::REL_USER};
+        $employeeJob  = $partTimeJob->{PartTimeJob::REL_EMPLOYEE_JOB};
+        $employee     = $employeeJob->{EmployeePartTimeJob::REL_USER};
         //给赏金猎人发送模板消息
         $title = '评价完成通知';
         $values = [$partTimeJob->{PartTimeJob::FIELD_TITLE},$commentScore,'悬赏人对您的任务进行了评价，详情请登录小程序查看！'];
@@ -252,12 +252,12 @@ class PartTimeJobController extends Controller
         $result = $this->detail($id);
 
         //给悬赏人发送模板消息
-        $title = '任务完成通知';
+        $title  = '任务完成通知';
         $values = [$job->{PartTimeJob::FIELD_TITLE},'该悬赏令已被您确认完成,详情请登录小程序查看',date('Y-m-d H:i:s',time())];
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$title,$values);
 
         //给上架猎人发送模板消息
-        $title = '任务完成通知';
+        $title  = '任务完成通知';
         $values = [$job->{PartTimeJob::FIELD_TITLE},"该悬赏令已被悬赏人确认完成,详情请登录小程序查看。",date('Y-m-d H:i:s',time())];
         senTemplateMessage($user->{User::FIELD_ID_APP},$employeeUser->id,$title,$values);
 
@@ -276,19 +276,17 @@ class PartTimeJobController extends Controller
      */
     public function partTimJobs()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $orderBy = request()->input('order_by', 'created_at');
-        $sortBy = request()->input('sort_by', 'desc');
-        $status = request()->input('type');
-        $filter = request()->input('filter');
+        $orderBy    = request()->input('order_by', 'created_at');
+        $sortBy     = request()->input('sort_by', 'desc');
+        $status     = request()->input('type');
+        $filter     = request()->input('filter');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->partTimeJob->builder($user,$status)->filter($filter)->sort($orderBy,$sortBy)->done();
-
-        $jobs = paginate($query, $pageParams, '*', function ($item) use ($user) {
+        $query      = $this->partTimeJob->builder($user,$status)->filter($filter)->sort($orderBy,$sortBy)->done();
+        $jobs       = paginate($query, $pageParams, '*', function ($item) use ($user) {
 
             return $this->partTimeJob->formatSinglePost($item, $user);
 
@@ -306,11 +304,10 @@ class PartTimeJobController extends Controller
      */
     public function getMostNew()
     {
-        $user = request()->input('user');
-        $time = request()->input('time');
+        $user   = request()->input('user');
+        $time   = request()->input('time');
 
         $result = app(PartTimeJobService::class)->newList($user,$time);
-
         $result = collect($result)->map(function ($item)use($user){
             return $this->partTimeJob->formatSinglePost($item, $user);
         });
@@ -328,21 +325,20 @@ class PartTimeJobController extends Controller
      */
     public function detail($id)
     {
-        $user = request()->input('user');
-
-        $job = $this->partTimeJob->getPartTimeJobById($id);
+        $user       = request()->input('user');
+        $job        = $this->partTimeJob->getPartTimeJobById($id);
         $job->{PartTimeJob::REL_USER};
-        $employee = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
+        $employee   = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
 
-        $userService = app(UserService::class);
-        $job->boss_profile = $userService->getProfileById($job->{PartTimeJob::FIELD_ID_BOSS});
+        $userService              = app(UserService::class);
+        $job->boss_profile        = $userService->getProfileById($job->{PartTimeJob::FIELD_ID_BOSS});
         $job->boss_profile->phone = $userService->getPhoneById($job->{PartTimeJob::FIELD_ID_BOSS});
-        $job->employee_profile = '';
-        $jobStatus = '';
+        $job->employee_profile    = '';
+        $jobStatus                = '';
         if($employee){
-            $job->employee_profile = $userService->getProfileById($employee->{EmployeePartTimeJob::FIELD_ID_USER});
+            $job->employee_profile        = $userService->getProfileById($employee->{EmployeePartTimeJob::FIELD_ID_USER});
             $job->employee_profile->phone = $userService->getPhoneById($employee->{EmployeePartTimeJob::FIELD_ID_USER});
-            $jobStatus = $this->partTimeJob->countEmployee($employee->{EmployeePartTimeJob::FIELD_ID_USER});
+            $jobStatus                    = $this->partTimeJob->countEmployee($employee->{EmployeePartTimeJob::FIELD_ID_USER});
         }
 
         $result = $this->partTimeJob->formatSinglePost($job,$user);
@@ -369,7 +365,7 @@ class PartTimeJobController extends Controller
      */
     public function restartJob($id)
     {
-        $user = request()->input('user');
+        $user  = request()->input('user');
         $jobId = $id;
 
         $job = $this->partTimeJob->getPartTimeJobById($jobId);
@@ -392,13 +388,13 @@ class PartTimeJobController extends Controller
             throw new ApiException($exception,500);
         }
 
-        $employeeJod = $job->{PartTimeJob::REL_FIRE_EMPLOYEE_JOB};
-        $employee = $employeeJod->{EmployeePartTimeJob::REL_USER};
+        $employeeJod  = $job->{PartTimeJob::REL_FIRE_EMPLOYEE_JOB};
+        $employee     = $employeeJod->{EmployeePartTimeJob::REL_USER};
         $employeeName = $employee->{User::REL_PROFILE}->{UserProfile::FIELD_NAME};
 
         //给悬赏人发送模板消息
-        $bossTitle = '订单终止提醒';
-        $bossValues = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
+        $bossTitle    = '订单终止提醒';
+        $bossValues   = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了与【{$employeeName}】的悬赏关系后重新发布了悬赏令,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$bossTitle,$bossValues);
 
         //给赏金猎人发送模板消息
@@ -436,10 +432,10 @@ class PartTimeJobController extends Controller
      */
     public function missionRecord($jobId)
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $status = request()->input('status');
+        $status     = request()->input('status');
 
         $job = $this->partTimeJob->getPartTimeJobById($jobId);
         if(!$job){
@@ -452,9 +448,8 @@ class PartTimeJobController extends Controller
         }
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query = $this->partTimeJob->employeeMissionComments($employee->{EmployeePartTimeJob::FIELD_ID_USER},$status);
-
-        $jobs = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
+        $query      = $this->partTimeJob->employeeMissionComments($employee->{EmployeePartTimeJob::FIELD_ID_USER},$status);
+        $jobs       = app(PaginateService::class)->paginate($query, $pageParams, '*', function ($item) use ($user) {
             return $item;
         });
 
@@ -490,7 +485,7 @@ class PartTimeJobController extends Controller
         }
 
         //给悬赏人发送模板消息
-        $title = '订单终止提醒';
+        $title  = '订单终止提醒';
         $values = [$job->id,date('Y-m-d H:i:s',time()),$user->{User::REL_PROFILE}->{UserProfile::FIELD_NAME},"您终止了悬令【{$job->{PartTimeJob::FIELD_TITLE}}】,详情请登录小程序查看。"];//订单编号、终止时间、终止人、温馨提示
         senTemplateMessage($user->{User::FIELD_ID_APP},$user->id,$title,$values);
 
@@ -508,7 +503,7 @@ class PartTimeJobController extends Controller
      */
     public function delete($id)
     {
-        $user = request()->input('user');
+        $user   = request()->input('user');
 
         $result = PartTimeJob::where(PartTimeJob::FIELD_ID, $id)->delete();
         if(!$result){

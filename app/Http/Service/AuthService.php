@@ -51,12 +51,12 @@ class AuthService
     public function createAdmin($username,$email,$password)
     {
         $admin = Model::create([
-            Model::FIELD_USER_NAME => $username,
-            Model::FIELD_EMAIL=>$email,
-            Model::FIELD_PASSWORD=>bcrypt($password),
-            Model::FIELD_AVATAR=>[Model::USER_AVATAR],
-            Model::FIELD_ACTIVE_TOKEN=>str_random('18'),
-            Model::FIELD_TOKEN_EXPIRE=>Carbon::now()->addMonth()
+            Model::FIELD_USER_NAME    => $username,
+            Model::FIELD_EMAIL        => $email,
+            Model::FIELD_PASSWORD     => bcrypt($password),
+            Model::FIELD_AVATAR       =>[Model::USER_AVATAR],
+            Model::FIELD_ACTIVE_TOKEN => str_random('18'),
+            Model::FIELD_TOKEN_EXPIRE => Carbon::now()->addMonth()
         ]);
 
         return $admin;
@@ -66,20 +66,20 @@ class AuthService
     {
         $rules = [
             'username' => 'required|min:2|max:16',
-            'email' => 'required|email|unique:admins',
+            'email'    => 'required|email|unique:admins',
             'password' => 'required|min:6|max:225'
         ];
         $message = [
-            'username.required' => '用户名不能为空！',
-            'username.min' => '用户名必须是2~16个字符！',
-            'username.max' => '用户名必须是2~16个字符！',
-            'email.required' => '邮箱不能为空！',
-            'email.email' => '邮箱格式不正确',
-            'password.required' => '密码不能为空！',
-            'password.min' => '密码必须是6~16个字符！',
-            'password.max' => '密码必须是6~16个字符！',
-            'password_confirmation'=>'两次输入密码不一致！',
-            'email.unique'=>'邮箱已被注册！'
+            'username.required'     => '用户名不能为空！',
+            'username.min'          => '用户名必须是2~16个字符！',
+            'username.max'          => '用户名必须是2~16个字符！',
+            'email.required'        => '邮箱不能为空！',
+            'email.email'           => '邮箱格式不正确',
+            'password.required'     => '密码不能为空！',
+            'password.min'          => '密码必须是6~16个字符！',
+            'password.max'          => '密码必须是6~16个字符！',
+            'password_confirmation' => '两次输入密码不一致！',
+            'email.unique'          => '邮箱已被注册！'
         ];
         $validator = \Validator::make($request->all(),$rules,$message);
 

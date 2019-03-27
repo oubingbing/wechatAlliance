@@ -144,11 +144,11 @@ class MathService
      */
     public function getLocationPoint($fx,$fy,$tx,$ty,$dis)
     {
-        $lineSlope = $this->lineSlope($fx,$fy,$tx,$ty);
-        $angle = $this->lineAngle($lineSlope);
-        $otherAngle = $this->otherAngle($angle);
-        $bc = $this->BCLength($dis,$angle);
-        $ac = $this->ACLength($dis,$otherAngle);
+        $lineSlope     = $this->lineSlope($fx,$fy,$tx,$ty);
+        $angle         = $this->lineAngle($lineSlope);
+        $otherAngle    = $this->otherAngle($angle);
+        $bc            = $this->BCLength($dis,$angle);
+        $ac            = $this->ACLength($dis,$otherAngle);
         $locationPoint = $this->location($fx,$fy,$tx,$lineSlope,$ac,$bc);
         
         return $locationPoint;
@@ -209,12 +209,12 @@ class MathService
      */
     public function getDistance($lat1, $lng1, $lat2, $lng2)
     {
-        $dis = 0;
-        $radLat1 = $this->toRadians($lat1);
-        $radLat2 = $this->toRadians($lat2);
+        $dis      = 0;
+        $radLat1  = $this->toRadians($lat1);
+        $radLat2  = $this->toRadians($lat2);
         $deltaLat = $radLat1 - $radLat2;
         $deltaLng = $this->toRadians($lng1) - $this->toRadians($lng2);
-        $dis = 2 * asin(sqrt(pow(sin($deltaLat / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($deltaLng / 2), 2)));
+        $dis      = 2 * asin(sqrt(pow(sin($deltaLat / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($deltaLng / 2), 2)));
 
         return $dis * 6378137;
     }

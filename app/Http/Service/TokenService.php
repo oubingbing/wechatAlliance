@@ -44,7 +44,7 @@ class TokenService
         $user = User::where(User::FIELD_ID_OPENID,$openId)->where(User::FIELD_ID_APP,$appId)->first();
         if(!$user){
             $userLogin = new UserService();
-            $user = $userLogin->createWeChatUser($openId,$userInfo,$appId);
+            $user      = $userLogin->createWeChatUser($openId,$userInfo,$appId);
         }else{
             $user->{User::FIELD_NICKNAME} = $userInfo['nickName'];
             $user->{User::FIELD_AVATAR} = $userInfo['avatarUrl'];
@@ -103,9 +103,9 @@ class TokenService
         if(!$token){
             $result = $this->accessToken($appId);
             $token = AccessToken::create([
-                AccessToken::FIELD_ID_APP=>$appId,
-                AccessToken::FIELD_TOKEN=>$result['access_token'],
-                AccessToken::FIELD_EXPIRED_AT=>Carbon::now()->addSecond($result['expires_in'])
+                AccessToken::FIELD_ID_APP     => $appId,
+                AccessToken::FIELD_TOKEN      => $result['access_token'],
+                AccessToken::FIELD_EXPIRED_AT => Carbon::now()->addSecond($result['expires_in'])
             ]);
         }
 
@@ -125,10 +125,10 @@ class TokenService
         $user = User::where(User::FIELD_ID_APP,$appId)->orderBy(User::FIELD_CREATED_AT,'asc')->where(User::FIELD_ID_OPENID,$userInfo["openId"])->first();
         if(!$user){
             $userLogin = new UserService();
-            $user = $userLogin->createWeChatUserByModel($appId,$userInfo);
+            $user      = $userLogin->createWeChatUserByModel($appId,$userInfo);
         }else{
             $user->{User::FIELD_NICKNAME} = $userInfo['nickName'];
-            $user->{User::FIELD_AVATAR} = $userInfo['avatarUrl'];
+            $user->{User::FIELD_AVATAR}   = $userInfo['avatarUrl'];
             $user->save();
         }
 

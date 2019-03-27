@@ -28,8 +28,8 @@ class FriendService
     public function createFriend($userId, $friendId)
     {
         $result = Friend::create([
-            Friend::FIELD_ID_USER=>$userId,
-            Friend::FIELD_ID_FRIEND=>$friendId,
+            Friend::FIELD_ID_USER   => $userId,
+            Friend::FIELD_ID_FRIEND => $friendId,
         ]);
 
         return $result;

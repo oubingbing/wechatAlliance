@@ -27,7 +27,7 @@ class CommentController extends Controller
 
     public function __construct(InboxService $inboxLogic,CommentService $commentLogic)
     {
-        $this->inbox = $inboxLogic;
+        $this->inbox   = $inboxLogic;
         $this->comment = $commentLogic;
     }
 
@@ -41,18 +41,17 @@ class CommentController extends Controller
      */
     public function store()
     {
-        $user = request()->input('user');
-        $objId = request()->input('obj_id');
-        $content = request()->input('content');
-        $type = request()->input('type');
+        $user         = request()->input('user');
+        $objId        = request()->input('obj_id');
+        $content      = request()->input('content');
+        $type         = request()->input('type');
         $refCommentId = request()->input('ref_comment_id',null);
-        $attachments = request()->input('attachments',null);
+        $attachments  = request()->input('attachments',null);
 
-        $commenterId = $user->{User::FIELD_ID};
-        $collegeId = $user->{User::FIELD_ID_COLLEGE};
-
-        $objData = $this->comment->getObjUserId($type,$objId);
-        $objUserId = $objData['userId'];
+        $commenterId  = $user->{User::FIELD_ID};
+        $collegeId    = $user->{User::FIELD_ID_COLLEGE};
+        $objData      = $this->comment->getObjUserId($type,$objId);
+        $objUserId    = $objData['userId'];
         if(!$objUserId){
             throw new ApiException('对象不存在',404);
         }
@@ -62,13 +61,13 @@ class CommentController extends Controller
         if($refCommentId){
             //回复别人,要通知该条评论的主人
             $refCommentObj = $this->comment->getObjUserId(Comment::ENUM_OBJ_TYPE_COMMENT, $refCommentId);
-            $toId = $refCommentObj['userId'];
+            $toId          = $refCommentObj['userId'];
         }else{
             $toId = $objUserId;
         }
 
-        $objType = Inbox::ENUM_OBJ_TYPE_COMMENT;
-        $postAt = Carbon::now();
+        $objType    = Inbox::ENUM_OBJ_TYPE_COMMENT;
+        $postAt     = Carbon::now();
         $actionType = Inbox::ENUM_ACTION_TYPE_COMMENT;
 
         try{

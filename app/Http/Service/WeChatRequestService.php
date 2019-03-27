@@ -34,9 +34,9 @@ class WeChatRequestService
 
     public function getWeChatData()
     {
-        $http = new Client;
+        $http     = new Client;
         $response = $http->get($this->url);
-        $result = json_decode((string) $response->getBody(), true);
+        $result   = json_decode((string) $response->getBody(), true);
         if(!isset($result['session_key'])){
             throw new ApiException('获取数据失败！',500);
         }
@@ -71,11 +71,10 @@ class WeChatRequestService
         if (strlen($iv) != 24) {
             throw new ApiException('iv error',500);
         }
-        $aesIV=base64_decode($iv);
 
-        $aesCipher=base64_decode($encryptedData);
-
-        $result=openssl_decrypt( $aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
+        $aesIV     = base64_decode($iv);
+        $aesCipher = base64_decode($encryptedData);
+        $result    = openssl_decrypt( $aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
 
         $dataObj=json_decode( $result );
         if( $dataObj  == NULL )
@@ -94,7 +93,7 @@ class WeChatRequestService
     public function getWeRunData($encryptedData,$iv)
     {
         $sessionKey = $this->getSessionKey();
-        $runData = $this->decryptData( $encryptedData, $iv,$sessionKey);
+        $runData    = $this->decryptData( $encryptedData, $iv,$sessionKey);
         return $runData;
     }
 }

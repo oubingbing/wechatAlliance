@@ -114,9 +114,7 @@ class CommentService
     public function formatBatchComments($comments, $user,$obj=null)
     {
         return collect($comments)->map(function ($item) use ($user,$obj) {
-
             return $this->formatSingleComments($item, $user,$obj);
-
         })->toArray();
     }
 

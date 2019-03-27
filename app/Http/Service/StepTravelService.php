@@ -115,15 +115,14 @@ class StepTravelService
         }
 
         $oldSteps = $this->getUserThirtyRunData($userId);
-        $oldDate = collect($this->getUserRunDate($oldSteps))->map(function ($item){
+        $oldDate  = collect($this->getUserRunDate($oldSteps))->map(function ($item){
             $item = Carbon::parse($item)->toDateString();
             return $item;
         });
 
-        $newDate = $this->getUserRunDate($newSteps);
+        $newDate    = $this->getUserRunDate($newSteps);
         $diffResult = collect(collect($newDate)->diff($oldDate))->all();
-
-        $saveData = [];
+        $saveData   = [];
         if($diffResult){
             foreach ($newSteps as $step){
                 if(in_array($step['run_at'],$diffResult)){
@@ -149,12 +148,12 @@ class StepTravelService
         $stepArray = [];
         foreach ($steps as $item){
             array_push($stepArray,[
-                RunStep::FIELD_ID_USER=>$userId,
-                RunStep::FIELD_STEP=>$item['step'],
-                RunStep::FIELD_RUN_AT=>$item['run_at'],
-                RunStep::FIELD_CREATED_AT=>Carbon::now(),
-                RunStep::FIELD_UPDATED_AT=>Carbon::now(),
-                RunStep::FIELD_TYPE=>$item['run_at'] == Carbon::now()->toDateString()?RunStep::ENUM_TYPE_TODAY:RunStep::ENUM_TYPE_NOT_TODAY
+                RunStep::FIELD_ID_USER     => $userId,
+                RunStep::FIELD_STEP        => $item['step'],
+                RunStep::FIELD_RUN_AT      => $item['run_at'],
+                RunStep::FIELD_CREATED_AT  => Carbon::now(),
+                RunStep::FIELD_UPDATED_AT  => Carbon::now(),
+                RunStep::FIELD_TYPE        => $item['run_at'] == Carbon::now()->toDateString()?RunStep::ENUM_TYPE_TODAY:RunStep::ENUM_TYPE_NOT_TODAY
             ]);
         }
 

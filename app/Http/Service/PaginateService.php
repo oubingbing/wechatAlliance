@@ -31,8 +31,8 @@ class PaginateService
         $perPage     = $pageParams['page_size'] ? $pageParams['page_size'] : 10;
         $currentPage = $pageParams['page_number'] ? $pageParams['page_number'] : 1;
 
-        $result = $query->paginate($perPage, $columns, null, $currentPage);
-        $items  = $result->getCollection();
+        $result      = $query->paginate($perPage, $columns, null, $currentPage);
+        $items       = $result->getCollection();
         if ($map != null) {
             $items = $items->map($map);
         }

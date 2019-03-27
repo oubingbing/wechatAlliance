@@ -12,11 +12,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\WeChatMessageService;
-use App\Models\Admin;
 use App\Models\Colleges;
 use App\Models\User;
 use App\Models\WechatApp;
-use App\Models\WeChatTemplate;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -43,11 +41,11 @@ class AppController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->get('user');
-        $appName = $request->input('app_name');
-        $appKey = $request->input('app_key');
+        $user      = $request->get('user');
+        $appName   = $request->input('app_name');
+        $appKey    = $request->input('app_key');
         $appSecret = $request->input('app_secret');
-        $mobile = $request->input('mobile');
+        $mobile    = $request->input('mobile');
         $collegeId = $request->input('college_id');
 
         $appService = app(AppService::class);
@@ -102,19 +100,19 @@ class AppController extends Controller
     public function appInfo()
     {
         $user = request()->get('user');
+        $app  = $user->app();
 
-        $app = $user->app();
         $app->status_string = collect([
-            WechatApp::ENUM_STATUS_TO_BE_AUDIT=>"审核中",
-            WechatApp::ENUM_STATUS_ON_LINE=>"运行中",
-            WechatApp::ENUM_STATUS_WE_CHAT_AUDIT=>"微信审核中",
-            WechatApp::ENUM_STATUS_CLOSED=>"已下线",
+            WechatApp::ENUM_STATUS_TO_BE_AUDIT   => "审核中",
+            WechatApp::ENUM_STATUS_ON_LINE       => "运行中",
+            WechatApp::ENUM_STATUS_WE_CHAT_AUDIT => "微信审核中",
+            WechatApp::ENUM_STATUS_CLOSED        => "已下线",
         ])->get((integer)$app->{WechatApp::FIELD_STATUS});
 
         $app->college = Colleges::query()->where(Colleges::FIELD_ID,$app->{WechatApp::FIELD_ID_COLLEGE})->value(Colleges::FIELD_NAME);
         if($app->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
             $app->{WechatApp::FIELD_ALLIANCE_KEY} = '';
-            $app->{WechatApp::FIELD_DOMAIN} = '';
+            $app->{WechatApp::FIELD_DOMAIN}       = '';
         }
 
         return webResponse('ok',200,$app);
@@ -201,7 +199,7 @@ class AppController extends Controller
                 return webResponse('恢复成长状态失败！',500);
             }
 
-        }catch (Exception $e){
+        }catch (\Exception $e){
             \DB::rollBack();
             return webResponse($e,500);
         }
@@ -226,9 +224,9 @@ class AppController extends Controller
      */
     public function serService()
     {
-        $user = request()->get('user');
+        $user      = request()->get('user');
         $serviceId = request()->get('service_id');
-        $app = $user->app();
+        $app       = $user->app();
 
         if(!$serviceId){
             return webResponse('客服不能为空！',500);
@@ -254,9 +252,9 @@ class AppController extends Controller
      */
     public function setSupervise()
     {
-        $user = request()->get('user');
+        $user      = request()->get('user');
         $serviceId = request()->get('supervise_id');
-        $app = $user->app();
+        $app       = $user->app();
 
         if(!$serviceId){
             return webResponse('用户不能为空！',500);
@@ -282,9 +280,9 @@ class AppController extends Controller
      */
     public function removeService()
     {
-        $user = request()->get('user');
+        $user      = request()->get('user');
         $serviceId = request()->get('supervise_id');
-        $app = $user->app();
+        $app       = $user->app();
 
         if(!$serviceId){
             return webResponse('用户不能为空！',500);
@@ -310,14 +308,14 @@ class AppController extends Controller
      */
     public function updateImage()
     {
-        $user = request()->get('user');
+        $user   = request()->get('user');
         $qrCode = request()->input('image');
+        $app    = $user->app();
 
-        $app = $user->app();
-        $attachments = $app->{WechatApp::FIELD_ATTACHMENTS};
-        $attachments['qr_code'] = $qrCode;
+        $attachments                         = $app->{WechatApp::FIELD_ATTACHMENTS};
+        $attachments['qr_code']              = $qrCode;
         $app->{WechatApp::FIELD_ATTACHMENTS} = $attachments;
-        $result = $app->save();
+        $result                              = $app->save();
         if($result){
             return webResponse('修改成功！',200,$app);
         }else{
@@ -334,10 +332,10 @@ class AppController extends Controller
      */
     public function updateApp()
     {
-        $user = request()->get('user');
-        $name = request()->input('name');
+        $user  = request()->get('user');
+        $name  = request()->input('name');
         $value = request()->input('value');
-        $app = $user->app();
+        $app   = $user->app();
 
         if(empty($name)){
             return webResponse('参数错误！',500);
@@ -348,7 +346,7 @@ class AppController extends Controller
         }
 
         $app->{$name} = $value;
-        $result = $app->save();
+        $result       = $app->save();
         if(!$result){
             return webResponse('修改失败！',500);
         }
@@ -356,25 +354,43 @@ class AppController extends Controller
         return webResponse('修改成功！',200,$app);
     }
 
+    /**
+     * 模板视图
+     *
+     * @author yezi
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function templateView()
     {
         return view('admin.app.template');
     }
 
+    /**
+     * 修改模板
+     *
+     * @author yezi
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function template()
     {
         $user = request()->get('user');
-        $app = $user->app();
+        $app  = $user->app();
 
         $templates = app(AppService::class)->getTemplateByAppId($app->id);
 
         return webResponse('修改成功！',200,$templates);
     }
 
+    /**
+     * 新建模板
+     *
+     * @author yezi
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function createTemplate()
     {
         $user = request()->get('user');
-        $app = $user->app();
+        $app  = $user->app();
 
         $weChatService = new WeChatMessageService($app->id);
 

@@ -20,10 +20,10 @@ class EmailService
 
     public function __construct()
     {
-        $this->url = 'http://api.sendcloud.net/apiv2/mail/send';
+        $this->url     = 'http://api.sendcloud.net/apiv2/mail/send';
         $this->apiUser = env('SEND_CLOUD_API_USER');
-        $this->appKey = env('SEND_CLOUD_APP_KEY');
-        $this->client = new Client;
+        $this->appKey  = env('SEND_CLOUD_APP_KEY');
+        $this->client  = new Client;
     }
 
     public function sendRegisterEmail($receiveEmail,$content)
@@ -36,13 +36,13 @@ class EmailService
     public function send($from,$to,$content)
     {
         $response = $this->client->request('POST', $this->url, [
-            'form_params' => [
-                'apiUser' => $this->apiUser,
-                'apiKey' => $this->appKey,
-                'from' => $from,
-                'to'=>$to,
-                'subject'=>'小情书账号激活',
-                'html'=>$content
+            'form_params'  => [
+                'apiUser'  => $this->apiUser,
+                'apiKey'   => $this->appKey,
+                'from'     => $from,
+                'to'       => $to,
+                'subject'  => '小情书账号激活',
+                'html'     => $content
             ]
         ]);
 

@@ -21,7 +21,7 @@ class ChatController extends Controller
 
     public function __construct(ChatService $chatLogic,FriendService $friendLogic)
     {
-        $this->chat = $chatLogic;
+        $this->chat   = $chatLogic;
         $this->friend = $friendLogic;
     }
 
@@ -36,12 +36,12 @@ class ChatController extends Controller
      */
     public function sendMessage($friendId)
     {
-        $user = request()->input('user');
-        $content = request()->input('content');
+        $user        = request()->input('user');
+        $content     = request()->input('content');
         $attachments = request()->input('attachments');
-        $type = ChatMessage::ENUM_STATUS_RED;
-        $userId = $user->id;
-        $postAt = Carbon::now();
+        $type        = ChatMessage::ENUM_STATUS_RED;
+        $userId      = $user->id;
+        $postAt      = Carbon::now();
 
         try{
             \DB::beginTransaction();
@@ -81,23 +81,20 @@ class ChatController extends Controller
      */
     public function chatList($friendId)
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size',10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size',10);
         $pageNumber = request()->input('page_number',1);
-        $orderBy = request()->input('order_by','created_at');
-        $sortBy = request()->input('sort_by','desc');
+        $orderBy    = request()->input('order_by','created_at');
+        $sortBy     = request()->input('sort_by','desc');
 
         $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
-
-        $query = $this->chat->builder($user->id,$friendId)->sort($orderBy,$sortBy)->done();
-
-        $result = paginate($query,$pageParams, '*',function($item)use($user){
+        $query      = $this->chat->builder($user->id,$friendId)->sort($orderBy,$sortBy)->done();
+        $result     = paginate($query,$pageParams, '*',function($item)use($user){
             return $this->chat->format($item);
         });
 
         $result['page_data'] = array_reverse(collect($result['page_data'])->toArray());
-
-        $newMessages = collect($result)->filter(function ($item){
+        $newMessages         = collect($result)->filter(function ($item){
 
             if(empty($item->{ChatMessage::FIELD_READ_AT})){
                 return true;
@@ -124,11 +121,9 @@ class ChatController extends Controller
      */
     public function getNewMessage($friendId)
     {
-        $user = request()->input('user');
-
+        $user   = request()->input('user');
         $result = $this->chat->newMessage($user->id,$friendId);
-
-        $data = array_reverse(collect($result)->toArray());
+        $data   = array_reverse(collect($result)->toArray());
 
         return $data;
     }
@@ -156,14 +151,10 @@ class ChatController extends Controller
      */
     public function friends()
     {
-        $user = request()->input('user');
-
-        $friends = $this->friend->friends($user->id);
-
-        $friends = collect($friends)->map(function ($friend){
-
+        $user       = request()->input('user');
+        $friends    = $this->friend->friends($user->id);
+        $friends    = collect($friends)->map(function ($friend){
             $friend = $this->friend->format($friend);
-
             return $friend;
         });
 
@@ -181,8 +172,7 @@ class ChatController extends Controller
      */
     public function delete($id)
     {
-        $user = request()->input('user');
-
+        $user   = request()->input('user');
         $result = $this->chat->delete($user->id,$id);
 
         return $result;

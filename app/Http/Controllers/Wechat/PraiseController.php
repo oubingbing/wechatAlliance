@@ -25,7 +25,7 @@ class PraiseController extends Controller
 
     public function __construct(InboxService $inboxLogic,PraiseService $praiseLogic)
     {
-        $this->inbox = $inboxLogic;
+        $this->inbox  = $inboxLogic;
         $this->praise = $praiseLogic;
     }
 
@@ -39,13 +39,13 @@ class PraiseController extends Controller
      */
     public function store()
     {
-        $user = request()->input('user');
-        $ownerId = $user->{User::FIELD_ID};
-        $objId = request()->input('obj_id');
-        $objType = request()->input('obj_type');
-        $collegeId = $user->{User::FIELD_ID_COLLEGE};
+        $user       = request()->input('user');
+        $ownerId    = $user->{User::FIELD_ID};
+        $objId      = request()->input('obj_id');
+        $objType    = request()->input('obj_type');
+        $collegeId  = $user->{User::FIELD_ID_COLLEGE};
 
-        $objUserId = $this->praise->getObjUserId($objType,$objId);
+        $objUserId  = $this->praise->getObjUserId($objType,$objId);
         if(!$objUserId){
             throw new ApiException('对象不存在',404);
         }
@@ -55,12 +55,12 @@ class PraiseController extends Controller
             return;
         }
 
-        $fromId = $user->id;
-        $toId = $objUserId;
-        $content = '有新的点赞';
-        $postAt = Carbon::now();
+        $fromId     = $user->id;
+        $toId       = $objUserId;
+        $content    = '有新的点赞';
+        $postAt     = Carbon::now();
         $actionType = Inbox::ENUM_ACTION_TYPE_PRAISE;
-        $type = Inbox::ENUM_OBJ_TYPE_PRAISE;
+        $type       = Inbox::ENUM_OBJ_TYPE_PRAISE;
 
         try{
             \DB::beginTransaction();

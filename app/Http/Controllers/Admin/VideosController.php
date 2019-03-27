@@ -32,20 +32,20 @@ class VideosController extends Controller
 
     public function create()
     {
-        $user = request()->input('user');
-        $v_id = request()->input('v_id');
+        $user  = request()->input('user');
+        $v_id  = request()->input('v_id');
         $title = request()->input('title');
-        $sort = request()->input('sort');
+        $sort  = request()->input('sort');
 
         if(!$v_id){
             throw new WebException("视频id不能为空");
         }
 
-        $videos = new Videos();
+        $videos                         = new Videos();
         $videos->{Videos::FIELD_ID_APP} = $user->app()->id;
-        $videos->{Videos::FIELD_TITLE} = $title;
-        $videos->{Videos::FIELD_SORT} = $sort;
-        $videos->{Videos::FIELD_V_ID} = $v_id;
+        $videos->{Videos::FIELD_TITLE}  = $title;
+        $videos->{Videos::FIELD_SORT}   = $sort;
+        $videos->{Videos::FIELD_V_ID}   = $v_id;
 
         try {
             \DB::beginTransaction();
@@ -63,16 +63,14 @@ class VideosController extends Controller
 
     public function videoList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
-        $app = $user->app();
+        $app        = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->service->createBuilder($app->id)->done();
-
-        $videoList = paginate($query, $pageParams, '*', function ($item) use ($user) {
+        $query      = $this->service->createBuilder($app->id)->done();
+        $videoList  = paginate($query, $pageParams, '*', function ($item) use ($user) {
 
             return $item;
 
@@ -84,7 +82,7 @@ class VideosController extends Controller
     public function delete($id)
     {
         $user = request()->input('user');
-        $app = $user->app();
+        $app  = $user->app();
 
         $result = Videos::query()->where(Videos::FIELD_ID_APP,$app->id)->where(Videos::FIELD_ID,$id)->delete();
         return (string)$result;
@@ -92,11 +90,11 @@ class VideosController extends Controller
 
     public function update($id)
     {
-        $user = request()->input('user');
-        $app = $user->app();
-        $v_id = request()->input('v_id');
+        $user  = request()->input('user');
+        $app   = $user->app();
+        $v_id  = request()->input('v_id');
         $title = request()->input('title');
-        $sort = request()->input('sort');
+        $sort  = request()->input('sort');
 
         $videos = $this->service->findById($id);
         if(!$videos){
@@ -107,9 +105,9 @@ class VideosController extends Controller
             throw new WebException("视频id不能为空");
         }
 
-        $videos->{Videos::FIELD_V_ID} = $v_id;
+        $videos->{Videos::FIELD_V_ID}  = $v_id;
         $videos->{Videos::FIELD_TITLE} = $title;
-        $videos->{Videos::FIELD_SORT} = $sort;
+        $videos->{Videos::FIELD_SORT}  = $sort;
         $result = $videos->save();
         if(!$result){
             throw new WebException("更新失败",500);

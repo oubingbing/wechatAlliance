@@ -26,15 +26,13 @@ class VideosController extends Controller
 
     public function videoList()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size', 10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-
-        $query = $this->service->createBuilder($user->{User::FIELD_ID_APP})->sort()->done();
-
-        $select = [
+        $query      = $this->service->createBuilder($user->{User::FIELD_ID_APP})->sort()->done();
+        $select     = [
             Videos::FIELD_ID,
             Videos::FIELD_TITLE,
             Videos::FIELD_ID_APP,
@@ -42,9 +40,7 @@ class VideosController extends Controller
             Videos::FIELD_SORT
         ];
         $videoList = paginate($query, $pageParams, $select, function ($item) use ($user) {
-
             return $item;
-
         });
 
         return $videoList;

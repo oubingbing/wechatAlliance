@@ -35,12 +35,12 @@ class PartTimeJobService
     public function savePartTimeJob($userId,$title,$content,$attachments,$salary,$endAt)
     {
         $result = PartTimeJob::create([
-            PartTimeJob::FIELD_ID_BOSS=>$userId,
-            PartTimeJob::FIELD_TITLE=>$title,
-            PartTimeJob::FIELD_CONTENT=>$content,
-            PartTimeJob::FIELD_ATTACHMENTS=>$attachments,
-            PartTimeJob::FIELD_SALARY=>$salary,
-            PartTimeJob::FIELD_END_AT=>$endAt
+            PartTimeJob::FIELD_ID_BOSS     => $userId,
+            PartTimeJob::FIELD_TITLE       => $title,
+            PartTimeJob::FIELD_CONTENT     => $content,
+            PartTimeJob::FIELD_ATTACHMENTS => $attachments,
+            PartTimeJob::FIELD_SALARY      => $salary,
+            PartTimeJob::FIELD_END_AT      => $endAt
         ]);
 
         return $result;
@@ -73,16 +73,16 @@ class PartTimeJobService
     public function validParam($request)
     {
         $rules = [
-            'title' => 'required',
+            'title'   => 'required',
             'content' => 'required',
-            'salary' => 'sometimes | numeric',
-            'end_at' => 'sometimes | date'
+            'salary'  => 'sometimes | numeric',
+            'end_at'  => 'sometimes | date'
         ];
         $message = [
-            'title.required' => '标题不能为空！',
+            'title.required'   => '标题不能为空！',
             'content.required' => '内容不能为空！',
-            'salary.numeric' => '酬劳必须是数字！',
-            'end_at.required' => '日期格式错误！'
+            'salary.numeric'   => '酬劳必须是数字！',
+            'end_at.required'  => '日期格式错误！'
         ];
         $validator = \Validator::make($request->all(),$rules,$message);
 
@@ -160,9 +160,9 @@ class PartTimeJobService
     public function saveEmployeeParTimeJob($employeeId,$partTimeJobId,$status)
     {
         $result = EmployeePartTimeJob::create([
-            EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB=>$partTimeJobId,
-            EmployeePartTimeJob::FIELD_ID_USER=>$employeeId,
-            EmployeePartTimeJob::FIELD_STATUS=>$status,
+            EmployeePartTimeJob::FIELD_ID_PART_TIME_JOB => $partTimeJobId,
+            EmployeePartTimeJob::FIELD_ID_USER          => $employeeId,
+            EmployeePartTimeJob::FIELD_STATUS           => $status,
         ]);
 
         return $result;
@@ -359,19 +359,19 @@ class PartTimeJobService
      */
     public function formatSinglePost($job,$user)
     {
-        $job->can_entry = false;
-        $job->can_delete = false;
-        $job->can_restart = false;
-        $job->can_comfirm = false;
-        $job->can_comment = false;
-        $job->show_contact = false;
+        $job->can_entry         = false;
+        $job->can_delete        = false;
+        $job->can_restart       = false;
+        $job->can_comfirm       = false;
+        $job->can_comment       = false;
+        $job->show_contact      = false;
         $job->show_employee_tip = '';
-        $job->can_show_tip = false;
-        $job->can_contact = true;
-        $job->can_stop = false;
-        $job->give_up = false;
-        $job->role = '';
-        $job->contact_id = '';
+        $job->can_show_tip      = false;
+        $job->can_contact       = true;
+        $job->can_stop          = false;
+        $job->give_up           = false;
+        $job->role              = '';
+        $job->contact_id        = '';
 
         $employeeJob = $job->{PartTimeJob::REL_EMPLOYEE_JOB};
 
@@ -389,7 +389,7 @@ class PartTimeJobService
         }
 
         if($job->{PartTimeJob::FIELD_ID_BOSS} == $user->id){
-            $job->can_entry = true;
+            $job->can_entry  = true;
             $job->can_delete = true;
             $job->role = 'boss';
 
@@ -413,20 +413,20 @@ class PartTimeJobService
         if($employeeJob){
             if($employeeJob->{EmployeePartTimeJob::FIELD_ID_USER} == $user->id){
                 $job->show_contact = true;
-                $job->can_entry = true;
-                $job->role = 'employee';
+                $job->can_entry    = true;
+                $job->role         = 'employee';
                 switch ($job->{PartTimeJob::FIELD_STATUS}){
                     case PartTimeJob::ENUM_STATUS_WORKING:
-                        $job->can_show_tip = true;
+                        $job->can_show_tip      = true;
                         $job->show_employee_tip = '任务中';
-                        $job->give_up = true;
+                        $job->give_up           = true;
                         break;
                     case PartTimeJob::ENUM_STATUS_END:
-                        $job->can_show_tip = true;
+                        $job->can_show_tip      = true;
                         $job->show_employee_tip = '已终止';
                         break;
                     case PartTimeJob::ENUM_STATUS_SUCCESS:
-                        $job->can_show_tip = true;
+                        $job->can_show_tip      = true;
                         $job->show_employee_tip = '已完成';
                         break;
                 }
@@ -511,12 +511,11 @@ class PartTimeJobService
             ->select([EmployeePartTimeJob::FIELD_STATUS,EmployeePartTimeJob::FIELD_SCORE])
             ->get();
 
-        $score['good'] = collect($result)->where('score',1)->count();
-        $score['middle'] = collect($result)->where('score',2)->count();
-        $score['bad'] = collect($result)->where('score',3)->count();
-
+        $score['good']     = collect($result)->where('score',1)->count();
+        $score['middle']   = collect($result)->where('score',2)->count();
+        $score['bad']      = collect($result)->where('score',3)->count();
         $status['working'] = collect($result)->where('score',1)->count();
-        $status['fire'] = collect($result)->where('score',2)->count();
+        $status['fire']    = collect($result)->where('score',2)->count();
         $status['success'] = collect($result)->where('score',3)->count();
         $status['abandon'] = collect($result)->where('score',4)->count();
 

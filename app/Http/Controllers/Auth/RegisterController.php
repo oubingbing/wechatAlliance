@@ -47,34 +47,41 @@ class RegisterController extends Controller
     public function createAdmin($username,$email,$password)
     {
         $admin = Admin::create([
-            Admin::FIELD_USER_NAME => $username,
-            Admin::FIELD_EMAIL=>$email,
-            Admin::FIELD_PASSWORD=>bcrypt($password),
-            Admin::FIELD_AVATAR=>[Admin::USER_AVATAR],
-            Admin::FIELD_ACTIVE_TOKEN=>str_random('18'),
-            Admin::FIELD_TOKEN_EXPIRE=>Carbon::now()->addMonth()
+            Admin::FIELD_USER_NAME      => $username,
+            Admin::FIELD_EMAIL          => $email,
+            Admin::FIELD_PASSWORD       => bcrypt($password),
+            Admin::FIELD_AVATAR         => [Admin::USER_AVATAR],
+            Admin::FIELD_ACTIVE_TOKEN   => str_random('18'),
+            Admin::FIELD_TOKEN_EXPIRE   => Carbon::now()->addMonth()
         ]);
 
         return $admin;
     }
 
+    /**
+     * 验证登录信息
+     *
+     * @author 叶子
+     * @param $request
+     * @return array
+     */
     public function validRegister($request)
     {
         $rules = [
             'username' => 'required|min:2|max:16',
-            'email' => 'required|email|unique:admins',
+            'email'    => 'required|email|unique:admins',
             'password' => 'required|min:6|max:225'
         ];
         $message = [
-            'username.required' => '用户名不能为空！',
-            'username.min' => '用户名必须是2~16个字符！',
-            'username.max' => '用户名必须是2~16个字符！',
-            'email.required' => '邮箱不能为空！',
-            'email.email' => '邮箱格式不正确',
-            'password.required' => '密码不能为空！',
-            'password.min' => '密码必须是6~16个字符！',
-            'password.max' => '密码必须是6~16个字符！',
-            'password_confirmation'=>'两次输入密码不一致！',
+            'username.required'     => '用户名不能为空！',
+            'username.min'          => '用户名必须是2~16个字符！',
+            'username.max'          => '用户名必须是2~16个字符！',
+            'email.required'        => '邮箱不能为空！',
+            'email.email'           => '邮箱格式不正确',
+            'password.required'     => '密码不能为空！',
+            'password.min'          => '密码必须是6~16个字符！',
+            'password.max'          => '密码必须是6~16个字符！',
+            'password_confirmation' => '两次输入密码不一致！',
             'email.unique'=>'邮箱已被注册！'
         ];
         $validator = \Validator::make($request->all(),$rules,$message);
@@ -113,7 +120,7 @@ class RegisterController extends Controller
         if(Carbon::now()->gt(Carbon::parse($result->{Admin::FIELD_TOKEN_EXPIRE}))){
             return redirect('login');
         }else{
-            $result->{Admin::FIELD_STATUS} = Admin::ENUM_STATUS_ACTIVATED;
+            $result->{Admin::FIELD_STATUS}       = Admin::ENUM_STATUS_ACTIVATED;
             $result->{Admin::FIELD_TOKEN_EXPIRE} = Carbon::now();
             $result->save();
             return view('auth.active');

@@ -35,22 +35,22 @@ class MatchLoveController extends Controller
      */
     public function save()
     {
-        $user = request()->input('user');
-        $username = request()->input('username');
+        $user      = request()->input('user');
+        $username  = request()->input('username');
         $matchName = request()->input('match_name');
-        $content = request()->input('content');
-        $private = request()->input('privation');
+        $content   = request()->input('content');
+        $private   = request()->input('privation');
 
         $rule = [
-            'username' => 'required',
+            'username'   => 'required',
             'match_name' => 'required',
-            'privation' => 'required'
+            'privation'  => 'required'
         ];
 
         $messages = [
-            'username.required'=>'你的名字不能为空',
-            'gender.required'=>'匹配的名字不能为空',
-            'privation.required'=>'是否匿名不能为空不能为空',
+            'username.required'  => '你的名字不能为空',
+            'gender.required'    => '匹配的名字不能为空',
+            'privation.required' => '是否匿名不能为空不能为空',
         ];
 
         $validator = \Validator::make(request()->input(), $rule,$messages);
@@ -78,18 +78,16 @@ class MatchLoveController extends Controller
      */
     public function matchLoves()
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size',10);
-        $pageNumber = request()->input('page_number',1);
-        $type = request()->input('type');
-        $just = request()->input('just');
-        $orderBy = request()->input('order_by','created_at');
-        $sortBy = request()->input('sort_by','desc');
+        $user        = request()->input('user');
+        $pageSize    = request()->input('page_size',10);
+        $pageNumber  = request()->input('page_number',1);
+        $type        = request()->input('type');
+        $just        = request()->input('just');
+        $orderBy     = request()->input('order_by','created_at');
+        $sortBy      = request()->input('sort_by','desc');
 
-        $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
-
-        $query = $this->match->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
-
+        $pageParams  = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
+        $query       = $this->match->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
         $saleFriends = paginate($query,$pageParams, '*',function($saleFriend)use($user){
             return $this->match->formatSingle($saleFriend,$user);
         });
@@ -124,8 +122,7 @@ class MatchLoveController extends Controller
             })
             ->orderBy('created_at','desc');
 
-        $result = $query->get();
-
+        $result       = $query->get();
         $formatResult = collect($result)->map(function ($item)use($user){
             $this->match->formatSingle($item,$user);
             return $item;

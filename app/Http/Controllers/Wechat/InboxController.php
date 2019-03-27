@@ -33,16 +33,16 @@ class InboxController extends Controller
      */
     public function sendInbox()
     {
-        $user = request()->input('user');
-        $fromId = $user->id;
-        $toId = request()->input('to_id');
-        $objId = request()->input('obj_id');
-        $objType = request()->input('obj_type');
+        $user       = request()->input('user');
+        $fromId     = $user->id;
+        $toId       = request()->input('to_id');
+        $objId      = request()->input('obj_id');
+        $objType    = request()->input('obj_type');
         $actionType = request()->input('action_type');
-        $content = request()->input('content');
-        $postAt = Carbon::now();
+        $content    = request()->input('content');
+        $postAt     = Carbon::now();
 
-        $result = $this->inboxLogic->send($fromId, $toId, $objId, $content, $objType, $actionType, $postAt);
+        $result     = $this->inboxLogic->send($fromId, $toId, $objId, $content, $objType, $actionType, $postAt);
 
         return $result;
     }
@@ -74,8 +74,8 @@ class InboxController extends Controller
      */
     public function userInbox($type, $messageType)
     {
-        $user = request()->input('user');
-        $pageSize = request()->input('page_size',10);
+        $user       = request()->input('user');
+        $pageSize   = request()->input('page_size',10);
         $pageNumber = request()->input('page_number',1);
 
         $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
