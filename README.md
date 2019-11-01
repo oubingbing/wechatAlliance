@@ -134,7 +134,7 @@ php的laravel框架是一款非常优秀的php框架，如果有兴趣的可以�
 然后会显示一下信息，复制 [] 中括号的字符串贴到.env的APP_KEY就行了
 Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set successfully.
 
-##### 2、APP_URL=https://kucaroom.com，应用的域名，发邮箱激活链接用的，填上你的项目域名即可
+##### 2、APP_URL=https://kucaroom.com ，应用的域名，发邮箱激活链接用的，填上你的项目域名即可
 
 ##### 3、数据库，输入你数据对应的信息即可
 
