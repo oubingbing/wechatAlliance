@@ -31,14 +31,12 @@ class AppService
             'app_key'    => 'required',
             'app_secret' => 'required',
             'mobile'     => 'required',
-            'college'    => 'required',
         ];
         $message = [
             'username.required'   => '用户名不能为空！',
             'app_key.required'    => 'APP_KEY不能为空！',
             'app_secret.required' => 'APP_SECRET不能为空！',
             'mobile.required'     => '手机号不能为空！',
-            'college.required'    => '学校不能为空！',
         ];
         $validator = \Validator::make($request->all(),$rules,$message);
 

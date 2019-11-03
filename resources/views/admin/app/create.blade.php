@@ -16,10 +16,6 @@
             <hr class="hr15">
             <input name="mobile" v-model="mobile" lay-verify="required" placeholder="管理员手机号码（必填）"  type="text" class="layui-input">
             <hr class="hr15">
-            <div class="layui-input-inline" style="width: 100%">
-                <v-select label="name" ref="select" :options="colleges" name="college" v-model="selected"></v-select>
-            </div>
-            <hr class="hr15">
             <input value="提交" lay-submit lay-filter="login" style="width:100%;background: #EE7600" @click="createApp" type="submit">
             <hr class="hr20" >
         </form>
@@ -79,23 +75,13 @@
                  * @author 叶子
                  */
                 createApp:function () {
-                    this.college_id = this.selected.id;
-                    var college_id = this.college_id;
-                    if(college_id == null || college_id === 0){
-                        layer.msg('学校不能为空');
-                        return false;
-                    }
-
                     axios.post("{{ asset('admin/create_app') }}",{
                         app_name:this.app_name,
                         app_key:this.app_key,
                         app_secret:this.app_secret,
-                        mobile:this.mobile,
-                        college_id:college_id
+                        mobile:this.mobile
                     }).then( res=> {
-
                         var resData = res.data;
-
                         if(resData.error_code === 200){
                             layer.msg(resData.error_message);
                             setTimeout(function () {
@@ -104,7 +90,6 @@
                         }else{
                             layer.msg(resData.error_message)
                         }
-
                     }).catch(function (error) {
                         console.log(error);
                     });
