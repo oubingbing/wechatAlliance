@@ -19,8 +19,8 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
-        \Log::info($request->input());
-        if($request->isMethod('post')){
+        \Log::info($request->isMethod('get'));
+        if(!$request->isMethod('get')){
             try {
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
                     throw new ApiException('请登录后再操作',5000);
