@@ -42,10 +42,12 @@ class Wechat extends BaseMiddleware
 
             $request->offsetSet('user',$user);
         }else{
-            \Log::info("token是否存：");
-            \Log::info(JWTAuth::getToken());
             if(JWTAuth::getToken()){
-                $user = JWTAuth::parseToken()->authenticate();
+                try {
+                    $user = JWTAuth::parseToken()->authenticate();
+                } catch (\Exception $e) {
+                    $user = new User();
+                }
             }else{
                 $user = new User();
             }
