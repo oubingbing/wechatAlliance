@@ -19,7 +19,7 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
-        \Log::info($request->isMethod('get'));
+        \Log::info($request->url());
         if(!$request->isMethod('get')){
             try {
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
@@ -42,6 +42,8 @@ class Wechat extends BaseMiddleware
 
             $request->offsetSet('user',$user);
         }else{
+            \Log::info("token是否存：");
+            \Log::info(JWTAuth::getToken());
             if(JWTAuth::getToken()){
                 $user = JWTAuth::parseToken()->authenticate();
             }else{
