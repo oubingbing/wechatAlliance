@@ -100,30 +100,6 @@ class Http
      */
     public function compareFace($image1,$image2,$imageType=0)
     {
-
-        /*array:6 [
-                "confidence" => 45.945251464844
-          "thresholds" => array:3 [
-                0 => 61.0
-            1 => 69.0
-            2 => 75.0
-          ]
-          "rectA" => array:4 [
-                0 => 115
-            1 => 222
-            2 => 382
-            3 => 550
-          ]
-          "rectB" => array:4 [
-                0 => 213
-            1 => 540
-            2 => 484
-            3 => 618  //如图片中没有人脸，返回矩形框数值均为0
-          ]
-          "errno" => 0 //返回正常
-          "request_id" => "406081ae-3a79-4562-a4db-6e7e0fc3b465"
-        ]*/
-
         $akId     = env('ALI_ID');
         $akSecret = env('ALI_SECRET');
         $url      = env('ALI_URL');

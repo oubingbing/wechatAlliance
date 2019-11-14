@@ -116,6 +116,11 @@ class AppService
         return $result;
     }
 
+    public function getAppIdByCode($akey)
+    {
+        return WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$akey)->first();
+    }
+
     /**
      * 开启微信审核模式
      *

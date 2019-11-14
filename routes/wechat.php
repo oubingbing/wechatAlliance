@@ -53,6 +53,11 @@ $api->version('v1', function ($api) {
 
         $api->group(['middleware' => ['wechat']], function ($api) {
 
+            /** 检测登录路由 **/
+            $api->post("/check_login",function ($api){
+                return '';
+            });
+
             /** 获取用户信息 */
             $api->get('/user/{id}', UserController::class . '@user');
 

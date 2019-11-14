@@ -105,9 +105,7 @@ class PostController extends Controller
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
         $query      = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
         $posts      = paginate($query, $pageParams, '*', function ($post) use ($user) {
-
             return $this->postLogic->formatSinglePost($post, $user);
-
         });
 
         return collect($posts)->toArray();

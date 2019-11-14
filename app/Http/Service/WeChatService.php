@@ -26,6 +26,7 @@ class WeChatService
 
         $this->appKey    = $weChatApp->{WechatApp::FIELD_APP_KEY};
         $this->secretKey = $weChatApp->{WechatApp::FIELD_APP_SECRET};
+
         $url             = $this->weChatLoginUrl."?appid={$this->appKey}&secret={$this->secretKey}&js_code=$code&grant_type=authorization_code";
         $http            = new Client;
         $response        = $http->get($url);

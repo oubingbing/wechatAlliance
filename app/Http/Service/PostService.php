@@ -86,9 +86,6 @@ class PostService
             ->when($just, function ($query) use ($user) {
                 $query->where(Post::FIELD_ID_POSTER, $user->id);
                 return $query;
-            })
-            ->when($user->{User::FIELD_ID_COLLEGE}, function ($query) use ($user) {
-                return $query->where(Post::FIELD_ID_COLLEGE, $user->{User::FIELD_ID_COLLEGE});
             });
 
         return $this;
