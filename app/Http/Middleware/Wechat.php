@@ -19,6 +19,7 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
+        \Log::info($request->input());
         if($request->isMethod('post')){
             try {
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
