@@ -11,6 +11,7 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AppService;
 use App\Http\Service\PaginateService;
 use App\Http\Service\PostService;
 use App\Http\Service\SendMessageService;
@@ -52,6 +53,10 @@ class PostController extends Controller
 
             if (empty($content) && empty($imageUrls)) {
                 throw new ApiException('内容不能为空', 6000);
+            }
+
+            if(!empty($content)){
+                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
             }
 
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);

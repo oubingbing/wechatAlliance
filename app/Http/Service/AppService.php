@@ -9,6 +9,7 @@
 namespace App\Http\Service;
 
 
+use App\Exceptions\ApiException;
 use App\Models\AdminApps;
 use App\Models\Colleges;
 use App\Models\WechatApp;
@@ -211,6 +212,53 @@ class AppService
             ->get();
 
         return $templates;
+    }
+
+    /**
+     * 内容安全监测
+     *
+     * @author yezi
+     * @param $appId
+     * @param $content
+     * @throws ApiException
+     */
+    public function checkContent($appId,$content)
+    {
+        $txtArr = [
+            "习大大","习近平","进平","共产党","做爱","AV","打倒","共匪","操你妈","fuck","自由民主","丢你老母","游行示威","杀人","共党","色情",
+            "自杀","强奸","江泽民","暴动","打劫","打狗"
+        ];
+
+        foreach ($txtArr as $item){
+            $result = strstr($content,$item);
+            if($result){
+                throw new ApiException("请勿发布不良信息，文明上网",500);
+            }
+        }
+
+        $token = app(TokenService::class)->accessToken($appId);
+        $url = "https://api.weixin.qq.com/wxa/msg_sec_check?access_token={$token['access_token']}";
+        $result = app(Http::class)->request($type = 'POST',$url, ['content'=>$content], null);
+        if($result){
+            if($result["result"]["errcode"] != 0){
+                throw new ApiException("请勿发布不良信息，文明上网",500);
+            }
+        }
+    }
+
+    public function checkImage($appId,$images)
+    {
+        $token = app(TokenService::class)->accessToken($appId);
+        $domain = env("QI_NIU_DOMAIN");
+        foreach ($images as $image){
+            $url = "https://api.weixin.qq.com/wxa/img_sec_check?access_token={$token['access_token']}";
+            $result = app(Http::class)->request($type = 'POST',$url, ['media'=>$domain."/".$image], null);
+            if($result){
+                if($result["result"]["errcode"] != 0){
+                    throw new ApiException("请勿发布不良信息，文明上网",500);
+                }
+            }
+        }
     }
 
 }

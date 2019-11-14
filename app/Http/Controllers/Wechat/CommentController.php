@@ -11,14 +11,18 @@ namespace App\Http\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AppService;
 use App\Http\Service\CommentService;
+use App\Http\Service\Http;
 use App\Http\Service\InboxService;
+use App\Http\Service\TokenService;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Client;
 
 class CommentController extends Controller
 {
@@ -55,6 +59,8 @@ class CommentController extends Controller
         if(!$objUserId){
             throw new ApiException('对象不存在',404);
         }
+
+        app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
 
         $fromId = $user->id;
 
