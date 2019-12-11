@@ -198,7 +198,7 @@
                 total:0,
                 page_size:20,
                 current_page:1,
-                imageUrl:'http://image.kucaroom.com/',
+                imageUrl:"{{env('QI_NIU_DOMAIN')}}"+"/",
                 username:""
             },
             created:function () {
@@ -230,7 +230,27 @@
                         sort_by:'desc'
                     }).then( response=> {
                         var res = response.data;
-                        this.faces = res.data.page_data;
+                        let list = res.data.page_data;
+                        list = list.map(item=>{
+                            let a = item.attachments.rect_a.split("/")
+                            if(a[2] == 'image.kucaroom.com'){
+                                item.attachments.rect_a = "http://img.qiuhuiyi.cn/"+a[3]
+                            }else{
+                                item.attachments.rect_a = "{{env('QI_NIU_DOMAIN')}}"+"/"+a[3]
+                            }
+
+                            let b = item.attachments.rect_b.split("/")
+                            console.log(b[2])
+                            if(b[2] == 'image.kucaroom.com'){
+                                item.attachments.rect_b = "http://img.qiuhuiyi.cn/"+b[3]
+                            }else{
+                                item.attachments.rect_b = "{{env('QI_NIU_DOMAIN')}}"+"/"+b[3]
+                            }
+
+                            return item;
+                        })
+
+                        this.faces = list;
                         this.total = res.data.page.total_items;
                     }).catch(function (error) {
                         console.log(error);
