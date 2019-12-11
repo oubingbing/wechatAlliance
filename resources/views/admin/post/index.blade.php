@@ -226,7 +226,7 @@
                 total:0,
                 page_size:20,
                 current_page:1,
-                imageUrl:'http://image.kucaroom.com/',
+                imageUrl:"{{env('QI_NIU_DOMAIN')}}"+"/",
                 content:''
             },
             created:function () {

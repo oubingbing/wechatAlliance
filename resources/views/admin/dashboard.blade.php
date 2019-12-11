@@ -191,7 +191,7 @@
                 upLoadDomain:'https://up-z2.qbox.me',
                 appImageUrl:'',
                 attachments:[],
-                imageUrl:'http://image.kucaroom.com/'
+                imageUrl:"{{env('QI_NIU_DOMAIN')}}"+"/"
             },
             created:function () {
                 this.getUploadToken();
