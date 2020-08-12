@@ -9,12 +9,10 @@ RUN cd ${LARAVEL_PATH} \
        --no-scripts \
        --prefer-dist
 
-FROM php:7.2.33-fpm as laravel
+FROM php:7.2.33-zts-alpine as laravel
 ARG LARAVEL_PATH=/var/www/laravel
 COPY --from=composer /app/laravel ${LARAVEL_PATH}
 RUN cd ${LARAVEL_PATH} \
-    && apt-get update \
-    && apt-get install -y vim \
     && docker-php-ext-install mysqli pdo pdo_mysql \
     && mkdir -p ${LARAVEL_PATH}/storage \
     && mkdir -p ${LARAVEL_PATH}/storage/framework/cache \
@@ -27,13 +25,13 @@ RUN cd ${LARAVEL_PATH} \
     && cp ${LARAVEL_PATH}/.env.example ${LARAVEL_PATH}/.env \
     && cp ${LARAVEL_PATH}/.env.example ${LARAVEL_PATH}/.env \
     && php ${LARAVEL_PATH}/artisan key:generate \
-    && php ${LARAVEL_PATH}/artisan jwt:secret
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN  chmod 777 /usr/local/bin/docker-entrypoint.sh
+    && php ${LARAVEL_PATH}/artisan jwt:secret \
+    && mv ${LARAVEL_PATH}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh \
+    && chmod 777 /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
 
-FROM nginx:1.18 as nginx
+FROM nginx:stable-alpine-perl as nginx
 ARG LARAVEL_PATH=/var/www/laravel
 COPY --from=laravel ${LARAVEL_PATH}/public ${LARAVEL_PATH}/public
 COPY laravel.conf /etc/nginx/conf.d/
