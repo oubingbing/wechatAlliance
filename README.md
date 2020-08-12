@@ -12,7 +12,7 @@
     
 #### 效果图
 
-![](http://image.kucaroom.com/tmp/wx0f587d7c97a68e2b.o6zAJs3oh85Zb1lJE8oWix57vny0.bRrrxT8E9R8A3280bf2c92be9407e0d8c55edc628c3d.png)
+![](http://article.qiuhuiyi.cn/tmp/wx0f587d7c97a68e2b.o6zAJs3oh85Zb1lJE8oWix57vny0.bRrrxT8E9R8A3280bf2c92be9407e0d8c55edc628c3d.png)
 
 ### 一、下载后台源码
 

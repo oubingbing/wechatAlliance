@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+
+  db:
+    image: mysql:5.7.27
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      # 设置你需要的数据库账号密码，数据库名固定位love_wall请不要修改，注意需要冒号前空格
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: love_wall
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+    networks:
+      - laravel_net
+
+  laravel:
+    image: oubingbing/wechat_alliance_fpm:v2
+    restart: always
+    networks:
+      - laravel_net
+    depends_on:
+      - db
+    environment:
+      # 项目域名，例如：https://love.qiuhuiyi.cn
+      APP_URL:
+      # 填上上面你填写的数据库账号密码
+      DB_USERNAME:
+      DB_PASSWORD:
+      # 七牛配置信息
+      QI_NIU_ACCESS_KEY:
+      QI_NIU_SECRET_KEY:
+      BUCKET_NAME:
+      # 七牛域名，例如：https://image.qiuhuiyi.cn
+      QI_NIU_DOMAIN:
+      # 云片配置信息
+      YUN_PIAN_KEY:
+      # 阿里云配置信息
+      ALI_ID:
+      ALI_SECRET:
+      # 发送邮件的配置前往send cloud注册
+      SEND_CLOUD_API_USER:
+      SEND_CLOUD_APP_KEY:
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      environment:
+       - PMA_ARBITRARY=1
+      restart: always
+      ports:
+       - 8080:80
+      volumes:
+       - /sessions
+      networks:
+       - laravel_net
+
+  nginx:
+    depends_on:
+      - laravel
+      - db
+    image: oubingbing/wechat_alliance_nginx:v2
+    ports:
+      - "8000:8000"
+    networks:
+      - laravel_net
+
+networks:
+  laravel_net:
+
+volumes:
+  db_data:

@@ -70,6 +70,7 @@ class AppService
             WechatApp::FIELD_APP_SECRET   => $appSecret,
             WechatApp::FIELD_ID_COLLEGE   => $college,
             WechatApp::FIELD_MOBILE       => $mobile,
+            WechatApp::FIELD_STATUS       => WechatApp::ENUM_STATUS_ON_LINE,
             WechatApp::FIELD_ALLIANCE_KEY => str_random(16),
             WechatApp::FIELD_DOMAIN       => $domain
         ]);
