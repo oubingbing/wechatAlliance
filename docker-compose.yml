@@ -17,7 +17,7 @@ services:
       - laravel_net
 
   laravel:
-    image: oubingbing/wechat_alliance_fpm:v2
+    image: oubingbing/wechat_alliance_fpm:alpine
     restart: always
     networks:
       - laravel_net
@@ -61,7 +61,7 @@ services:
     depends_on:
       - laravel
       - db
-    image: oubingbing/wechat_alliance_nginx:v2
+    image: oubingbing/wechat_alliance_nginx:alpine
     ports:
       - "8000:8000"
     networks:

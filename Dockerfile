@@ -9,7 +9,7 @@ RUN cd ${LARAVEL_PATH} \
        --no-scripts \
        --prefer-dist
 
-FROM php:7.2.33-zts-alpine as laravel
+FROM php:7.2.33-fpm-alpine3.12 as laravel
 ARG LARAVEL_PATH=/var/www/laravel
 COPY --from=composer /app/laravel ${LARAVEL_PATH}
 RUN cd ${LARAVEL_PATH} \
