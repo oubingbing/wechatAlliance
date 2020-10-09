@@ -59,6 +59,10 @@ class PostController extends Controller
                 app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
             }
 
+            if(!empty($imageUrls)){
+                app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls);
+            }
+
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);
 
             if($mobile){

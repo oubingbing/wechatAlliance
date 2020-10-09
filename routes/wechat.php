@@ -54,7 +54,7 @@ $api->version('v1', function ($api) {
         $api->group(['middleware' => ['wechat']], function ($api) {
 
             /** 检测登录路由 **/
-            $api->post("/check_login",function ($api){
+            $api->post("/check_login",function (){
                 return '';
             });
 

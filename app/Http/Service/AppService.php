@@ -14,6 +14,7 @@ use App\Models\AdminApps;
 use App\Models\Colleges;
 use App\Models\WechatApp;
 use App\Models\WeChatTemplate;
+use GuzzleHttp\Client;
 
 class AppService
 {
@@ -225,23 +226,15 @@ class AppService
      */
     public function checkContent($appId,$content)
     {
-        $txtArr = [
-            "习大大","习近平","进平","共产党","做爱","AV","打倒","共匪","操你妈","fuck","自由民主","丢你老母","游行示威","杀人","共党","色情",
-            "自杀","强奸","江泽民","暴动","打劫","打狗"
-        ];
-
-        foreach ($txtArr as $item){
-            $result = strstr($content,$item);
-            if($result){
-                throw new ApiException("请勿发布不良信息，文明上网",500);
-            }
-        }
-
         $token = app(TokenService::class)->accessToken($appId);
         $url = "https://api.weixin.qq.com/wxa/msg_sec_check?access_token={$token['access_token']}";
-        $result = app(Http::class)->request($type = 'POST',$url, ['content'=>$content], null);
+        $client = new Client();
+        $response = $client->request("POST",$url,[
+            'body' => json_encode(["content"=>$content],JSON_UNESCAPED_UNICODE)
+        ]);
+        $result = json_decode((string) $response->getBody(), true);
         if($result){
-            if($result["result"]["errcode"] != 0){
+            if($result["errcode"] != 0){
                 throw new ApiException("请勿发布不良信息，文明上网",500);
             }
         }
@@ -251,12 +244,34 @@ class AppService
     {
         $token = app(TokenService::class)->accessToken($appId);
         $domain = env("QI_NIU_DOMAIN");
-        foreach ($images as $image){
+
+        foreach ($images as $key => $image){
+            $imageName =  str_ireplace("/", "_", $image);
+            $saveFilePath = storage_path($imageName);
+            $client = new Client(['verify'=>false]);
+            $response = $client->get($domain."/".$image,['save_to'=>$saveFilePath]);
+            if ($response->getStatusCode() != 200){
+                throw new ApiException("上传文件失败",500);
+            }
+
             $url = "https://api.weixin.qq.com/wxa/img_sec_check?access_token={$token['access_token']}";
-            $result = app(Http::class)->request($type = 'POST',$url, ['media'=>$domain."/".$image], null);
+            $client = new Client();
+            $response = $client->request("POST",$url,[
+                'multipart' => [
+                    [
+                        'name'     => 'media',
+                        'contents' => fopen($saveFilePath, "r"),
+                        'filename' => $image,
+                    ]
+                ]
+            ]);
+            $result = json_decode((string) $response->getBody(), true);
             if($result){
-                if($result["result"]["errcode"] != 0){
-                    throw new ApiException("请勿发布不良信息，文明上网",500);
+                if($result["errcode"] == 87014){
+                    $n = $key+1;
+                    throw new ApiException("图片非法",500);
+                }elseif ($result["errcode"] != 0){
+                    throw new ApiException("图片检测异常");
                 }
             }
         }
