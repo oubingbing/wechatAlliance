@@ -105,9 +105,9 @@ class Http
         $url      = env('ALI_URL');
 
         $content = [
-            "type"        => $imageType,
-            "image_url_1" => $image1,
-            "image_url_2" => $image2
+            "Action"    => "CompareFace",
+            "ImageURLA" => $image1,
+            "ImageURLB" => $image2
         ];
 
         $options                    = array(
@@ -125,16 +125,17 @@ class Http
         $http   = $options['http'];
         $header = $http['header'];
         $urlObj = parse_url($url);
+        /*dd($urlObj);
         if(empty($urlObj["query"]))
             $path = $urlObj["path"];
         else
-            $path = $urlObj["path"]."?".$urlObj["query"];
+            $path = $urlObj["path"]."?".$urlObj["query"];*/
         $body     = $http['content'];
         if(empty($body))
             $bodymd5 = $body;
         else
             $bodymd5  = base64_encode(md5($body,true));
-        $stringToSign = $http['method']."\n".$header['accept']."\n".$bodymd5."\n".$header['content-type']."\n".$header['date']."\n".$path;
+        $stringToSign = $http['method']."\n".$header['accept']."\n".$bodymd5."\n".$header['content-type']."\n".$header['date']."\n";
         $signature    = base64_encode(
             hash_hmac(
                 "sha1",
@@ -152,6 +153,7 @@ class Http
         $context = stream_context_create($options);
         $file = file_get_contents($url, false, $context );
 
+        dd(json_decode($file,true));
         return json_decode($file,true);
     }
 

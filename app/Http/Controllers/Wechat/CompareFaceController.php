@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\CompareFaceService;
 use App\Http\Service\Http;
 use App\Models\CompareFace;
+use App\Models\User;
 
 class CompareFaceController extends Controller
 {
@@ -51,7 +52,7 @@ class CompareFaceController extends Controller
                     throw new ApiException('图中无人脸！',500);
                 }
 
-                $result = $compareService->create($user->id,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
+                $result = $compareService->create($user->id,$user->{User::FIELD_ID_COLLEGE},$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
                 if($result){
                     $report = $compareService->report($compareResult);
                     return $report;

@@ -29,6 +29,9 @@ class CompareFace extends BaseModel
     /** Field status 对比的状态 1=成功，2=失败 */
     const FIELD_STATUS = 'status';
 
+    /** field college_id 学校Id */
+    const FIELD_ID_COLLEGE = 'college_id';
+
     /** Field rect_a 比对结果 */
     const FIELD_COMPARE_RESULT = 'compare_result';
 
@@ -46,7 +49,8 @@ class CompareFace extends BaseModel
         self::FIELD_ATTACHMENTS,
         self::FIELD_CONFIDENCE,
         self::FIELD_STATUS,
-        self::FIELD_COMPARE_RESULT
+        self::FIELD_COMPARE_RESULT,
+        self::FIELD_ID_COLLEGE
     ];
 
     protected $casts = [

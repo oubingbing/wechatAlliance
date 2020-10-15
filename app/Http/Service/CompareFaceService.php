@@ -48,10 +48,11 @@ class CompareFaceService
      * @param $compareResult
      * @return mixed
      */
-    public function create($userId,$image1,$image2,$status,$compareResult)
+    public function create($userId,$collegeId,$image1,$image2,$status,$compareResult)
     {
         $result = CompareFace::create([
             CompareFace::FIELD_ID_USER        => $userId,
+            CompareFace::FIELD_ID_COLLEGE     => $collegeId,
             CompareFace::FIELD_ATTACHMENTS    => ['rect_a'=>$image1,'rect_b'=>$image2],
             CompareFace::FIELD_CONFIDENCE     => $compareResult['confidence'],
             CompareFace::FIELD_STATUS         => $status,

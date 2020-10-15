@@ -88,6 +88,10 @@ class PostService
                 return $query;
             });
 
+        if (!empty($user->{User::FIELD_ID_COLLEGE})){
+            $this->builder->where(Post::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
+        }
+
         return $this;
     }
 

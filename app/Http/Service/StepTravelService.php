@@ -42,9 +42,12 @@ class StepTravelService
      * @param $userId
      * @return mixed
      */
-    public function userIfNotStep($userId)
+    public function userIfNotStep($userId,$collegeId)
     {
-        $result = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->value(RunStep::FIELD_ID);
+        $result = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
+            ->value(RunStep::FIELD_ID);
         return $result;
     }
 
@@ -54,10 +57,11 @@ class StepTravelService
      * @param $userId
      * @return \Illuminate\Support\Collection
      */
-    public function getUserThirtyRunData($userId)
+    public function getUserThirtyRunData($userId,$collegeId)
     {
         $date = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
             ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
             ->orderBy(RunStep::FIELD_RUN_AT,'asc')
             ->select([RunStep::FIELD_ID,RunStep::FIELD_ID_USER,RunStep::FIELD_STEP,RunStep::FIELD_RUN_AT])
@@ -73,14 +77,15 @@ class StepTravelService
      * @param $userId
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getUserAllRunData($userId)
+    public function getUserAllRunData($userId,$collegeId)
     {
-        $date = RunStep::query()
+        $builder = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
-            ->where(RunStep::FIELD_STATUS,RunStep::ENUM_STATUS_CAN_USE)
-            //->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()->subDay(1)])
-            ->orderBy(RunStep::FIELD_RUN_AT,'asc')
-            ->get();
+            ->where(RunStep::FIELD_STATUS,RunStep::ENUM_STATUS_CAN_USE);
+        if(!empty($collegeId)){
+            $builder->where(RunStep::FIELD_ID_COLLEGE,$collegeId);
+        }
+        $date = $builder->orderBy(RunStep::FIELD_RUN_AT,'asc')->get();
         return $date;
     }
 
@@ -107,14 +112,14 @@ class StepTravelService
      * @param $newSteps
      * @return array
      */
-    public function getUserNewRunStep($userId,$newSteps)
+    public function getUserNewRunStep($userId,$collegeId,$newSteps)
     {
-        $checkResult = $this->userIfNotStep($userId);
+        $checkResult = $this->userIfNotStep($userId,$collegeId);
         if(!$checkResult){
             return $newSteps;
         }
 
-        $oldSteps = $this->getUserThirtyRunData($userId);
+        $oldSteps = $this->getUserThirtyRunData($userId,$collegeId);
         $oldDate  = collect($this->getUserRunDate($oldSteps))->map(function ($item){
             $item = Carbon::parse($item)->toDateString();
             return $item;
@@ -143,12 +148,13 @@ class StepTravelService
      * @param $steps
      * @return bool
      */
-    public function saveSteps($userId,$steps)
+    public function saveSteps($userId,$collegeId,$steps)
     {
         $stepArray = [];
         foreach ($steps as $item){
             array_push($stepArray,[
                 RunStep::FIELD_ID_USER     => $userId,
+                RunStep::FIELD_ID_COLLEGE  => $collegeId,
                 RunStep::FIELD_STEP        => $item['step'],
                 RunStep::FIELD_RUN_AT      => $item['run_at'],
                 RunStep::FIELD_CREATED_AT  => Carbon::now(),
@@ -173,9 +179,12 @@ class StepTravelService
      * @param $userId
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
-    public function ifRunDataInToday($userId)
+    public function ifRunDataInToday($userId,$collegeId)
     {
-        $result = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->first();
+        $result = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
+            ->first();
         return $result;
     }
 
@@ -187,7 +196,7 @@ class StepTravelService
      * @param $userId
      * @param $runData
      */
-    public function updateTodayRunData($userId,$runData)
+    public function updateTodayRunData($userId,$collegeId,$runData)
     {
         $todayRunData = '';
         foreach ($runData as $item){
@@ -199,7 +208,11 @@ class StepTravelService
 
         if($todayRunData){
             //更新数据
-            $step = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->first();
+            $step = RunStep::query()
+                ->where(RunStep::FIELD_ID_USER,$userId)
+                ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
+                ->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())
+                ->first();
             if($step){
                 $step->{RunStep::FIELD_STEP} = $todayRunData['step'];
                 $step->save();
@@ -215,10 +228,11 @@ class StepTravelService
      * @param $userId
      * @param $runData
      */
-    public function updateTypeIsTodayRunData($userId,$runData)
+    public function updateTypeIsTodayRunData($userId,$collegeId,$runData)
     {
         $date = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
             ->whereBetween(RunStep::FIELD_RUN_AT,[Carbon::now()->subDay(31),Carbon::now()])
             ->where(RunStep::FIELD_TYPE,RunStep::ENUM_TYPE_TODAY)
             ->pluck(RunStep::FIELD_RUN_AT);
@@ -230,6 +244,7 @@ class StepTravelService
             if(in_array($item[RunStep::FIELD_RUN_AT],$date)){
                 RunStep::query()
                     ->where(RunStep::FIELD_ID_USER,$userId)
+                    ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
                     ->where(RunStep::FIELD_RUN_AT,$item[RunStep::FIELD_RUN_AT])
                     ->update([RunStep::FIELD_STEP=>$item['step'],RunStep::FIELD_TYPE=>RunStep::ENUM_TYPE_NOT_TODAY]);
             }
@@ -244,9 +259,13 @@ class StepTravelService
      * @param $userId
      * @return mixed
      */
-    public function todayStep($userId)
+    public function todayStep($userId,$collegeId)
     {
-        $step = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())->value(RunStep::FIELD_STEP);
+        $step = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
+            ->where(RunStep::FIELD_RUN_AT,Carbon::now()->toDateString())
+            ->value(RunStep::FIELD_STEP);
         return $step;
     }
 
@@ -258,9 +277,12 @@ class StepTravelService
      * @param $userId
      * @return mixed
      */
-    public function statisticStep($userId)
+    public function statisticStep($userId,$collegeId)
     {
-        $total = RunStep::query()->where(RunStep::FIELD_ID_USER,$userId)->sum(RunStep::FIELD_STEP);
+        $total = RunStep::query()
+            ->where(RunStep::FIELD_ID_USER,$userId)
+            ->where(RunStep::FIELD_ID_COLLEGE,$collegeId)
+            ->sum(RunStep::FIELD_STEP);
         return $total;
     }
 
@@ -272,12 +294,13 @@ class StepTravelService
      * @param $userId
      * @return $this
      */
-    public function stepBuilder($userId=null)
+    public function stepBuilder($userId=null,$collegeId)
     {
         $builder = RunStep::query();
         if($userId){
             $builder->where(RunStep::FIELD_ID_USER,$userId);
         }
+        $builder->where(RunStep::FIELD_ID_COLLEGE,$collegeId);
         $this->builder = $builder;
 
         return $this;
@@ -339,14 +362,17 @@ class StepTravelService
         return $step;
     }
 
-    public function canTravelRunData($userId)
+    public function canTravelRunData($userId,$collegeId)
     {
-        $steps = RunStep::query()
+        $builder = RunStep::query()
             ->where(RunStep::FIELD_ID_USER,$userId)
             ->where(RunStep::FIELD_STATUS,RunStep::ENUM_STATUS_CAN_USE)
-            ->where(RunStep::FIELD_RUN_AT,'!=',Carbon::now()->toDateString())
-            ->orderBy(RunStep::FIELD_RUN_AT,'asc')
-            ->get();
+            ->where(RunStep::FIELD_RUN_AT,'!=',Carbon::now()->toDateString());
+        if (!empty($collegeId)){
+            $builder->where(RunStep::FIELD_ID_COLLEGE,$collegeId);
+        }
+
+        $steps = $builder->orderBy(RunStep::FIELD_RUN_AT,'asc')->get();
 
         return $steps;
     }

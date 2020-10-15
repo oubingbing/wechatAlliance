@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "alibabacloud/facebody": "^1.8",
         "barryvdh/laravel-ide-helper": "^2.4",
         "dingo/api": "2.0.0-alpha1",
         "fideloper/proxy": "~3.3",

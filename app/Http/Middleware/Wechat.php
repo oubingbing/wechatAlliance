@@ -40,6 +40,7 @@ class Wechat extends BaseMiddleware
                 }
             }
 
+            $college = $user->{User::REL_COLLEGE};
             $request->offsetSet('user',$user);
         }else{
             if(JWTAuth::getToken()){
@@ -58,6 +59,7 @@ class Wechat extends BaseMiddleware
                 $user->{User::FIELD_ID_APP} = $app->id;
             }
 
+            $college = $user->{User::REL_COLLEGE};
             $request->offsetSet('user',$user);
         }
 

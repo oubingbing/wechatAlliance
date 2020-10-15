@@ -56,10 +56,10 @@ class UserController extends Controller
         $user = request()->input('user');
 
         //该接口已废弃，所以用来进行用户浏览记录接口
-        $job  = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
-        dispatch($job)->onQueue('record_visit_log');
+        //$job  = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
+        //dispatch($job)->onQueue('record_visit_log');
 
-        $college = $user->{User::FIELD_ID_COLLEGE};
+        $college = $user->{User::REL_COLLEGE};
 
         return $college ? $college->{Colleges::FIELD_NAME} : '请选择学校';
     }

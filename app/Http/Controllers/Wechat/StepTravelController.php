@@ -54,41 +54,41 @@ class StepTravelController extends Controller
 
         $runData      = json_decode($runData,true);
         $formatResult = $this->stepTravelService->formatRunDataToDateTimeString($runData['stepInfoList']);
-        $checkToday   = $this->stepTravelService->ifRunDataInToday($user->id);
+        $checkToday   = $this->stepTravelService->ifRunDataInToday($user->id,$user->{User::FIELD_ID_COLLEGE});
 
         try {
             \DB::beginTransaction();
         
             //如果当天有数据就只更新数据
             if($checkToday){
-                $this->stepTravelService->updateTodayRunData($user->id,$formatResult);
+                $this->stepTravelService->updateTodayRunData($user->id,$user->{User::FIELD_ID_COLLEGE},$formatResult);
             }
     
-            $result = $this->stepTravelService->getUserNewRunStep($user->id,$formatResult);
+            $result = $this->stepTravelService->getUserNewRunStep($user->id,$user->{User::FIELD_ID_COLLEGE},$formatResult);
             if($result){
-                $result = $this->stepTravelService->saveSteps($user->id,$result);
+                $result = $this->stepTravelService->saveSteps($user->id,$user->{User::FIELD_ID_COLLEGE},$result);
             }
 
             $travelService = app(TravelService::class);
-            $plan          = $travelService->traveling($user->id);
+            $plan          = $travelService->traveling($user->id,$user->{User::FIELD_ID_COLLEGE});
 
             if($plan){
-                $travelLog = $travelService->getLastTravelLog($plan->id);
-                $points    = $travelService->getNotFinishPoint($plan->id);
+                $travelLog = $travelService->getLastTravelLog($plan->id,$user->{User::FIELD_ID_COLLEGE});
+                $points    = $travelService->getNotFinishPoint($plan->id,$user->{User::FIELD_ID_COLLEGE});
                 if($travelLog){
                     $length = $travelLog->{TravelLog::FIELD_TOTAL_LENGTH};
                 }else{
                     $length = 0;
                 }
                 //步数旅行
-                $newStepData   = $this->stepTravelService->canTravelRunData($user->id);
-                $travelLogData = $travelService->travelLog($user->id,$newStepData,$plan,$points,$length);
+                $newStepData   = $this->stepTravelService->canTravelRunData($user->id,$user->{User::FIELD_ID_COLLEGE});
+                $travelLogData = $travelService->travelLog($user->id,$user->{User::FIELD_ID_COLLEGE},$newStepData,$plan,$points,$length);
                 if($travelLogData){
-                    $travelService->saveTravelLogs($travelLogData);
+                    $travelService->saveTravelLogs($travelLogData,$user->{User::FIELD_ID_COLLEGE});
                 }
             }
             
-            $this->stepTravelService->updateTypeIsTodayRunData($user->id,$formatResult);
+            $this->stepTravelService->updateTypeIsTodayRunData($user->id,$user->{User::FIELD_ID_COLLEGE},$formatResult);
 
             \DB::commit();
         } catch (\Exception $e) {
@@ -110,8 +110,8 @@ class StepTravelController extends Controller
     {
         $user = request()->input('user');
 
-        $todayStep = $this->stepTravelService->todayStep($user->id);
-        $totalStep = $this->stepTravelService->statisticStep($user->id);
+        $todayStep = $this->stepTravelService->todayStep($user->id,$user->{User::FIELD_ID_COLLEGE});
+        $totalStep = $this->stepTravelService->statisticStep($user->id,$user->{User::FIELD_ID_COLLEGE});
 
         return [
             'today_step'=>$todayStep,
@@ -135,7 +135,7 @@ class StepTravelController extends Controller
         $sortBy     = request()->input('sort_by', 'desc');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query      = $this->stepTravelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
+        $query      = $this->stepTravelService->stepBuilder($user->id,$user->{User::FIELD_ID_COLLEGE})->sort($orderBy,$sortBy)->done();
         $steps      = paginate($query, $pageParams, [RunStep::FIELD_ID,RunStep::FIELD_RUN_AT,RunStep::FIELD_STEP], function ($item) use ($user) {
             return $this->stepTravelService->formatStep($item);
         });
@@ -172,8 +172,7 @@ class StepTravelController extends Controller
             RunStep::FIELD_ID_USER
         ];
 
-        $query = $this->stepTravelService
-            ->stepBuilder()
+        $query = $this->stepTravelService->stepBuilder(null,$user->{User::FIELD_ID_COLLEGE})
             ->selectToday()
             ->filterByApp($user)
             ->sort(RunStep::FIELD_STEP,'desc')
@@ -205,7 +204,7 @@ class StepTravelController extends Controller
         ];
 
         $stepRanks = $this->stepTravelService
-            ->stepBuilder()
+            ->stepBuilder(null,$user->{User::FIELD_ID_COLLEGE})
             ->selectToday()
             ->filterByApp($user)
             ->sort(RunStep::FIELD_STEP,'desc')

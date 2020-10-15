@@ -29,6 +29,9 @@ class TravelPlan extends BaseModel
     /** Field status 旅行的状态 */
     const FIELD_STATUS = 'status';
 
+    /** field college_id 学校Id */
+    const FIELD_ID_COLLEGE = 'college_id';
+
     /** status 旅行的状态，1=旅行中，2=已终止，3=已完成 */
     const ENUM_STATUS_TRAVeLING = 1;
     const ENUM_STATUS_END = 2;
@@ -42,7 +45,8 @@ class TravelPlan extends BaseModel
         self::FIELD_ID_USER,
         self::FIELD_TITLE,
         self::FIELD_DISTANCE,
-        self::FIELD_STATUS
+        self::FIELD_STATUS,
+        self::FIELD_ID_COLLEGE
     ];
 
     public function points()

@@ -32,6 +32,9 @@ class RunStep extends BaseModel
     /** Field run_at */
     const FIELD_RUN_AT = 'run_at';
 
+    /** field college_id 学校Id */
+    const FIELD_ID_COLLEGE = 'college_id';
+
     /** status 是否已使用，1=未使用，2=已使用 */
     const ENUM_STATUS_CAN_USE = 1;
     const ENUM_STATUS_BE_USE = 2;
@@ -48,6 +51,7 @@ class RunStep extends BaseModel
         self::FIELD_STEP,
         self::FIELD_RUN_AT,
         self::FIELD_STATUS,
+        self::FIELD_ID_COLLEGE
     ];
 
     public function user()

@@ -20,13 +20,14 @@ class TravelService
 {
     protected $builder;
 
-    public function saveTravelPlan($userId,$title,$distance)
+    public function saveTravelPlan($userId,$collegeId,$title,$distance)
     {
         $plan = TravelPlan::create([
-            TravelPlan::FIELD_ID_USER  => $userId,
-            TravelPlan::FIELD_TITLE    => empty($title)?'无':$title,
-            TravelPlan::FIELD_DISTANCE => $distance,
-            TravelPlan::FIELD_STATUS   => TravelPlan::ENUM_STATUS_TRAVeLING
+            TravelPlan::FIELD_ID_USER    => $userId,
+            TravelPlan::FIELD_ID_COLLEGE => $collegeId,
+            TravelPlan::FIELD_TITLE      => empty($title)?'无':$title,
+            TravelPlan::FIELD_DISTANCE   => $distance,
+            TravelPlan::FIELD_STATUS     => TravelPlan::ENUM_STATUS_TRAVeLING
         ]);
 
         return $plan;
@@ -81,9 +82,9 @@ class TravelService
      * @param $userId
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
-    public function travelingPlan($userId)
+    public function travelingPlan($userId,$collegeId)
     {
-        $plans = TravelPlan::query()
+        $builder = TravelPlan::query()
             ->with([
                 TravelPlan::REL_POINTS,
                 TravelPlan::REL_TRAVEL_LOGS=>function($query){
@@ -97,10 +98,12 @@ class TravelService
                     ]);
                 }
             ])
-            ->where(TravelPlan::FIELD_ID_USER,$userId)
+            ->where(TravelPlan::FIELD_ID_USER,$userId);
+        if (!empty($collegeId)){
+            $builder->where(TravelPlan::FIELD_ID_COLLEGE,$collegeId);
+        }
             //->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
-            ->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')
-            ->first();
+        $plans = $builder->orderBy(TravelPlan::FIELD_CREATED_AT,'desc')->first();
         return $plans;
     }
 
@@ -145,7 +148,7 @@ class TravelService
      * @param $theTravelLength
      * @return array
      */
-    public function travelLog($userId,$stepData,$plan,$travelPoints,$theTravelLength=0)
+    public function travelLog($userId,$collegeId,$stepData,$plan,$travelPoints,$theTravelLength=0)
     {
         if(collect($stepData)->isEmpty()){
             return false;
@@ -198,6 +201,7 @@ class TravelService
             array_push($logArray,[
                 TravelLog::FIELD_ID_TRAVEL_PLAN => $plan->id,
                 TravelLog::FIELD_ID_USER        => $userId,
+                TravelLog::FIELD_ID_COLLEGE     => $collegeId,
                 TravelLog::FIELD_LATITUDE       => $locationPoint['y'],
                 TravelLog::FIELD_LONGITUDE      => $locationPoint['x'],
                 TravelLog::FIELD_DISTANCE       => $step['step_meter'],
@@ -211,6 +215,7 @@ class TravelService
             array_push($updateStep,[
                 RunStep::FIELD_ID         => $step['id'],
                 RunStep::FIELD_STATUS     => RunStep::ENUM_STATUS_BE_USE,
+                RunStep::FIELD_ID_COLLEGE => $collegeId,
                 RunStep::FIELD_UPDATED_AT => Carbon::now()
             ]);
         }
@@ -253,11 +258,12 @@ class TravelService
      * @param $travelLogs
      * @return mixed
      */
-    public function saveTravelLogs($travelLogs)
+    public function saveTravelLogs($travelLogs,$collegeId)
     {
         foreach ($travelLogs  as &$log){
             $log['created_at'] = Carbon::now();
             $log['updated_at'] = Carbon::now();
+            $log[TravelLog::FIELD_ID_COLLEGE] = $collegeId;
         }
 
         $result = TravelLog::insert($travelLogs);
@@ -273,9 +279,14 @@ class TravelService
      * @param $userId
      * @return bool
      */
-    public function ifFirstTravel($userId)
+    public function ifFirstTravel($userId,$collegeId)
     {
-        $log = TravelLog::query()->where(TravelLog::FIELD_ID,$userId)->value(TravelLog::FIELD_ID);
+        $builder = TravelLog::query()->where(TravelLog::FIELD_ID,$userId);
+        if (!empty($collegeId)){
+            $builder->where(TravelLog::FIELD_ID_COLLEGE,$collegeId);
+        }
+
+        $log = $builder->value(TravelLog::FIELD_ID);
         if($log){
             return false;
         }else{
@@ -291,12 +302,16 @@ class TravelService
      * @param $userId
      * @return int
      */
-    public function stopAllTravelByUserId($userId)
+    public function stopAllTravelByUserId($userId,$collegeId)
     {
-        $result = TravelPlan::query()
+        $builder = TravelPlan::query()
             ->where(TravelPlan::FIELD_ID_USER,$userId)
-            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
-            ->update([TravelPlan::FIELD_STATUS=>TravelPlan::ENUM_STATUS_END]);
+            ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
+        if (!empty($collegeId)){
+            $builder->where(TravelPlan::FIELD_ID_COLLEGE,$collegeId);
+        }
+
+        $result = $builder->update([TravelPlan::FIELD_STATUS=>TravelPlan::ENUM_STATUS_END]);
 
         return $result;
     }
@@ -353,17 +368,18 @@ class TravelService
      * @param $userId
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
-    public function traveling($userId)
+    public function traveling($userId,$collegeId)
     {
         $result = TravelPlan::query()
             ->where(TravelPlan::FIELD_ID_USER,$userId)
+            ->where(TravelPlan::FIELD_ID_COLLEGE,$collegeId)
             ->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING)
             ->first();
 
         return $result;
     }
 
-    public function travelLogBuilder($userId,$planId=null)
+    public function travelLogBuilder($userId,$collegeId,$planId=null)
     {
         $builder = TravelLog::query()
             ->whereHas(TravelLog::REL_PLAN,function ($query)use($userId,$planId){
@@ -372,7 +388,9 @@ class TravelService
                 }else{
                     //$query->where(TravelPlan::FIELD_STATUS,TravelPlan::ENUM_STATUS_TRAVeLING);
                 }
-            })->where(TravelLog::FIELD_ID_USER,$userId)
+            })
+            ->where(TravelLog::FIELD_ID_USER,$userId)
+            ->where(TravelLog::FIELD_ID_COLLEGE,$collegeId)
             ->orderBy(TravelLog::FIELD_RUN_AT,'desc');
 
         return $builder;
@@ -631,9 +649,10 @@ class TravelService
      * @param $userId
      * @return $this
      */
-    public function stepBuilder($userId=null)
+    public function stepBuilder($userId=null,$collegeId)
     {
         $this->builder = TravelPlan::query()
+            ->where(TravelPlan::FIELD_ID_COLLEGE,$collegeId)
             ->with([TravelPlan::REL_POINTS=>function($query){
                 $query->select([
                     TravelPlanPoint::FIELD_ID,

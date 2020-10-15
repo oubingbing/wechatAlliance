@@ -17,6 +17,7 @@ use App\Http\Service\TravelService;
 use App\Models\RunStep;
 use App\Models\TravelLog;
 use App\Models\TravelPlan;
+use App\Models\User;
 use Carbon\Carbon;
 
 class TravelController extends Controller
@@ -53,20 +54,20 @@ class TravelController extends Controller
             \DB::beginTransaction();
 
             //终止所有还在旅行中的计划
-            $this->travelService->stopAllTravelByUserId($user->id);
+            $this->travelService->stopAllTravelByUserId($user->id,$user->{User::FIELD_ID_COLLEGE});
 
             //新建旅行计划
-            $travel = $this->travelService->saveTravelPlan($user->id,$title,$distance);
+            $travel = $this->travelService->saveTravelPlan($user->id,$user->{User::FIELD_ID_COLLEGE},$title,$distance);
             if(!$travel){
                 throw new ApiException('新建失败！',500);
             }
             $this->travelService->saveTravelPlanPoint($travel->id,$plans);
 
             //是否是首次旅行，是的话就是用用户的步数进行旅行
-            $firstTravel  = $this->travelService->ifFirstTravel($user->id);
-            $plan         = $this->travelService->travelingPlan($user->id);
+            $firstTravel  = $this->travelService->ifFirstTravel($user->id,$user->{User::FIELD_ID_COLLEGE});
+            $plan         = $this->travelService->travelingPlan($user->id,$user->{User::FIELD_ID_COLLEGE});
             if($firstTravel){
-                $stepData = app(StepTravelService::class)->getUserAllRunData($user->id);
+                $stepData = app(StepTravelService::class)->getUserAllRunData($user->id,$user->{User::FIELD_ID_COLLEGE});
                 $stepData = collect($stepData)->filter(function ($item){
                     //过滤掉当天的数据
                     if(Carbon::parse($item->{RunStep::FIELD_RUN_AT})->toDateString() != Carbon::now()->toDateString()){
@@ -75,14 +76,14 @@ class TravelController extends Controller
                 });
             }else{
                 //或者是否有可用的步数
-                $stepData = app(StepTravelService::class)->canTravelRunData($user->id);
+                $stepData = app(StepTravelService::class)->canTravelRunData($user->id,$user->{User::FIELD_ID_COLLEGE});
             }
 
             if($stepData){
                 //进行旅行操作
-                $travelLogData = $this->travelService->travelLog($user->id,$stepData,$plan,$plan['points']);
+                $travelLogData = $this->travelService->travelLog($user->id,$user->{User::FIELD_ID_COLLEGE},$stepData,$plan,$plan['points']);
                 if($travelLogData){
-                    $result = $this->travelService->saveTravelLogs($travelLogData);
+                    $result = $this->travelService->saveTravelLogs($travelLogData,$user->{User::FIELD_ID_COLLEGE});
                     if(!$result){
                         throw new ApiException("保存数据失败！",500);
                     }
@@ -108,7 +109,7 @@ class TravelController extends Controller
     public function plan()
     {
         $user   = request()->input('user');
-        $plan   = $this->travelService->travelingPlan($user->id);
+        $plan   = $this->travelService->travelingPlan($user->id,$user->{User::FIELD_ID_COLLEGE});
         $result = $this->travelService->format($plan);
 
         return $result;
@@ -129,7 +130,7 @@ class TravelController extends Controller
         $planId     = request()->input('plan_id',null);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query      = $this->travelService->travelLogBuilder($user->id,$planId);
+        $query      = $this->travelService->travelLogBuilder($user->id,$user->{User::FIELD_ID_COLLEGE},$planId);
         $logs       = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravelLog($item);
         });
@@ -224,7 +225,7 @@ class TravelController extends Controller
         $sortBy     = request()->input('sort_by', 'desc');
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query      = $this->travelService->stepBuilder($user->id)->sort($orderBy,$sortBy)->done();
+        $query      = $this->travelService->stepBuilder($user->id,$user->{User::FIELD_ID_COLLEGE})->sort($orderBy,$sortBy)->done();
         $plans      = paginate($query, $pageParams, ['*'], function ($item) use ($user) {
             return $this->travelService->formatTravel($item);
         });

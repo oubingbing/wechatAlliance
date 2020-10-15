@@ -56,6 +56,9 @@ class TravelLog extends BaseModel
     /** Field point_id 所属站点 */
     const FIELD_ID_POINT = 'point_id';
 
+    /** field college_id 学校Id */
+    const FIELD_ID_COLLEGE = 'college_id';
+
 
     /** Field point_distance 地图坐标的距离 */
     const FIELD_LENGTH = 'length';
@@ -81,7 +84,8 @@ class TravelLog extends BaseModel
         self::FIELD_TOTAL_LENGTH,
         self::FIELD_PROVINCE,
         self::FIELD_CITY,
-        self::FIELD_DISTRICT
+        self::FIELD_DISTRICT,
+        self::FIELD_ID_COLLEGE
     ];
 
     public function plan()

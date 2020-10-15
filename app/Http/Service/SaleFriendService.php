@@ -93,6 +93,10 @@ class SaleFriendService
                 return $query->where(SaleFriend::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
             });
 
+        if (!empty($user->{User::FIELD_ID_COLLEGE})){
+            $this->builder->where(SaleFriend::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
+        }
+
         return $this;
     }
 

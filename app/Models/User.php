@@ -91,6 +91,7 @@ class User extends Authenticatable implements JWTSubject
     const REL_PROFILE = 'profile';
     const REL_APP = 'app';
     const REL_BLACK_LIST = 'blacklist';
+    const REL_COLLEGE = 'college';
 
     /**
      * The attributes that are mass assignable.
