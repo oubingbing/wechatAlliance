@@ -40,9 +40,9 @@ class CompareFaceController extends Controller
         $compareResult  = app(Http::class)->compareFace($yourFace,$hisFace);
 
         if($compareResult){
-            if($compareResult['errno'] == 0){
-                $emptyRectA = $compareService->checkEmptyRect($compareResult['rectA']);
-                $emptyRectB = $compareService->checkEmptyRect($compareResult['rectB']);
+            if(isset($compareResult['RectAList'])){
+                $emptyRectA = $compareService->checkEmptyRect($compareResult['RectAList']);
+                $emptyRectB = $compareService->checkEmptyRect($compareResult['RectBList']);
 
                 if($emptyRectA){
                     throw new ApiException('图中无人脸！',500);

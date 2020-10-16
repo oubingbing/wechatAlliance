@@ -9,10 +9,8 @@
 namespace Tests\Unit;
 
 
-use App\ChatMessage;
-use App\Http\Logic\ChatLogic;
-use App\Http\Logic\FriendLogic;
-use App\User;
+use App\Models\ChatMessage;
+use App\Models\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 
@@ -23,7 +21,7 @@ class ChatTest extends TestCase
      */
     public function sendMessage()
     {
-        $user = User::query()->first();
+        /*$user = User::query()->first();
 
         $friendId = $user->id;
         $content = '你好';
@@ -42,7 +40,7 @@ class ChatTest extends TestCase
 
         $result = app(ChatLogic::class)->sendMessage($userId,$friendId,$content,$attachments,$type,$postAt);
 
-        return $result;
+        return $result;*/
     }
 
 }

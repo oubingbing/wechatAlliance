@@ -9,6 +9,9 @@
 namespace Tests\Unit;
 
 
+use AlibabaCloud\SDK\ViapiUtils\ViapiUtils;
+use AlibabaCloud\Tea\Exception\TeaUnableRetryError;
+use App\Http\Service\Http;
 use App\Post;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -44,13 +47,16 @@ class PostTest extends TestCase
     }
 
     /**
+     * vendor/bin/phpunit tests/unit/PostTest.php --filter=comment
+     *
      * @test
      */
     public function comment()
     {
-        $post = Post::find(21);
+        $img = "https://image.qiuhuiyi.cn/tmp/wx0f587d7c97a68e2b.o6zAJs3oh85Zb1lJE8oWix57vny0.LsG26c4Timu0b502fa7c03ff8e41d4297904e22add9b.jpg";
 
-        dd($post->comments->toArray());
+        $http = new Http();
+        $http->compareFace($img,$img);
     }
 
 }
