@@ -25,6 +25,7 @@ use App\Http\Wechat\MatchLoveController;
 use App\Http\Wechat\PartTimeJobController;
 use App\Http\Wechat\PostController;
 use App\Http\Wechat\PraiseController;
+use App\Http\Wechat\RotationImageController;
 use App\Http\Wechat\SaleFriendController;
 use App\Http\Wechat\StepTravelController;
 use App\Http\Wechat\TopicController;
@@ -297,6 +298,9 @@ $api->version('v1', function ($api) {
 
             /** 获取具体的旅行详情 */
             $api->get('/plan/{id}',TravelController::class . '@planDetail');
+
+            /** 获取首页轮播图 */
+            $api->get('/rotations',RotationImageController::class . '@imageList');
         });
 
     });

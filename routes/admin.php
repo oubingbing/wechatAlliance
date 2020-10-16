@@ -58,20 +58,16 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']],
         /** 微信模板列表 */
         Route::post('/templates','AppController@createTemplate');
 
-        /** 视频 **/
-        Route::get('/videos_view',"VideosController@index");
-
-        /** 添加视频链接视频 **/
-        Route::post('/videos/create',"VideosController@create");
-
-        /** 添加视频链接视频 **/
-        Route::get('/videos',"VideosController@videoList");
-
-        /** 删除 **/
-        Route::delete('/videos/{id}/delete',"VideosController@delete");
-
-        /** 更新 **/
-        Route::post('/videos/{id}/update',"VideosController@update");
+        /** 轮播图设置 **/
+        Route::get('/rotation_view',"RotationImageController@index");
+        /** 上传轮播图 */
+        Route::patch('/rotation_store','RotationImageController@create');
+        /** 更新轮播图appId */
+        Route::patch('/rotation_update','RotationImageController@updateAppId');
+        /** 轮播图列表 */
+        Route::get('/rotation_list','RotationImageController@ListData');
+        /** 删除轮播图 **/
+        Route::delete('rotation_delete',"RotationImageController@delete");
 
         /** 设置黑名单 **/
         Route::post('user/blacklist',"UserController@setBlackList");
