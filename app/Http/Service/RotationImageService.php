@@ -18,7 +18,7 @@ class RotationImageService
         $result = RotationImageModel::create([
             RotationImageModel::FIELD_ID_APP=>$appId,
             RotationImageModel::FIELD_ID_COLLEGE=>$collegeId,
-            RotationImageModel::FIELD_URL=>$img
+            RotationImageModel::FIELD_IMAGE=>$img
         ]);
         return $result;
     }
@@ -36,7 +36,14 @@ class RotationImageService
     {
         $list = RotationImageModel::query()
             ->where(RotationImageModel::FIELD_ID_APP,$appId)
-            ->select([RotationImageModel::FIELD_ID,RotationImageModel::FIELD_URL,RotationImageModel::FIELD_SORT,RotationImageModel::FIELD_WECHAT_APP])
+            ->select([
+                RotationImageModel::FIELD_ID,
+                RotationImageModel::FIELD_URL,
+                RotationImageModel::FIELD_SORT,
+                RotationImageModel::FIELD_WECHAT_APP,
+                RotationImageModel::FIELD_IMAGE,
+                RotationImageModel::FIELD_URL
+            ])
             ->get();
         return $list;
     }
@@ -50,4 +57,12 @@ class RotationImageService
         return $result;
     }
 
+    public function updateUrl($id,$appId,$url)
+    {
+        $result = RotationImageModel::query()
+            ->where(RotationImageModel::FIELD_ID,$id)
+            ->where(RotationImageModel::FIELD_ID_APP,$appId)
+            ->update([RotationImageModel::FIELD_URL=>$url]);
+        return $result;
+    }
 }

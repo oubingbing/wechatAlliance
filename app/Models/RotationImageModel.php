@@ -23,6 +23,9 @@ class RotationImageModel extends BaseModel
     /** field college_id 学校Id */
     const FIELD_ID_COLLEGE = 'college_id';
 
+    /** field image **/
+    const FIELD_IMAGE = "image";
+
     /** field url **/
     const FIELD_URL = "url";
 
@@ -41,6 +44,7 @@ class RotationImageModel extends BaseModel
         self::FIELD_URL,
         self::FIELD_STATUS,
         self::FIELD_SORT,
-        self::FIELD_WECHAT_APP
+        self::FIELD_WECHAT_APP,
+        self::FIELD_IMAGE
     ];
 }

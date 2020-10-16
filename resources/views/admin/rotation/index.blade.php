@@ -49,6 +49,7 @@
             <tr>
                 <th>图片</th>
                 <th>跳转小程序的ID</th>
+                <th>跳转小程序的路径</th>
                 <th>创建时间</th>
                 <th>操作</th>
             </thead>
@@ -56,12 +57,17 @@
             <tr v-for="topic in topics">
                 <td>
                     <div class="image-container">
-                        <div class="image"><img v-bind:src="topic.url" alt="" style="width: 80px;height: 80px"></div>
+                        <div class="image"><img v-bind:src="topic.image" alt="" style="width: 80px;height: 80px"></div>
                     </div>
                 </td>
                 <td>
                     <div class="layui-input-inline">
-                        <input type="text" @blur="updateAppId(topic.id,topic.wechat_app)" lay-verify="required" v-model="topic.wechat_app" class="layui-input" placeholder="小程序ID" name="app_id" style="width: 250px;float: left">
+                        <input type="text" @blur="update(topic.id,topic.wechat_app)" lay-verify="required" v-model="topic.wechat_app" class="layui-input" placeholder="小程序ID" name="app_id" style="width: 250px;float: left">
+                    </div>
+                </td>
+                <td>
+                    <div class="layui-input-inline">
+                        <input type="text" @blur="updateUrl(topic.id,topic.url)" lay-verify="required" v-model="topic.url" class="layui-input" placeholder="小程序ID" name="app_id" style="width: 250px;float: left">
                     </div>
                 </td>
                 <td>@{{ topic.created_at }}</td>
@@ -166,9 +172,25 @@
                     });
                 },
 
+                updateUrl:function (id,value) {
+                    axios.patch('/admin/rotation_update_url',{id:id,url:value})
+                        .then( response=> {
+                            var res = response.data;
+                            if(res.error_code == 200){
+                                let data = this.topics
+                                data.push(res.data)
+                                this.topics = data
+                                layer.msg('修改成功！');
+                            }else{
+                                layer.msg('修改失败！');
+                            }
+
+                        }).catch(function (error) {
+                        console.log(error);
+                    });
+                },
+
                 updateAppId:function (id,value) {
-                    console.log(value)
-                    console.log(id)
                     axios.patch('/admin/rotation_update',{id:id,wechat_id:value})
                         .then( response=> {
                             var res = response.data;

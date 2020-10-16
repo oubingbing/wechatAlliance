@@ -40,7 +40,7 @@ class RotationImageController extends Controller
 
         $domain = env("QI_NIU_DOMAIN");
         $result = $this->service->store($app->id,0,$image);
-        $result->url = $domain."/".$result->url;
+        $result->{RotationImageModel::FIELD_IMAGE} = $domain."/".$result->{RotationImageModel::FIELD_IMAGE};
         return webResponse('ok',200,$result);
     }
 
@@ -61,7 +61,7 @@ class RotationImageController extends Controller
 
         $domain = env("QI_NIU_DOMAIN");
         $list = paginate($query, $pageParams, '*', function ($item)use($domain){
-            $item->url = $domain."/".$item->url;
+            $item->{RotationImageModel::FIELD_IMAGE} = $domain."/".$item->{RotationImageModel::FIELD_IMAGE};
             return $item;
         });
 
@@ -94,6 +94,21 @@ class RotationImageController extends Controller
         $id       = request()->input("id");
 
         $result = $this->service->update($id,$app->id,$wechatId);
+        if (!$result){
+            throw new ApiException("修改失败");
+        }
+
+        return webResponse('修改成功',200,[]);
+    }
+
+    public function updateUrl()
+    {
+        $user     = request()->input('user');
+        $app      = $user->app();
+        $url      = request()->input("url");
+        $id       = request()->input("id");
+
+        $result = $this->service->updateUrl($id,$app->id,$url);
         if (!$result){
             throw new ApiException("修改失败");
         }

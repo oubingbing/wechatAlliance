@@ -11,6 +11,7 @@ namespace App\Http\Wechat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Service\RotationImageService;
+use App\Models\RotationImageModel;
 use App\Models\User;
 
 class RotationImageController extends Controller
@@ -30,7 +31,7 @@ class RotationImageController extends Controller
 
         $domain = env("QI_NIU_DOMAIN");
         $list = collect($list)->map(function ($item,$index)use($domain){
-            $item->url = $domain."/".$item->url;
+            $item->{RotationImageModel::FIELD_IMAGE} = $domain."/".$item->{RotationImageModel::FIELD_IMAGE};
             if ($index == 0){
                 $item->show = true;
             }else{

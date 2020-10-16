@@ -64,6 +64,8 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin','middleware'=>['web']],
         Route::patch('/rotation_store','RotationImageController@create');
         /** 更新轮播图appId */
         Route::patch('/rotation_update','RotationImageController@updateAppId');
+        /** 更新轮播图aurl */
+        Route::patch('/rotation_update_url','RotationImageController@updateUrl');
         /** 轮播图列表 */
         Route::get('/rotation_list','RotationImageController@ListData');
         /** 删除轮播图 **/
