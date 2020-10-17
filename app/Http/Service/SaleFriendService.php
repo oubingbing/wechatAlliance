@@ -68,34 +68,35 @@ class SaleFriendService
      *
      * @return $this
      */
-    public function builder($user,$type,$just)
+    public function builder($user,$collegeId,$type,$just)
     {
-        $this->builder = SaleFriend::query()
-            ->whereHas(SaleFriend::REL_USER,function ($query)use($user){
+        $this->builder = SaleFriend::query();
+
+        if (collect($user)->isNotEmpty()){
+            $this->builder->whereHas(SaleFriend::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
             })
-            ->with(['poster','comments'])
-            ->when($type,function ($query)use($user,$type){
-                if($type == 2){
-                    $query->whereHas('follows',function ($query)use($user,$type){
-                        $query->where(Follow::FIELD_ID_USER,$user->id)->where(Follow::FIELD_STATUS,Follow::ENUM_STATUS_FOLLOW);
-                    });
-                }
+                ->with(['poster','comments'])
+                ->when($type,function ($query)use($user,$type){
+                    if($type == 2){
+                        $query->whereHas('follows',function ($query)use($user,$type){
+                            $query->where(Follow::FIELD_ID_USER,$user->id)->where(Follow::FIELD_STATUS,Follow::ENUM_STATUS_FOLLOW);
+                        });
+                    }
 
-                return $query;
-            })
-            ->when($just,function ($query)use($user){
-                $query->where(SaleFriend::FIELD_ID_OWNER,$user->id);
+                    return $query;
+                })
+                ->when($just,function ($query)use($user){
+                    $query->where(SaleFriend::FIELD_ID_OWNER,$user->id);
 
-                return $query;
-            })
-            ->when($user->{User::FIELD_ID_COLLEGE},function ($query)use($user){
-                return $query->where(SaleFriend::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
-            });
-
-        if (!empty($user->{User::FIELD_ID_COLLEGE})){
-            $this->builder->where(SaleFriend::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
+                    return $query;
+                })
+                ->when($user->{User::FIELD_ID_COLLEGE},function ($query)use($collegeId){
+                    return $query->where(SaleFriend::FIELD_ID_COLLEGE,$collegeId);
+                });
         }
+
+        $this->builder->where(SaleFriend::FIELD_ID_COLLEGE,$collegeId);
 
         return $this;
     }

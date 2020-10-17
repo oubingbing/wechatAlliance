@@ -41,6 +41,7 @@ class PostController extends Controller
     public function store()
     {
         $user      = request()->input('user');
+        $collegeId = request()->input('college_id');
         $content   = request()->input('content');
         $imageUrls = request()->input('attachments');
         $location  = request()->input('location');
@@ -63,7 +64,7 @@ class PostController extends Controller
                 app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls);
             }
 
-            $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);
+            $result = $this->postLogic->save($user,$collegeId, $content, $imageUrls, $location, $private, $topic);
 
             if($mobile){
                 $checkMobile = validMobile($mobile);
@@ -103,6 +104,7 @@ class PostController extends Controller
     public function postList()
     {
         $user       = request()->input('user');
+        $collegeId  = request()->input("college_id");
         $pageSize   = request()->input('page_size', 10);
         $pageNumber = request()->input('page_number', 1);
         $just       = request()->input('just');
@@ -111,8 +113,15 @@ class PostController extends Controller
         $sortBy     = request()->input('sort_by', 'desc');
         $filter     = request()->input('filter');
 
+        if (collect($user)->isNotEmpty() && empty($user->{User::FIELD_ID_COLLEGE}) && $user->id){
+            if ($collegeId != $user->{User::FIELD_ID_COLLEGE}){
+                $user->{User::FIELD_ID_COLLEGE} = $collegeId;
+                $user->save();
+            }
+        }
+
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query      = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
+        $query      = $this->postLogic->builder($user,$collegeId,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
         $posts      = paginate($query, $pageParams, '*', function ($post) use ($user) {
             return $this->postLogic->formatSinglePost($post, $user);
         });

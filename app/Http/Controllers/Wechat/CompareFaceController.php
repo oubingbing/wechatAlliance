@@ -31,6 +31,7 @@ class CompareFaceController extends Controller
         $user     = request()->input('user');
         $yourFace = request()->input('your_face');
         $hisFace  = request()->input('his_face');
+        $collegeId= request()->input("college_id");
 
         if(empty($yourFace) || empty($hisFace)){
             throw new ApiException('照片不能为空',500);
@@ -52,7 +53,7 @@ class CompareFaceController extends Controller
                     throw new ApiException('图中无人脸！',500);
                 }
 
-                $result = $compareService->create($user->id,$user->{User::FIELD_ID_COLLEGE},$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
+                $result = $compareService->create($user->id,$collegeId,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
                 if($result){
                     $report = $compareService->report($compareResult);
                     return $report;

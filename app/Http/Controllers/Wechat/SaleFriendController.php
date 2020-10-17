@@ -110,6 +110,7 @@ class SaleFriendController extends Controller
     public function saleFriends()
     {
         $user       = request()->input('user');
+        $collegeId  = request()->input("college_id");
         $pageSize   = request()->input('page_size',10);
         $pageNumber = request()->input('page_number',1);
         $type       = request()->input('type');
@@ -118,7 +119,7 @@ class SaleFriendController extends Controller
         $sortBy     = request()->input('sort_by','desc');
 
         $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
-        $query      = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
+        $query      = $this->saleFriendLogic->builder($user,$collegeId,$type,$just)->sort($orderBy,$sortBy)->done();
 
         $saleFriends     = app(PaginateService::class)->paginate($query,$pageParams, '*',function($saleFriend)use($user){
             $attachments = $this->saleFriendLogic->convertAttachments($saleFriend->{SaleFriend::FIELD_ATTACHMENTS});
@@ -189,6 +190,7 @@ class SaleFriendController extends Controller
     public function saleFriendsV2()
     {
         $user       = request()->input('user');
+        $collegeId  = request()->input("college_id");
         $pageSize   = request()->input('page_size',10);
         $pageNumber = request()->input('page_number',1);
         $type       = request()->input('type');
@@ -197,7 +199,7 @@ class SaleFriendController extends Controller
         $sortBy     = request()->input('sort_by','desc');
 
         $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
-        $query      = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
+        $query      = $this->saleFriendLogic->builder($user,$collegeId,$type,$just)->sort($orderBy,$sortBy)->done();
 
         $selectData = [
             SaleFriend::FIELD_ID,

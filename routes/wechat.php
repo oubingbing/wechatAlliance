@@ -37,7 +37,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
 
-    $api->group(['prefix' => 'wechat','middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1], function ($api) {
+    $api->group(['prefix' => 'wechat','middleware' => ['api.throttle',"before"], 'limit' => 100, 'expires' => 1], function ($api) {
 
         $api->get('/config',IndexController::class . '@config');
 
@@ -77,7 +77,7 @@ $api->version('v1', function ($api) {
                 $api->get('/recommend_school', UserController::class . '@recommendSchool');
 
                 /** 设置学校 */
-                $api->put('/set/{id}/college', UserController::class . '@setCollege');
+                $api->get('/set/{id}/college', UserController::class . '@setCollege');
 
                 /** 搜索学校 */
                 $api->get('/search_college', UserController::class . '@searchCollege');

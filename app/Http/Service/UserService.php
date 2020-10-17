@@ -12,6 +12,7 @@ namespace App\Http\Service;
 use App\Models\BlackList;
 use App\Models\User;
 use App\Models\UserProfile;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -55,6 +56,15 @@ class UserService
      */
     public function createWeChatUserByModel($appId,$userInfo)
     {
+        Log::info("连接：".request()->url());
+        Log::info($userInfo);
+
+        if (isset($userInfo['nickName'])){
+            if (empty($userInfo['nickName'])){
+                return $userInfo;
+            }
+        }
+
         $result = User::create([
             User::FIELD_ID_APP    => $userInfo["app_id"],
             User::FIELD_ID_OPENID => $userInfo["openId"],

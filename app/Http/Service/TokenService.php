@@ -120,9 +120,13 @@ class TokenService
      * @return mixed
      * @throws Exception
      */
-    public function createApiToken($appId,$userInfo)
+    public function createApiToken($appId,$userInfo,$collegeId)
     {
-        $user = User::where(User::FIELD_ID_APP,$appId)->orderBy(User::FIELD_CREATED_AT,'asc')->where(User::FIELD_ID_OPENID,$userInfo["openId"])->first();
+        $user = User::where(User::FIELD_ID_APP,$appId)
+            ->orderBy(User::FIELD_CREATED_AT,'asc')
+            ->where(User::FIELD_ID_OPENID,$userInfo["openId"])
+            ->where(User::FIELD_ID_COLLEGE,$collegeId)
+            ->first();
         if(!$user){
             $userLogin = new UserService();
             $user      = $userLogin->createWeChatUserByModel($appId,$userInfo);

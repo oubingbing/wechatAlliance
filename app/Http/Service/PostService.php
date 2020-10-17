@@ -42,11 +42,11 @@ class PostService
      *
      * @return mixed
      */
-    public function save($user, $content, $imageUrls = null, $location = null, $private = null, $topic = null)
+    public function save($user,$collegeId, $content, $imageUrls = null, $location = null, $private = null, $topic = null)
     {
         $result = Post::create([
             Post::FIELD_ID_POSTER   => $user->{User::FIELD_ID},
-            Post::FIELD_ID_COLLEGE  => $user->{User::FIELD_ID_COLLEGE},
+            Post::FIELD_ID_COLLEGE  => $collegeId,
             Post::FIELD_CONTENT     => $content,
             Post::FIELD_ATTACHMENTS => $imageUrls,
             Post::FIELD_PRIVATE     => $private,
@@ -67,12 +67,14 @@ class PostService
      *
      * @return $this
      */
-    public function builder($user, $type, $just)
+    public function builder($user,$collegeId, $type, $just)
     {
         $this->builder = Post::query()->with(['poster'=>function($query){
             $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER,User::FIELD_CREATED_AT);
-        }, 'praises', 'comments'])
-            ->whereHas(Post::REL_USER,function ($query)use($user){
+        }, 'praises', 'comments']);
+
+        if (collect($user)->isNotEmpty()){
+            $this->builder->whereHas(Post::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
             })
             ->when($type, function ($query) use ($user, $type) {
@@ -87,10 +89,9 @@ class PostService
                 $query->where(Post::FIELD_ID_POSTER, $user->id);
                 return $query;
             });
-
-        if (!empty($user->{User::FIELD_ID_COLLEGE})){
-            $this->builder->where(Post::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
         }
+
+        $this->builder->where(Post::FIELD_ID_COLLEGE,$collegeId);
 
         return $this;
     }

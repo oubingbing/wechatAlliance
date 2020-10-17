@@ -16,6 +16,9 @@ class Before
      */
     public function handle($request, Closure $next)
     {
+        $collegeId = $request->input("college_id");
+        $request->offsetSet('college_id',$collegeId);
+
         return $next($request);
     }
 }

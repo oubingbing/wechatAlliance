@@ -43,11 +43,12 @@ class WeChatLoginController extends Controller
         $code          = request()->input('code');
         $encryptedData = request()->input('encrypted_data');
         $appId         = request()->input("app_id");
+        $collegeId     = request()->input("college_id");
 
         try{
             DB::beginTransaction();
 
-            $result = $this->wechatLogin($appId,$code,$iv,$encryptedData);
+            $result = $this->wechatLogin($appId,$code,$iv,$encryptedData,$collegeId);
 
             DB::commit();
         }catch (\Exception $e){
@@ -69,14 +70,14 @@ class WeChatLoginController extends Controller
      * @return mixed
      * @throws ApiException
      */
-    public function weChatLogin($appId,$code,$iv,$encryptedData)
+    public function weChatLogin($appId,$code,$iv,$encryptedData,$collegeId)
     {
         $weChatApp = WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$appId)->first();
         if(!$weChatApp){
             throw new ApiException('不是有效的key',6000);
         }
         $userInfo = app(WeChatService::class)->getSessionInfo($weChatApp,$code,$iv,$encryptedData);
-        $token    = $this->tokenService->createApiToken($weChatApp->id,$userInfo);
+        $token    = $this->tokenService->createApiToken($weChatApp->id,$userInfo,$collegeId);
 
         return $token;
     }

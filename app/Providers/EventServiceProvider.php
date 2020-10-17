@@ -18,7 +18,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Dingo\Api\Event\ResponseWasMorphed' => [
             'App\Listeners\AddPaginationLinksToResponse'
-        ]
+        ],
+        'Illuminate\Database\Events\QueryExecuted' => [
+            'App\Listeners\QueryListener',
+        ],
     ];
 
     /**

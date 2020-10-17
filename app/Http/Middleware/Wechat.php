@@ -19,14 +19,13 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
-        \Log::info($request->url());
         if(!$request->isMethod('get')){
             try {
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
                     throw new ApiException('请登录后再操作',5000);
                 }
             } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-                throw new ApiException('认证过期,请重新登录',5000);
+                throw new ApiException('认证过期,请重新登录',5001);
             } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
                 throw new ApiException('认证非法,请先登录',5000);
             } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
@@ -39,8 +38,6 @@ class Wechat extends BaseMiddleware
                     throw new ApiException("您已被列入黑名单，不可进行该操作",500);
                 }
             }
-
-            $college = $user->{User::REL_COLLEGE};
             $request->offsetSet('user',$user);
         }else{
             if(JWTAuth::getToken()){
@@ -58,8 +55,6 @@ class Wechat extends BaseMiddleware
             if(collect($app)->isNotEmpty()){
                 $user->{User::FIELD_ID_APP} = $app->id;
             }
-
-            $college = $user->{User::REL_COLLEGE};
             $request->offsetSet('user',$user);
         }
 

@@ -53,15 +53,9 @@ class UserController extends Controller
      */
     public function school()
     {
-        $user = request()->input('user');
-
-        //该接口已废弃，所以用来进行用户浏览记录接口
-        //$job  = (new UserLogs($user))->delay(Carbon::now()->addSecond(1));
-        //dispatch($job)->onQueue('record_visit_log');
-
-        $college = $user->{User::REL_COLLEGE};
-
-        return $college ? $college->{Colleges::FIELD_NAME} : '请选择学校';
+        $collegeId = request()->input('college_id');
+        $college = Colleges::query()->find($collegeId);
+        return $college->name;
     }
 
     /**
@@ -90,19 +84,18 @@ class UserController extends Controller
      */
     public function setCollege($id)
     {
-        $user    = request()->input('user');
-
-        $college = Colleges::find($id);
-
-        if ($college) {
+        //$user      = request()->input('user');
+        //$collegeId = request()->input('college_id');
+        //$college = Colleges::find($id);
+       /* if ($college) {
             $userObj                           = User::where(User::FIELD_ID_OPENID, $user->{User::FIELD_ID_OPENID})->first();
-            $userObj->{User::FIELD_ID_COLLEGE} = $id;
+            $userObj->{User::FIELD_ID_COLLEGE} = $collegeId;
             $userObj->save();
         } else {
             throw new ApiException('学校不存在', 5005);
-        }
+        }*/
 
-        return collect($userObj)->toArray();
+        return "";
     }
 
     /**

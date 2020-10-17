@@ -47,13 +47,13 @@ class CommentController extends Controller
     {
         $user         = request()->input('user');
         $objId        = request()->input('obj_id');
+        $collegeId    = request()->input("college_id");
         $content      = request()->input('content');
         $type         = request()->input('type');
         $refCommentId = request()->input('ref_comment_id',null);
         $attachments  = request()->input('attachments',null);
 
         $commenterId  = $user->{User::FIELD_ID};
-        $collegeId    = $user->{User::FIELD_ID_COLLEGE};
         $objData      = $this->comment->getObjUserId($type,$objId);
         $objUserId    = $objData['userId'];
         if(!$objUserId){
