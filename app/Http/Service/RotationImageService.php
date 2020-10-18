@@ -35,7 +35,7 @@ class RotationImageService
     public function listData($appId)
     {
         $list = RotationImageModel::query()
-            ->where(RotationImageModel::FIELD_ID_APP,$appId)
+            //->where(RotationImageModel::FIELD_ID_APP,$appId)
             ->select([
                 RotationImageModel::FIELD_ID,
                 RotationImageModel::FIELD_URL,
