@@ -77,7 +77,7 @@ docker-compose.yml文件
 
 如果想再次启动项目执行docker-compose up -d即可
 
-
+## [宝塔部署传送门](https://github.com/oubingbing/wechatAlliance/blob/master/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2.md "宝塔部署传送门")
 
 ## 手动部署方式
 ### 一、下载后台源码
