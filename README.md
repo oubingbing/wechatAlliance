@@ -254,7 +254,9 @@ Application key [base64:3ZYAJ6R5fzNcQpc1kfEuhMQJZU06HUXt93BS92UK8Pc=] set succes
 
     ALI_ID=
     ALI_SECRET=
-    ALI_URL=
+    //例如：viapiutils.cn-shanghai.aliyuncs.com
+    ALI_ENDPOINT=
+    ALI_ENDPOINT_ID
 
 阿里人脸识别地址：
 

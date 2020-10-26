@@ -169,8 +169,8 @@ class Http
                 'accessKeyId'     => $accessKeyId,
                 'accessKeySecret' => $accessKeySecret,
                 'type'            => 'access_key',
-                'endpoint'        => 'viapiutils.cn-shanghai.aliyuncs.com',
-                'regionId'        => 'cn-shanghai',
+                'endpoint'        => env("ALI_ENDPOINT"),
+                'regionId'        => env("ALI_ENDPOINT_ID"),
             ]);
             $viclient   = new AlibabaCloudSDKViapiutilsV20200401Viapiutils($viConfig);
             $viRequest  = new GetOssStsTokenRequest([]);
