@@ -9,6 +9,22 @@
 namespace App\Http\Service;
 
 
+use AlibabaCloud\Client\AlibabaCloud;
+use AlibabaCloud\Client\Exception\ClientException;
+use AlibabaCloud\Client\Exception\ServerException;
+use AlibabaCloud\SDK\ViapiUtils\ViapiUtils;
+use AlibabaCloud\Tea\Exception\TeaUnableRetryError;
+use AlibabaCloud\SDK\OSS\OSS;
+use AlibabaCloud\SDK\OSS\OSS\PutObjectRequest;
+use AlibabaCloud\SDK\ViapiTool\ViapiTool;
+use AlibabaCloud\SDK\Viapiutils\V20200401\Models\GetOssStsTokenRequest;
+use AlibabaCloud\SDK\Viapiutils\V20200401\Viapiutils as AlibabaCloudSDKViapiutilsV20200401Viapiutils;
+use AlibabaCloud\Tea\Exception\TeaError;
+use AlibabaCloud\Tea\OSSUtils\OSSUtils\RuntimeOptions;
+use AlibabaCloud\Tea\Rpc\Rpc\Config;
+use AlibabaCloud\Tea\Utils\Utils;
+use App\Exceptions\ApiException;
+
 class Http
 {
     /**
@@ -102,57 +118,108 @@ class Http
     {
         $akId     = env('ALI_ID');
         $akSecret = env('ALI_SECRET');
-        $url      = env('ALI_URL');
 
-        $content = [
-            "type"        => $imageType,
-            "image_url_1" => $image1,
-            "image_url_2" => $image2
-        ];
+        $img1 = self::upload($akId, $akSecret, $image1);
+        $img2 = ViapiUtils::upload($akId, $akSecret, $image2);
 
-        $options                    = array(
-            'http'                  => array(
-                'header'            => array(
-                    'accept'        => "application/json",
-                    'content-type'  => "application/json",
-                    'date'          => gmdate("D, d M Y H:i:s \G\M\T"),
-                    'authorization' => ''
-                ),
-                'method'            => "POST",
-                'content'           => json_encode($content) //如有数据，请用json_encode()进行编码
-            )
-        );
-        $http   = $options['http'];
-        $header = $http['header'];
-        $urlObj = parse_url($url);
-        if(empty($urlObj["query"]))
-            $path = $urlObj["path"];
-        else
-            $path = $urlObj["path"]."?".$urlObj["query"];
-        $body     = $http['content'];
-        if(empty($body))
-            $bodymd5 = $body;
-        else
-            $bodymd5  = base64_encode(md5($body,true));
-        $stringToSign = $http['method']."\n".$header['accept']."\n".$bodymd5."\n".$header['content-type']."\n".$header['date']."\n".$path;
-        $signature    = base64_encode(
-            hash_hmac(
-                "sha1",
-                $stringToSign,
-                $akSecret, true));
-        $authHeader = "Dataplus "."$akId".":"."$signature";
-        $options['http']['header']['authorization'] = $authHeader;
-        $options['http']['header'] = implode(
-            array_map(
-                function($key, $val){
-                    return $key.":".$val."\r\n";
-                },
-                array_keys($options['http']['header']),
-                $options['http']['header']));
-        $context = stream_context_create($options);
-        $file = file_get_contents($url, false, $context );
+        AlibabaCloud::accessKeyClient($akId, $akSecret)
+            ->regionId('cn-shanghai')
+            ->asDefaultClient();
 
-        return json_decode($file,true);
+        try {
+            $result = AlibabaCloud::rpc()
+                ->product('facebody')
+                // ->scheme('https') // https | http
+                ->version('2019-12-30')
+                ->action('CompareFace')
+                ->method('POST')
+                ->host('facebody.cn-shanghai.aliyuncs.com')
+                ->options([
+                    'query' => [
+                        'RegionId' => "cn-shanghai",
+                        'ImageURLA' => $img1,
+                        'ImageURLB' => $img2,
+                    ],
+                ])
+                ->request();
+        } catch (ClientException $e) {
+            throw new ApiException("比对出错");
+        } catch (ServerException $e) {
+            throw new ApiException("比对出错");
+        }
+
+        return $result->toArray()["Data"];
+    }
+
+    /**
+     * @param string $accessKeyId
+     * @param string $accessKeySecret
+     * @param string $filePath
+     *
+     * @throws \Exception
+     *
+     * @return string
+     */
+    public static function upload($accessKeyId, $accessKeySecret, $filePath)
+    {
+        $ins = null;
+
+        try {
+            $viConfig = new Config([
+                'accessKeyId'     => $accessKeyId,
+                'accessKeySecret' => $accessKeySecret,
+                'type'            => 'access_key',
+                'endpoint'        => 'viapiutils.cn-shanghai.aliyuncs.com',
+                'regionId'        => 'cn-shanghai',
+            ]);
+            $viclient   = new AlibabaCloudSDKViapiutilsV20200401Viapiutils($viConfig);
+            $viRequest  = new GetOssStsTokenRequest([]);
+            $viResponse = $viclient->getOssStsToken($viRequest);
+            if (Utils::isUnset($viResponse) || Utils::isUnset($viResponse->data)) {
+                throw new TeaError([
+                    'code'    => 'InvalidResponse',
+                    'message' => 'GetOssStsToken gets a invalid response',
+                    'data'    => $viResponse,
+                ]);
+            }
+            $fileName = '';
+            if (ViapiTool::startsWith($filePath, 'https://') || ViapiTool::startsWith($filePath, 'http://')) {
+                $filePath = ViapiTool::decode($filePath, 'UTF-8');
+                $fileName = ViapiTool::match($filePath, '\\w+.(jpg|gif|png|jpeg|bmp|mov|mp4|avi)');
+                if (Utils::empty_($fileName)) {
+                    $fileName = ViapiTool::getNameFromUrl($filePath);
+                    $fileName = ViapiTool::subStringAfterLast($fileName, '/');
+                }
+                $ins = ViapiTool::getStreamFromNet($filePath);
+            } else {
+                $ins      = ViapiTool::getStreamFromPath($filePath);
+                $fileName = ViapiTool::getNameFromPath($filePath);
+            }
+            $ossConfig = new \AlibabaCloud\SDK\OSS\OSS\Config([
+                'accessKeyId'     => $viResponse->data->accessKeyId,
+                'accessKeySecret' => $viResponse->data->accessKeySecret,
+                'securityToken'   => $viResponse->data->securityToken,
+                'type'            => 'sts',
+                'endpoint'        => 'oss-cn-shanghai.aliyuncs.com',
+                'regionId'        => 'cn-shanghai',
+            ]);
+            $ossClient     = new OSS($ossConfig);
+            $objectName    = '' . $accessKeyId . '/' . Utils::getNonce() . '' . $fileName . '';
+            $uploadRequest = new PutObjectRequest([
+                'bucketName' => 'viapi-customer-temp',
+                'body'       => $ins,
+                'objectName' => $objectName
+            ]);
+            $uploadRequest->header = new PutObjectRequest\header();
+            $ossRuntime = new RuntimeOptions([]);
+            $ossClient->putObject($uploadRequest, $ossRuntime);
+
+            return 'http://viapi-customer-temp.oss-cn-shanghai.aliyuncs.com/' . $objectName . '';
+        } finally {
+            if (!Utils::isUnset($ins)) {
+                ViapiTool::close($ins);
+            }
+        }
     }
 
 }

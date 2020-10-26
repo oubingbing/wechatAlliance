@@ -30,6 +30,7 @@ class CompareFaceController extends Controller
         $user     = request()->input('user');
         $yourFace = request()->input('your_face');
         $hisFace  = request()->input('his_face');
+        $collegeId= request()->input("college_id");
 
         if(empty($yourFace) || empty($hisFace)){
             throw new ApiException('照片不能为空',500);
@@ -39,9 +40,9 @@ class CompareFaceController extends Controller
         $compareResult  = app(Http::class)->compareFace($yourFace,$hisFace);
 
         if($compareResult){
-            if($compareResult['errno'] == 0){
-                $emptyRectA = $compareService->checkEmptyRect($compareResult['rectA']);
-                $emptyRectB = $compareService->checkEmptyRect($compareResult['rectB']);
+            if(isset($compareResult['RectAList'])){
+                $emptyRectA = $compareService->checkEmptyRect($compareResult['RectAList']);
+                $emptyRectB = $compareService->checkEmptyRect($compareResult['RectBList']);
 
                 if($emptyRectA){
                     throw new ApiException('图中无人脸！',500);

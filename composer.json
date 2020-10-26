@@ -19,8 +19,8 @@
         "qiniu/php-sdk": "^7.2",
         "sentry/sentry-laravel": "^0.8.0",
         "tymon/jwt-auth": "1.0.0-rc.1",
-        "workerman/gateway-worker": "^3.0",
-        "workerman/gatewayclient": "^3.0"
+        "alibabacloud/facebody": "^1.8",
+        "alibabacloud/viapi-utils": "0.1.2"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
