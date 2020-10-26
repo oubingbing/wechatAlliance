@@ -17,7 +17,7 @@ services:
       - laravel_net
 
   laravel:
-    image: oubingbing/wechat_alliance_fpm:alpine
+    image: oubingbing/wechat_alliance_fpm:fix_ali_face
     restart: always
     networks:
       - laravel_net
@@ -40,6 +40,8 @@ services:
       # 阿里云配置信息
       ALI_ID:
       ALI_SECRET:
+      ALI_ENDPOINT:
+      ALI_ENDPOINT_ID:
       # 发送邮件的配置前往send cloud注册
       SEND_CLOUD_API_USER:
       SEND_CLOUD_APP_KEY:
