@@ -2,6 +2,8 @@
 
 有空帮忙点一下右上角的start，谢谢
 
+如需要部署帮助，联系微信：bingbing_ou
+
 前端源码在这里：https://github.com/oubingbing/school_wechat
 
 ## 项目环境要求
@@ -31,7 +33,7 @@
 
 ### 二、安装docker-compose
 
-如果你的操作系统是window或者mac的，安装docker的时候已经包含在里面两位，无需再单独安装，如果你的是linux系统，需要按照下面的方法安装即可。
+如果你的操作系统是window或者mac的，安装docker的时候已经包含在里面了，无需再单独安装，如果你的是linux系统，需要按照下面的方法安装即可。
 
 在 Linux 上的也安装十分简单，从 官方 GitHub Release 处直接下载编译好的二进制文件即可。
 
