@@ -6,6 +6,10 @@
 
 前端源码在这里：https://github.com/oubingbing/school_wechat
 
+扫码进入体验
+
+![](http://article.qiuhuiyi.cn/Fthvoe308wnXc0vy0IsrY9GKmzx3)
+
 ## 项目环境要求
 
     PHP 7.0以上
