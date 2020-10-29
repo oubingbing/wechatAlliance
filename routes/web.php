@@ -24,3 +24,9 @@ Route::get('send','IM\IndexController@sendSocket');
 Route::get('/home', function () {
     return view('gateway.home');
 });
+
+Route::post('/hook', function () {
+    $data = request()->input();
+    \Illuminate\Contracts\Logging\Log::info($data);
+    return "ok";
+});
