@@ -27,6 +27,7 @@ Route::get('/home', function () {
 
 Route::post('/hook', function () {
     $data = request()->input();
+    //
     \Illuminate\Contracts\Logging\Log::info($data);
     return "ok";
 });
