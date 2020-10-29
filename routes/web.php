@@ -28,7 +28,7 @@ Route::get('/home', function () {
 
 Route::post('/hook', function () {
     $data = request()->input();
-    //测试
+    //测试部署
     Log::info($data);
     $result = system("/var/www/wechatAlliance/deploy.sh");
     Log::info("执行结果：".$result);
