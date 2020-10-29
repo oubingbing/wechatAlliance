@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\Chat;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 
@@ -28,6 +29,6 @@ Route::get('/home', function () {
 Route::post('/hook', function () {
     $data = request()->input();
     //测试test
-    \Illuminate\Contracts\Logging\Log::info($data);
+    Log::info($data);
     return "ok";
 });
