@@ -30,5 +30,6 @@ Route::post('/hook', function () {
     $data = request()->input();
     //测试
     Log::info($data);
+    system("/var/www/wechatAlliance");
     return "ok";
 });
