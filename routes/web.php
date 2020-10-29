@@ -27,7 +27,7 @@ Route::get('/home', function () {
 
 Route::post('/hook', function () {
     $data = request()->input();
-    //
+    //测试
     \Illuminate\Contracts\Logging\Log::info($data);
     return "ok";
 });
