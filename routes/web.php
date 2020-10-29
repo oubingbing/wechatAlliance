@@ -25,9 +25,9 @@ Route::get('/home', function () {
     return view('gateway.home');
 });
 
-Route::any('/hook', function () {
+Route::post('/hook', function () {
     $data = request()->input();
-    //测试
+    //测试test
     \Illuminate\Contracts\Logging\Log::info($data);
     return "ok";
 });
