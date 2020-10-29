@@ -28,7 +28,7 @@ Route::get('/home', function () {
 
 Route::post('/hook', function () {
     $data = request()->input();
-    //测试test
+    //测试
     Log::info($data);
     return "ok";
 });
