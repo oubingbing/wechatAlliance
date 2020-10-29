@@ -30,6 +30,6 @@ Route::post('/hook', function () {
     $data = request()->input();
     //测试自动更新
     Log::info($data);
-    system("/var/www/wechatAlliance");
+    system("/var/www/wechatAlliance/deploy.sh");
     return "ok";
 });
