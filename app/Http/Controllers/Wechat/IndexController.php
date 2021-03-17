@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Wechat;
+namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;

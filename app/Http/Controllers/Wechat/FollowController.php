@@ -6,7 +6,7 @@
  * Time: 下午8:04
  */
 
-namespace App\Http\Wechat;
+namespace App\Http\Controllers\Wechat;
 
 
 use App\Http\Controllers\Controller;

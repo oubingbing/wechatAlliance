@@ -6,7 +6,7 @@
  * Time: 14:25
  */
 
-namespace App\Http\Wechat;
+namespace App\Http\Controllers\Wechat;
 
 
 use App\Http\Controllers\Controller;

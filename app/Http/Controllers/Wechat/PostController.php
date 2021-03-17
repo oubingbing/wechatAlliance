@@ -6,7 +6,7 @@
  * Time: 下午6:16
  */
 
-namespace App\Http\Wechat;
+namespace App\Http\Controllers\Wechat;
 
 
 use App\Exceptions\ApiException;
