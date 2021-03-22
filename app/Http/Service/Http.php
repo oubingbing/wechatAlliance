@@ -143,9 +143,9 @@ class Http
                 ])
                 ->request();
         } catch (ClientException $e) {
-            throw new ApiException("比对出错");
+            throw new ApiException("请上传含人脸的正常图片");
         } catch (ServerException $e) {
-            throw new ApiException("比对出错");
+            throw new ApiException("请上传含人脸的正常图片");
         }
 
         return $result->toArray()["Data"];

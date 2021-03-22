@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "43cc7c5d1fd529d90417dcfa90d8e0ac",
+    "content-hash": "f1056adcc45f514b1129d27f11be1710",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -688,16 +688,16 @@
         },
         {
             "name": "alibabacloud/viapi-utils",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alibabacloud-sdk-php/viapi-utils.git",
-                "reference": "b29758b604f1f73adcc6f4a7240408587174b413"
+                "reference": "7a3c788ca17d7769d7fab704bdc2f6b13eb4b746"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alibabacloud-sdk-php/viapi-utils/zipball/b29758b604f1f73adcc6f4a7240408587174b413",
-                "reference": "b29758b604f1f73adcc6f4a7240408587174b413",
+                "url": "https://api.github.com/repos/alibabacloud-sdk-php/viapi-utils/zipball/7a3c788ca17d7769d7fab704bdc2f6b13eb4b746",
+                "reference": "7a3c788ca17d7769d7fab704bdc2f6b13eb4b746",
                 "shasum": ""
             },
             "require": {
@@ -726,7 +726,7 @@
                 }
             ],
             "description": "Alibaba Cloud Viapi Utils Library for PHP",
-            "time": "2020-05-26T06:07:26+00:00"
+            "time": "2020-05-28T07:46:59+00:00"
         },
         {
             "name": "alibabacloud/viapiutils-20200401",
@@ -3355,12 +3355,12 @@
             "version": "4.2.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/overtrue/wechat.git",
+                "url": "https://github.com/w7corp/easywechat.git",
                 "reference": "853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/wechat/zipball/853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf",
+                "url": "https://api.github.com/repos/w7corp/easywechat/zipball/853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf",
                 "reference": "853e0772e6aa53a71edf1b5d251c7ff1e6b2a2bf",
                 "shasum": ""
             },
@@ -6488,12 +6488,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
