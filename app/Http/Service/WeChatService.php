@@ -39,6 +39,7 @@ class WeChatService
         $userInfo = $this->decryptData($encryptedData,$iv,$sessionKey);
         $userInfo = json_decode($userInfo,true);
         $userInfo["app_id"] = $weChatApp->id;
+        $userInfo["openId"] = $result['openid'];
 
         return $userInfo;
     }
