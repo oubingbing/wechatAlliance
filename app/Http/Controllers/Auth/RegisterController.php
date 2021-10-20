@@ -36,12 +36,12 @@ class RegisterController extends Controller
             throw new WebException($exception);
         }
 
-        if($result){
+        /*if($result){
             $content = "您好，请点击链接激活您的小情书账号,".env('APP_URL')."/active?token={$result->{Admin::FIELD_ACTIVE_TOKEN}}";
             app(EmailService::class)->sendRegisterEmail($request->input('email'),$content);
-        }
+        }*/
 
-        return webResponse('注册成功,请登录您的邮箱激活账号',201,$result);
+        return webResponse('注册成功',201,$result);
     }
 
     public function createAdmin($username,$email,$password)
