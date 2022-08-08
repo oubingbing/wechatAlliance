@@ -18,9 +18,8 @@
     
     MySQL 5.7
 
-## [宝塔部署] （推荐） (https://github.com/oubingbing/wechatAlliance/blob/master/bt.md "宝塔部署")
+## [宝塔部署（推荐）](https://github.com/oubingbing/wechatAlliance/blob/master/bt.md "宝塔部署（推荐）")
 
-## [手动部署] (https://github.com/oubingbing/wechatAlliance/blob/master/manual.md "手动部署")
+## [手动部署](https://github.com/oubingbing/wechatAlliance/blob/master/manual.md "手动部署")
 
-## [docker部署] (https://github.com/oubingbing/wechatAlliance/blob/master/docker.md "docker部署")
-
+## [docker部署](https://github.com/oubingbing/wechatAlliance/blob/master/docker.md "docker部署")
