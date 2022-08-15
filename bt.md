@@ -174,11 +174,9 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   `$php artisan jwt:secret`
 
-- 生成数据库表
+- 导入数据库表
 
-  在项目根目录（即上文xiaoqingshu目录）运行一下命令
-
-  `$php artisan migrate`
+  在项目根目录上有一个love_wall.sql的文件，导入自己的数据库中即可
 
 ### 常见问题
 
