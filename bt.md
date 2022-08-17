@@ -182,6 +182,28 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
 ##### 如果您的站点搭建完成后，访问站点跑不起来的话，可以参考以下解决方案。
 
+- 执行composer install提示 putenv() has been disabled for security reasons
+
+  只需要找到您的php.ini文件，在里面找到putenv()然后将其删掉即可
+
+- 执行composer install提示fileinfo扩展问题
+
+  问题如下图
+
+  ![](http://article.qiuhuiyi.cn/FnmFXPqfF-Hqh1a5E5i0csx0NLZU)
+
+  1、找到您的php.ini文件，将;extension=fileinfo前面的冒号删除保存即可
+
+  2、安装fileinfo扩展，找到您安装使用的对应的php版本进行安装fileinfo扩展，宝塔操作如下
+
+  ![](http://article.qiuhuiyi.cn/FtPXFqdElHUqhN2IJwGpdRgj1jFd)
+
+  等待扩展安装完成即可
+
+- 执行composer install提示he Process class relies on proc_open, which is not available on your PHP installation.
+
+  找到您的php.ini文件，在里面找到proc_open()删除即可
+
 - 访问站点提示 HTTP ERROR 500 该网页无法正常运作
 
   这是由于项目目录下的 /storage 目录没有读写权限，项目日志没法写入导致的，只需要给该目录读写权限即可，可以登录终端进入项目目录下，执行以下命令后就能正常访问了
