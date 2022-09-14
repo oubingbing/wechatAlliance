@@ -70,6 +70,10 @@ class SaleFriendController extends Controller
             $major = "无";
         }
 
+        if(empty($expectation)){
+            $expectation = "无";
+        }
+
         $validator = \Validator::make(request()->input(), $rule,$messages);
         if ($validator->fails()) {
             $messages = $validator->errors();
