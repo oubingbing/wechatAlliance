@@ -100,9 +100,9 @@ class AppController extends Controller
         ])->get((integer)$app->{WechatApp::FIELD_STATUS});
 
         $app->college = Colleges::query()->where(Colleges::FIELD_ID,$app->{WechatApp::FIELD_ID_COLLEGE})->value(Colleges::FIELD_NAME);
-        if($app->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
-            $app->{WechatApp::FIELD_ALLIANCE_KEY} = '';
-        }
+        // if($app->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+        //     $app->{WechatApp::FIELD_ALLIANCE_KEY} = '';
+        // }
         
         $app->{WechatApp::FIELD_DOMAIN} = env("APP_URL");
 
