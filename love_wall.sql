@@ -92,7 +92,7 @@ CREATE TABLE `apps`  (
   `domain` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '小程序的接口域名',
   `mobile` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '联系人手机号码',
   `college_id` bigint(20) NULL DEFAULT NULL COMMENT '学校',
-  `status` tinyint(4) NOT NULL DEFAULT 2 COMMENT '小程序的状态，1=正常，2=非法',
+  `status` tinyint(4) NOT NULL DEFAULT 2 COMMENT '小程序内容安全，1=开启，2=关闭',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,

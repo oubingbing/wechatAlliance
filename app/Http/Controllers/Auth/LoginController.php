@@ -109,7 +109,7 @@ class LoginController extends Controller
         }
 
         if($weChatApp->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
-            throw new ApiException('小程序处于审核中，无法使用后台服务！',6001);
+            //throw new ApiException('小程序处于审核中，无法使用后台服务！',6001);
         }
 
         $weChatAppId = $weChatApp->{WechatApp::FIELD_APP_KEY};
