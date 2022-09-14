@@ -12,14 +12,13 @@ namespace App\Http\Controllers\Wechat;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
-use App\Http\Service\PaginateService;
 use App\Http\Service\PostService;
 use App\Http\Service\SendMessageService;
 use App\Models\MessageSession;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\WechatApp;
 use League\Flysystem\Exception;
+use App\Models\WechatApp;
 
 class PostController extends Controller
 {
@@ -55,12 +54,19 @@ class PostController extends Controller
                 throw new ApiException('内容不能为空', 6000);
             }
 
-            if(!empty($content)){
-                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
+            $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+            if(!$app){
+                return webResponse('应用不存在！',500);
             }
 
-            if(!empty($imageUrls)){
-                app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls);
+            if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+                if(!empty($content)){
+                    app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
+                }
+    
+                if(!empty($imageUrls)){
+                    app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls);
+                }
             }
 
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);

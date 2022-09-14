@@ -13,16 +13,14 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\CommentService;
-use App\Http\Service\Http;
 use App\Http\Service\InboxService;
-use App\Http\Service\TokenService;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Client;
+use App\Models\WechatApp;
 
 class CommentController extends Controller
 {
@@ -60,7 +58,14 @@ class CommentController extends Controller
             throw new ApiException('对象不存在',404);
         }
 
-        app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
+        $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
+        }
 
         $fromId = $user->id;
 

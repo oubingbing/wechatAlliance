@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\ChatService;
 use App\Http\Service\FriendService;
 use App\Http\Service\InboxService;
-use App\Http\Service\PaginateService;
 use App\Models\ChatMessage;
 use App\Models\Inbox;
 use Carbon\Carbon;

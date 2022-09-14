@@ -124,9 +124,9 @@ class AppController extends Controller
             return webResponse('应用不存在！',500);
         }
 
-        if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_ON_LINE){
-            return webResponse('小程序当前状态不是正常模式，无法切换到审核模式',500);
-        }
+        // if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_ON_LINE){
+        //     return webResponse('小程序当前状态不是正常模式，无法切换到审核模式',500);
+        // }
         try{
             \DB::beginTransaction();
 
@@ -138,12 +138,12 @@ class AppController extends Controller
             }
 
             $result = $appService->WeChatAuditModel($app->{WechatApp::FIELD_ID});
-            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_ON_LINE){
                 \DB::commit();
-                return webResponse('开启微信审核模式成功！',200);
+                return webResponse('操作成功！',200);
             }else{
                 \DB::commit();
-                return webResponse('开启微信审核模式失败！',500);
+                return webResponse('操作失败！',500);
             }
 
         }catch (\Exception $e){
@@ -153,7 +153,7 @@ class AppController extends Controller
     }
 
     /**
-     * 恢复正常状态
+     * 关闭内容审核
      *
      * @author yezi
      *
@@ -167,9 +167,9 @@ class AppController extends Controller
             return webResponse('应用不存在！',500);
         }
 
-        if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
-            return webResponse('小程序当前状态不是审核模式，无法切换到正常模式',500);
-        }
+        // if($app->{WechatApp::FIELD_STATUS} != WechatApp::ENUM_STATUS_WE_CHAT_AUDIT){
+        //     return webResponse('小程序当前状态不是审核模式，无法切换到正常模式',500);
+        // }
 
         $appService = app(AppService::class);
 
@@ -182,12 +182,12 @@ class AppController extends Controller
             }
 
             $result = $appService->onlineModel($app->{WechatApp::FIELD_ID});
-            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_ON_LINE){
+            if($result->{WechatApp::FIELD_STATUS} === WechatApp::ENUM_STATUS_TO_BE_AUDIT){
                 \DB::commit();
-                return webResponse('恢复正常状态成功！',200);
+                return webResponse('操作成功！',200);
             }else{
                 \DB::commit();
-                return webResponse('恢复成长状态失败！',500);
+                return webResponse('操作失败！',500);
             }
 
         }catch (\Exception $e){

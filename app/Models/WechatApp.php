@@ -47,9 +47,9 @@ class WechatApp extends BaseModel
     /** Field status 小程序状态 */
     const FIELD_STATUS = 'status';
 
-    /** status 待审核 */
+    /** status 开启内容审核 */
     const ENUM_STATUS_TO_BE_AUDIT = 1;
-    /** status 正常上线*/
+    /** status 关闭内容审核*/
     const ENUM_STATUS_ON_LINE = 2;
     /** status 微信审核中 */
     const ENUM_STATUS_WE_CHAT_AUDIT = 3;

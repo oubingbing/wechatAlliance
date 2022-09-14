@@ -11,12 +11,9 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
-use App\Http\Service\PaginateService;
 use App\Http\Service\StepTravelService;
 use App\Http\Service\TravelService;
 use App\Models\RunStep;
-use App\Models\TravelLog;
-use App\Models\TravelPlan;
 use Carbon\Carbon;
 
 class TravelController extends Controller

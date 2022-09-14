@@ -12,7 +12,6 @@ namespace App\Http\Controllers\Wechat;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\CommentService;
-use App\Http\Service\PaginateService;
 use App\Models\Comment;
 use App\Models\Topic;
 use App\Models\User;
