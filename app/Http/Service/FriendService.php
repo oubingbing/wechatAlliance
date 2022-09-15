@@ -58,7 +58,7 @@ class FriendService
      */
     public function friends($userId)
     {
-        $friends = Friend::query()->with(['friend'])->where(Friend::FIELD_ID_USER,$userId)->get();
+        $friends = Friend::query()->with(['friend'])->where(Friend::FIELD_ID_USER,$userId)->orderBy("id","desc")->get();
 
         return $friends;
     }
