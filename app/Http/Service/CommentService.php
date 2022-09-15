@@ -153,11 +153,17 @@ class CommentService
             }
         }
 
+        $supertube = 0;
+        if($commenter->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
+            $supertube = 1;
+        }
+
         $comment['commenter'] = [
             'id'       => $commenter->{User::FIELD_ID},
             'nickname' => $nickname,
             'avatar'   => $commenter->{User::FIELD_AVATAR},
-            'text'     => $comment[ Comment::FIELD_CONTENT ]
+            'text'     => $comment[ Comment::FIELD_CONTENT ],
+            'supertube'=> $supertube
         ];
 
         if ($comment[ Comment::FIELD_ID_REF_COMMENT ]) {
