@@ -138,13 +138,17 @@ class CommentService
         }
 
         $nickname = $commenter->{User::FIELD_NICKNAME};
+        $comment['author'] = 0;
 
         if($obj){
             if(isset($obj['private'])){
-                if($obj['private'] == 1){
-                    if($comment['commenter_id'] == $obj['poster_id']){
-                        $nickname = '楼主';
-                    }
+                // if($obj['private'] == 1){
+                //     if($comment['commenter_id'] == $obj['poster_id']){
+                //         $nickname = '楼主';
+                //     }
+                // }
+                if($comment['commenter_id'] == $obj['poster_id']){
+                    $comment['author'] = 1;
                 }
             }
         }
