@@ -141,15 +141,8 @@ class CommentService
         $comment['author'] = 0;
 
         if($obj){
-            if(isset($obj['private'])){
-                // if($obj['private'] == 1){
-                //     if($comment['commenter_id'] == $obj['poster_id']){
-                //         $nickname = '楼主';
-                //     }
-                // }
-                if($comment['commenter_id'] == $obj['poster_id']){
-                    $comment['author'] = 1;
-                }
+            if($comment['commenter_id'] == $obj['poster_id']){
+                $comment['author'] = 1;
             }
         }
 
@@ -169,16 +162,13 @@ class CommentService
         if ($comment[ Comment::FIELD_ID_REF_COMMENT ]) {
             $refComment = Comment::withTrashed()->find($comment[ Comment::FIELD_ID_REF_COMMENT ]);
             if ($refComment) {
-                $refComment->refCommenter = User::where(User::FIELD_ID, $refComment->{Comment::FIELD_ID_COMMENTER})->select('id', 'nickname', 'avatar')->first();
+                $refComment->refCommenter = User::where(User::FIELD_ID, $refComment->{Comment::FIELD_ID_COMMENTER})->select('id', 'nickname', 'avatar','type')->first();
 
+                $refComment->refCommenter->admin = 0;
                 if($refComment->refCommenter){
                     if($obj){
-                        if(isset($obj['private'])){
-                            if($obj['private'] == 1){
-                                if($refComment->refCommenter->id == $obj['poster_id']){
-                                    $refComment->refCommenter->nickname = '楼主';
-                                }
-                            }
+                        if($refComment->refCommenter->id == $obj['poster_id']){
+                            $refComment->refCommenter->admin = 1;
                         }
                     }
                 }
