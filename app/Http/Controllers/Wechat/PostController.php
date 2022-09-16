@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\PostService;
 use App\Http\Service\SendMessageService;
+use App\Http\Service\UserService;
 use App\Models\MessageSession;
 use App\Models\Post;
 use App\Models\User;
@@ -70,6 +71,9 @@ class PostController extends Controller
             }
 
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);
+            if($result){
+                app(UserService::class)->AddActivityValue($user->id,1);
+            }
 
             if($mobile){
                 $checkMobile = validMobile($mobile);

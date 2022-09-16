@@ -71,6 +71,9 @@ class User extends Authenticatable implements JWTSubject
     /** field deleted_at */
     const FIELD_DELETED_AT = 'deleted_at';
 
+    /** field active_value */
+    const FIELD_ACTIVE_VALUE = 'active_value';
+
     /** 微信用户 */
     const ENUM_TYPE_WE_CHAT_USER = 1;
     /** 超级管理员 */
@@ -113,7 +116,8 @@ class User extends Authenticatable implements JWTSubject
         self::FIELD_PROVINCE,
         self::FIELD_TYPE,
         self::FIELD_STATUS,
-        self::FIELD_ID_COLLEGE
+        self::FIELD_ID_COLLEGE,
+        self::FIELD_ACTIVE_VALUE
     ];
 
     /**

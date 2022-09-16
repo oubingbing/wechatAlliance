@@ -13,6 +13,7 @@ use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\InboxService;
 use App\Http\Service\PraiseService;
+use App\Http\Service\UserService;
 use App\Models\Inbox;
 use App\Models\User;
 use Carbon\Carbon;
@@ -70,6 +71,8 @@ class PraiseController extends Controller
             $this->inbox->send($fromId,$toId,$result->id,$content,$type,$actionType,$postAt);
 
             app(PraiseService::class)->incrementNumber($objType,$objId);
+
+            app(UserService::class)->AddActivityValue($user->id,1);
 
             \DB::commit();
         }catch (Exception $e){

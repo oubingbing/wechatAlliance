@@ -142,6 +142,42 @@ class UserService
     }
 
     /**
+     * 获取用户资料
+     *
+     * @author yezi
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function AddActivityValue($userId,$num)
+    {
+        $user = User::find($userId);
+        if(!$user){
+            return 0;
+        }
+
+        $user->{User::FIELD_ACTIVE_VALUE} += $num;
+        $result = $user->save();
+        if(!$result){
+            return 0;
+        }
+
+        return $user->{User::FIELD_ACTIVE_VALUE};
+    }
+
+    public static function getStar($num)
+    {
+        $level = [1000=>8,500=>7,300=>6,100=>5,50=>4,20=>3,10=>2,0=>1];
+        foreach($level as $key => $value){
+            if($num >= $key){
+                return $value;
+            }
+        }
+
+        return 1;
+    }
+
+    /**
      * 获取个人资料
      *
      * @author yezi

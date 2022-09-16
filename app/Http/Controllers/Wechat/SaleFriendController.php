@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\PaginateService;
 use App\Http\Service\SaleFriendService;
+use App\Http\Service\UserService;
 use App\Models\SaleFriend;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -117,6 +118,8 @@ class SaleFriendController extends Controller
         }
 
         $result = $this->saleFriendLogic->save($user->id,$name,$gender,$major,$expectation,$introduce,$attachments,$user->{User::FIELD_ID_COLLEGE});
+
+        app(UserService::class)->AddActivityValue($user->id,1);
 
         return $result;
     }

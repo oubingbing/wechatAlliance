@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\CommentService;
 use App\Http\Service\InboxService;
+use App\Http\Service\UserService;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\Post;
@@ -103,6 +104,8 @@ class CommentController extends Controller
             }
 
             $this->comment->incrementComment($type,$objId);
+
+            app(UserService::class)->AddActivityValue($user->id,1);
 
             \DB::commit();
         }catch (Exception $e){
