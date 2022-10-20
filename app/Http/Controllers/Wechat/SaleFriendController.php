@@ -215,7 +215,8 @@ class SaleFriendController extends Controller
             SaleFriend::FIELD_ID,
             SaleFriend::FIELD_ATTACHMENTS,
             SaleFriend::FIELD_ID_OWNER,
-            SaleFriend::FIELD_COMMENT_NUMBER
+            SaleFriend::FIELD_COMMENT_NUMBER,
+            SaleFriend::FIELD_INTRODUCE
         ];
 
         $qiNiuDomain = env('QI_NIU_DOMAIN');
