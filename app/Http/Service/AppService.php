@@ -119,6 +119,11 @@ class AppService
         return $result;
     }
 
+    public function getById($id)
+    {
+        return WechatApp::query()->where(WechatApp::FIELD_ID,$id)->first();
+    }
+
     public function getAppIdByCode($akey)
     {
         return WechatApp::query()->where(WechatApp::FIELD_ALLIANCE_KEY,$akey)->first();
@@ -134,7 +139,7 @@ class AppService
      */
     public function WeChatAuditModel($appId)
     {
-        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_WE_CHAT_AUDIT);
+        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_ON_LINE);
 
         return $result;
     }
@@ -149,7 +154,7 @@ class AppService
      */
     public function onlineModel($appId)
     {
-        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_ON_LINE);
+        $result = $this->updateStatus($appId,WechatApp::ENUM_STATUS_TO_BE_AUDIT);
 
         return $result;
     }
@@ -197,13 +202,14 @@ class AppService
      */
     public function canSwitchModel($app)
     {
-        $status = $app->{WechatApp::FIELD_STATUS};
-        if($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT || $status === WechatApp::ENUM_STATUS_CLOSED){
-            $errorString = ($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT?'应用未审核通过，不允许切换模式！':'应用处于下线状态，不允许切换模式！');
-            return ['status'=>false,'message'=>$errorString];
-        }else{
-            return ['status'=>true,'message'=>'ok'];
-        }
+        return ['status'=>true,'message'=>'ok'];
+        // $status = $app->{WechatApp::FIELD_STATUS};
+        // if($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT || $status === WechatApp::ENUM_STATUS_CLOSED){
+        //     $errorString = ($status === WechatApp::ENUM_STATUS_TO_BE_AUDIT?'应用未审核通过，不允许切换模式！':'应用处于下线状态，不允许切换模式！');
+        //     return ['status'=>false,'message'=>$errorString];
+        // }else{
+        //     return ['status'=>true,'message'=>'ok'];
+        // }
     }
 
     public function getTemplateByAppId($appId)

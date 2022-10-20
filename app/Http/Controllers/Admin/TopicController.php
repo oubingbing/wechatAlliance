@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Service\PaginateService;
 use App\Http\Service\TopicService;
 use App\Models\Topic;
 

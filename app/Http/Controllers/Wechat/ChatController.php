@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AppService;
 use App\Http\Service\ChatService;
 use App\Http\Service\FriendService;
 use App\Http\Service\InboxService;
-use App\Http\Service\PaginateService;
 use App\Models\ChatMessage;
 use App\Models\Inbox;
+use App\Models\User;
+use App\Models\WechatApp;
 use Carbon\Carbon;
 use League\Flysystem\Exception;
 
@@ -51,6 +53,22 @@ class ChatController extends Controller
                 $this->friend->createFriend($userId,$friendId);
                 $this->friend->createFriend($friendId,$userId);
             }
+
+            $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+            if(!$app){
+                return webResponse('应用不存在！',500);
+            }
+
+            if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+                if(!empty($content)){
+                    app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$content);
+                }
+    
+                if(!empty($attachments)){
+                    app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$attachments);
+                }
+            }
+
 
             $result = $this->chat->sendMessage($userId,$friendId,$content,$attachments,$type,$postAt);
             $result = $this->chat->format($result);

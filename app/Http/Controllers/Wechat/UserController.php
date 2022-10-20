@@ -12,7 +12,6 @@ use App\Models\Colleges;
 use App\Models\User;
 use App\Models\WechatApp;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller
 {

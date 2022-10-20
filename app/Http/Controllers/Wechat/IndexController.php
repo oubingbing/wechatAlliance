@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\PostService;
 use App\Http\Service\SaleFriendService;
 use App\Http\Service\YunPianService;
-use App\Models\SaleFriend;
 use App\Models\User;
 use App\Models\WechatApp;
 use Illuminate\Support\Facades\DB;

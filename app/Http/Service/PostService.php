@@ -70,7 +70,7 @@ class PostService
     public function builder($user, $type, $just)
     {
         $this->builder = Post::query()->with(['poster'=>function($query){
-            $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER,User::FIELD_CREATED_AT);
+            $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER,User::FIELD_CREATED_AT,User::FIELD_TYPE,User::FIELD_ACTIVE_VALUE);
         }, 'praises', 'comments'])
             ->whereHas(Post::REL_USER,function ($query)use($user){
                 $query->where(User::FIELD_ID_APP,$user->{User::FIELD_ID_APP});
@@ -220,12 +220,19 @@ class PostService
                 $post['can_chat']   = true;
             }
 
+            $post['supertube'] = 0;
+            if($post["poster"]["type"] == User::ENUM_TYPE_SUPERVISE){
+                $post['supertube'] = 1;
+            }
+
             if($post['can_delete'] == false){
                 //是否是超管
                 if($user->{User::FIELD_TYPE} == User::ENUM_TYPE_SUPERVISE){
                     $post['can_delete'] = true;
                 }
             }
+
+            $post['poster']["star"] = UserService::getStar($post['poster']["active_value"]);
         }
 
         return $post;

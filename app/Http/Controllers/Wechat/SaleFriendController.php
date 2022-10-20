@@ -14,9 +14,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Service\AppService;
 use App\Http\Service\PaginateService;
 use App\Http\Service\SaleFriendService;
+use App\Http\Service\UserService;
 use App\Models\SaleFriend;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\WechatApp;
 
 class SaleFriendController extends Controller
 {
@@ -80,21 +82,29 @@ class SaleFriendController extends Controller
             throw new ApiException($messages->first(), 60001);
         }
 
-        if(!empty($expectation)){
-            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$expectation);
-        }
-        if(!empty($major)){
-            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$major);
-        }
-        if(!empty($name)){
-            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$name);
-        }
-        if(!empty($introduce)){
-            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$introduce);
+
+        $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+        if(!$app){
+            return webResponse('应用不存在！',500);
         }
 
-        if(!empty($attachments)){
-            app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$attachments);
+        if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            if(!empty($expectation)){
+                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$expectation);
+            }
+            if(!empty($major)){
+                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$major);
+            }
+            if(!empty($name)){
+                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$name);
+            }
+            if(!empty($introduce)){
+                app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$introduce);
+            }
+    
+            if(!empty($attachments)){
+                app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$attachments);
+            }
         }
 
         $qiNiuDomain = env('QI_NIU_DOMAIN');
@@ -108,6 +118,8 @@ class SaleFriendController extends Controller
         }
 
         $result = $this->saleFriendLogic->save($user->id,$name,$gender,$major,$expectation,$introduce,$attachments,$user->{User::FIELD_ID_COLLEGE});
+
+        app(UserService::class)->AddActivityValue($user->id,1);
 
         return $result;
     }

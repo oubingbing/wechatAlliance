@@ -67,7 +67,8 @@
                     <tr>
                         <th>状态</th>
                         <td style="color: orangered">
-                            @{{ app_status_string }} <!--<button class="layui-btn" v-if="open_audit_status" v-on:click="openAudit">开启审核模式</button><button class="layui-btn layui-btn-danger" v-if="close_audit_status" v-on:click="closeAudit">关闭审核模式</button>-->
+                           <button class="layui-btn" v-if="open_audit_status" v-on:click="openAudit">关闭内容审核（已开启内容审核）</button>
+                           <button class="layui-btn layui-btn-danger" v-if="close_audit_status" v-on:click="closeAudit">开启内容审核（已关闭内容审核）</button>
                         </td></tr>
                     <tr>
                         <th>alliance_key</th>
@@ -232,12 +233,12 @@
                             this.college = res.data.college;
                             this.attachments = res.data.attachments;
 
-                            if(res.data.status === 2){
+                            if(res.data.status === 1){
                                 this.open_audit_status = true;
+                                this.close_audit_status = false;
                             }else{
-                                if(res.data.status === 3) {
-                                    this.close_audit_status = true;
-                                }
+                                this.open_audit_status = false;
+                                this.close_audit_status = true;
                             }
 
                         }else{
@@ -254,7 +255,7 @@
                             layer.msg(res.error_message);
                             this.open_audit_status = false;
                             this.close_audit_status = true;
-                            this.app_status_string = '微信审核中';
+                            //this.app_status_string = '微信审核中';
                         }else{
                             layer.msg(res.error_message);
                         }
@@ -269,7 +270,7 @@
                             layer.msg(res.error_message);
                             this.open_audit_status = true;
                             this.close_audit_status = false;
-                            this.app_status_string = '运行中';
+                            //this.app_status_string = '运行中';
                         }else{
                             layer.msg(res.error_message);
                         }
