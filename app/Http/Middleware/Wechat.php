@@ -19,18 +19,17 @@ class Wechat extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
-        \Log::info($request->url());
         if(!$request->isMethod('get')){
             try {
                 if (! $user = JWTAuth::parseToken()->authenticate()) {
                     throw new ApiException('请登录后再操作',5000);
                 }
             } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-                throw new ApiException('认证过期,请重新登录',5000);
+                throw new ApiException('登录已过期,请重新登录',5000);
             } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-                throw new ApiException('认证非法,请先登录',5000);
+                throw new ApiException('录已过期,请重新登录',5000);
             } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-                throw new ApiException('认证缺失，请先登录',5000);
+                throw new ApiException('录已过期,请重新登录',5000);
             }
 
             if(!$request->isMethod('get')){

@@ -12,6 +12,7 @@ namespace App\Http\Service;
 use App\Exceptions\ApiException;
 use App\Models\WechatApp;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class WeChatService
 {
@@ -34,6 +35,10 @@ class WeChatService
         if(!isset($result['openid'])){
             throw new ApiException('小程序登录失败，请检查您的app_id和app_secret是否正确！',5000);
         }
+
+        
+        Log::info((string) $response->getBody());
+        
 
         $sessionKey = $result["session_key"];
         $userInfo = $this->decryptData($encryptedData,$iv,$sessionKey);
@@ -72,11 +77,11 @@ class WeChatService
         $dataObj=json_decode( $result );
         if( $dataObj  == NULL )
         {
-            throw new ApiException("解密失败",5000);
+            throw new ApiException("登录失败，请稍后重试",5000);
         }
         if( $dataObj->watermark->appid != $this->appKey )
         {
-            throw new ApiException("解密失败",5000);
+            throw new ApiException("登录失败，请稍后重试",5000);
         }
         $data = $result;
         return $data;
