@@ -209,3 +209,6 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
   这是由于项目目录下的 /storage 目录没有读写权限，项目日志没法写入导致的，只需要给该目录读写权限即可，可以登录终端进入项目目录下，执行以下命令后就能正常访问了
 
   `sudo chmod -R 755 ./storage/`
+
+- 确认.env配置参数JWT_SECRET
+  有些部署成功了但是在登录的时候出现问题，可能是.env配置文件中JWT_SECRET参数未配置，该参数为jwt的加密串，执行命令php artisan jwt:secret即可生成。
