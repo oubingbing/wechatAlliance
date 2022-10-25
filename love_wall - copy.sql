@@ -848,7 +848,6 @@ CREATE TABLE `users`  (
   `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '用户类型',
   `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '用户状态',
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `active_value` int(11) NOT NULL DEFAULT 0 COMMENT '活跃度',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,

@@ -156,13 +156,12 @@ class UserService
             return 0;
         }
 
-        $user->{User::FIELD_ACTIVE_VALUE} += $num;
         $result = $user->save();
         if(!$result){
             return 0;
         }
 
-        return $user->{User::FIELD_ACTIVE_VALUE};
+        return 0;
     }
 
     public static function getStar($num)
