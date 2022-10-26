@@ -28,6 +28,18 @@ class Follow extends BaseModel
     /** Field status 关注的状态 */
     const FIELD_STATUS = 'status';
 
+    /** Field follow_nickname 关注的状态 */
+    const FIELD_FOLLOW_NICKNAME = 'follow_nickname';
+
+    /** Field follow_avatar 关注的状态 */
+    const FIELD_FOLLOW_AVATAR = 'follow_avatar';
+
+    /** Field be_follow_nickname 关注的状态 */
+    const FIELD_BE_FOLLOW_NICKNAME = 'be_follow_nickname';
+
+    /** Field be_follow_avatar 关注的状态 */
+    const FIELD_BE_FOLLOW_AVATAR = 'be_follow_avatar';
+
     /** 关注状态-已关注 */
     const ENUM_STATUS_FOLLOW = 1;
     /** 关注状态-取消关注 */
@@ -41,13 +53,19 @@ class Follow extends BaseModel
     const ENUM_OBJ_TYPE_MATCH_LOVE = 3;
     /** obj_type 评论 */
     const ENUM_OBJ_TYPE_COMMENT = 4;
+    /** obj_type 用户 */
+    const ENUM_OBJ_TYPE_USER = 5;
 
     protected $fillable = [
         self::FIELD_ID,
         self::FIELD_ID_USER,
         self::FIELD_ID_OBJ,
         self::FIELD_OBJ_TYPE,
-        self::FIELD_STATUS
+        self::FIELD_STATUS,
+        self::FIELD_FOLLOW_NICKNAME,
+        self::FIELD_FOLLOW_AVATAR,
+        self::FIELD_BE_FOLLOW_NICKNAME,
+        self::FIELD_BE_FOLLOW_AVATAR,
     ];
 
 }

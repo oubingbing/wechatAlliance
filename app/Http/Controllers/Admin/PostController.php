@@ -38,6 +38,7 @@ class PostController extends Controller
         $orderBy    = request()->input('order_by', 'created_at');
         $sortBy     = request()->input('sort_by', 'desc');
         $content    = request()->input('content');
+        $userId    = request()->input('user_id',0);
         $app        = $user->app();
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
@@ -54,6 +55,10 @@ class PostController extends Controller
         if($content){
             $query->Orwhere(Post::FIELD_CONTENT,'like','%'.$content.'%');
             $query->Orwhere(Post::FIELD_TOPIC,'like','%'.$content.'%');
+        }
+
+        if($userId > 0){
+            $query->where(Post::FIELD_ID_POSTER,$userId);
         }
 
         $posts = paginate($query, $pageParams, '*', function ($post) use ($user) {

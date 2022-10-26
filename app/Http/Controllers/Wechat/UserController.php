@@ -264,4 +264,31 @@ class UserController extends Controller
         return $qrCode;
     }
 
+    /**
+     * 设置学校
+     *
+     * @author yezi
+     *
+     * @param $id
+     *
+     * @return array
+     * @throws ApiException
+     */
+    public function updateSignature()
+    {
+        $user       = request()->input('user');
+        $signature  = request()->input('signature');
+        if(!$signature){
+            throw new ApiException('个性签名不能为空', 5005);
+        }
+
+        $user->{User::FIELD_PERSONAL_SIGNATURE} = $signature;
+        $result = $user->save();
+        if(!$result){
+            throw new ApiException('保存失败', 5000);
+        }
+
+        return $signature;
+    }
+
 }

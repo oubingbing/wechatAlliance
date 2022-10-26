@@ -68,7 +68,7 @@ class SaleFriendService
      *
      * @return $this
      */
-    public function builder($user,$type,$just)
+    public function builder($user,$userId,$type,$just)
     {
         $this->builder = SaleFriend::query()
             ->whereHas(SaleFriend::REL_USER,function ($query)use($user){
@@ -92,6 +92,10 @@ class SaleFriendService
             ->when($user->{User::FIELD_ID_COLLEGE},function ($query)use($user){
                 return $query->where(SaleFriend::FIELD_ID_COLLEGE,$user->{User::FIELD_ID_COLLEGE});
             });
+        
+        if($userId > 0){
+            $this->builder->where(SaleFriend::FIELD_ID_OWNER,$userId);
+        }
 
         return $this;
     }

@@ -219,9 +219,10 @@ class SaleFriendController extends Controller
         $just       = request()->input('just');
         $orderBy    = request()->input('order_by','created_at');
         $sortBy     = request()->input('sort_by','desc');
+        $userId     = request()->input('user_id',0);
 
         $pageParams = ['page_size'=>$pageSize, 'page_number'=>$pageNumber];
-        $query      = $this->saleFriendLogic->builder($user,$type,$just)->sort($orderBy,$sortBy)->done();
+        $query      = $this->saleFriendLogic->builder($user,$userId,$type,$just)->sort($orderBy,$sortBy)->done();
 
         $selectData = [
             SaleFriend::FIELD_ID,

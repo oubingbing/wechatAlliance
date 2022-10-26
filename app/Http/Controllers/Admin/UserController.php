@@ -156,5 +156,4 @@ class UserController
         $result = $userService->deleteBlackList($blackId);
         return webResponse("移除黑名单成功",200,$result);
     }
-
 }

@@ -60,6 +60,9 @@ $api->version('v1', function ($api) {
             /** 获取用户信息 */
             $api->get('/user/{id}', UserController::class . '@user');
 
+            /** 更新个性签名 */
+            $api->post('/user/update/signature', UserController::class . '@updateSignature');
+
             /** 获取个人信息 */
             $api->get('/personal_info', UserController::class . '@personal');
 
