@@ -197,7 +197,7 @@ class PostService
             }
 
             Carbon::setLocale('zh');
-            $post[Post::FIELD_CREATED_AT] = Carbon::parse($post[Post::FIELD_CREATED_AT])->diffForHumans();
+            $post[Post::FIELD_CREATED_AT] = Carbon::parse($post[Post::FIELD_CREATED_AT])->toDateTimeString();
 
             $post['follow'] = app(FollowService::class)->checkFollow($user->id, $post['id'], Follow::ENUM_OBJ_TYPE_POST) ? true : false;
 
