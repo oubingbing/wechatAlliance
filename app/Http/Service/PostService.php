@@ -67,7 +67,7 @@ class PostService
      *
      * @return $this
      */
-    public function builder($user, $type, $just)
+    public function query($user,$userId, $type, $just)
     {
         $this->builder = Post::query()->with(['poster'=>function($query){
             $query->select(User::FIELD_ID,User::FIELD_NICKNAME,User::FIELD_AVATAR,User::FIELD_GENDER,User::FIELD_CREATED_AT,User::FIELD_TYPE);
@@ -87,6 +87,10 @@ class PostService
                 $query->where(Post::FIELD_ID_POSTER, $user->id);
                 return $query;
             });
+
+        if($userId){
+            $this->builder->where(Post::FIELD_ID_POSTER,$userId);
+        }
 
         return $this;
     }

@@ -120,9 +120,10 @@ class PostController extends Controller
         $orderBy    = request()->input('order_by', 'created_at');
         $sortBy     = request()->input('sort_by', 'desc');
         $filter     = request()->input('filter');
+        $userId     = request()->input('user_id',0);
 
         $pageParams = ['page_size' => $pageSize, 'page_number' => $pageNumber];
-        $query      = $this->postLogic->builder($user,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
+        $query      = $this->postLogic->query($user,$userId,$type,$just)->filter($filter)->sort($orderBy, $sortBy)->done();
         $posts      = paginate($query, $pageParams, '*', function ($post) use ($user) {
             return $this->postLogic->formatSinglePost($post, $user);
         });

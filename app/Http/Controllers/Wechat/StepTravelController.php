@@ -108,9 +108,13 @@ class StepTravelController extends Controller
     public function statisticStep()
     {
         $user = request()->input('user');
+        $userId = request()->input('user_id',0);
+        if(!$userId){
+            $userId = $user->id;
+        }
 
-        $todayStep = $this->stepTravelService->todayStep($user->id);
-        $totalStep = $this->stepTravelService->statisticStep($user->id);
+        $todayStep = $this->stepTravelService->todayStep($userId);
+        $totalStep = $this->stepTravelService->statisticStep($userId);
 
         return [
             'today_step'=>$todayStep,
@@ -195,6 +199,10 @@ class StepTravelController extends Controller
     public function getMyRank()
     {
         $user = request()->input("user");
+        $userId = request()->input("user_id",0);
+        if(!$userId){
+            $userId = $user->id;
+        }
 
         $selectData = [
             RunStep::FIELD_ID,
@@ -222,7 +230,7 @@ class StepTravelController extends Controller
         $index    = 0;
         $userStep = '';
         foreach ($stepRanks as $key => $item){
-            if($item->{RunStep::FIELD_ID_USER} == $user->id){
+            if($item->{RunStep::FIELD_ID_USER} == $userId){
                 $userStep = $item;
                 $index    = $key+1;
                 break;

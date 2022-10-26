@@ -39,6 +39,10 @@ class UserController extends Controller
     public function personal()
     {
         $user = request()->input('user');
+        $userId = request()->input("user_id");
+        if($userId){
+            $user = User::find($userId);
+        }
 
         return $user;
     }
