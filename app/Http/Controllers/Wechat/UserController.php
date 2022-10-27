@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\FollowService;
 use App\Http\Service\SendMessageService;
 use App\Http\Service\UserService;
 use App\Jobs\UserLogs;
 use App\Models\Colleges;
+use App\Models\Follow;
 use App\Models\User;
 use App\Models\WechatApp;
 use Carbon\Carbon;

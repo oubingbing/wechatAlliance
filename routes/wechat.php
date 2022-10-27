@@ -173,6 +173,15 @@ $api->version('v1', function ($api) {
                 /** 关注 */
                 $api->post('/follow', FollowController::class . '@contact');
 
+                /** 关注用户 */
+                $api->post('/follow_user', FollowController::class . '@followUser');
+
+                /** 检测关注 */
+                $api->get('/follow/user', FollowController::class . '@getFollow');
+
+                /** 关注分页 */
+                $api->get('/follow/page', FollowController::class . '@followUserPage');
+
                 /** 取消关注 */
                 $api->put('/cancel/{id}/follow/{type}', FollowController::class . '@cancelFollow');
 
