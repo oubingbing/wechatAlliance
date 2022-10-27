@@ -18,6 +18,7 @@ use App\Http\Service\UserService;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\Post;
+use App\Models\Topic;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -134,7 +135,25 @@ class CommentController extends Controller
             throw new ApiException('404',6000);
         }
 
+        $comment = Comment::find($id);
+        if(!$comment){
+            throw new ApiException("评论不存在",5000);
+        }
+
         $result = Comment::where(Comment::FIELD_ID,$id)->delete();
+        if(!$result){
+            throw new ApiException("评论删除失败",5000);
+        }
+
+        if($comment->{Comment::FIELD_OBJ_TYPE} == Comment::ENUM_OBJ_TYPE_TOPIC){
+            $topic = Topic::query()->where(Topic::FIELD_ID, $comment->{Comment::FIELD_ID_OBJ})->first();
+            if($topic){
+                $num = Comment::query()->where(Comment::FIELD_ID_OBJ,$topic->id)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_TOPIC)->count();
+                $topic->{Topic::FIELD_COMMENT_NUMBER} = $num;
+                $topic->save();
+            }
+        }
+
         return $result;
     }
 
