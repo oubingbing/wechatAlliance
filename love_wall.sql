@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 19/09/2022 10:49:48
+ Date: 28/10/2022 15:02:38
 */
 
 SET NAMES utf8mb4;
@@ -52,7 +52,7 @@ CREATE TABLE `admin_apps`  (
   INDEX `admin_apps_admin_app_id_index`(`app_id`) USING BTREE,
   INDEX `admin_apps_created_at_index`(`created_at`) USING BTREE,
   INDEX `admin_apps_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 669 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 691 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for admins
@@ -77,7 +77,7 @@ CREATE TABLE `admins`  (
   INDEX `admins_mobile_index`(`mobile`) USING BTREE,
   INDEX `admins_created_at_index`(`created_at`) USING BTREE,
   INDEX `admins_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1180 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1217 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for apps
@@ -104,7 +104,7 @@ CREATE TABLE `apps`  (
   INDEX `apps_college_id_index`(`college_id`) USING BTREE,
   INDEX `apps_created_at_index`(`created_at`) USING BTREE,
   INDEX `apps_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 673 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 695 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for black_list
@@ -118,7 +118,7 @@ CREATE TABLE `black_list`  (
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `black_list_user_id_index`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for chat_messages
@@ -142,7 +142,7 @@ CREATE TABLE `chat_messages`  (
   INDEX `chat_messages_to_user_id_index`(`to_user_id`) USING BTREE,
   INDEX `chat_messages_created_at_index`(`created_at`) USING BTREE,
   INDEX `chat_messages_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8284 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for colleges
@@ -187,7 +187,7 @@ CREATE TABLE `comments`  (
   INDEX `comments_obj_id_index`(`obj_id`) USING BTREE,
   INDEX `comments_created_at_index`(`created_at`) USING BTREE,
   INDEX `comments_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7668 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8054 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for compare_faces
@@ -207,7 +207,7 @@ CREATE TABLE `compare_faces`  (
   INDEX `compare_faces_user_id_index`(`user_id`) USING BTREE,
   INDEX `compare_faces_created_at_index`(`created_at`) USING BTREE,
   INDEX `compare_faces_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16465 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16635 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for employee_part_time_jobs
@@ -251,17 +251,21 @@ CREATE TABLE `follows`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL COMMENT '关注人',
   `obj_id` bigint(20) NOT NULL COMMENT '关注的对象',
-  `obj_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '关注对象的类型,1=表白墙,2=卖舍友,3=评论暗恋匹配,4=评论',
+  `obj_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '关注对象的类型,1=表白墙,2=卖舍友,3=评论暗恋匹配,4=评论,5=用户',
   `status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否取消关注,1=关注中,2=已取消关注',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `follow_nickname` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关注人昵称',
+  `follow_avatar` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '关注人头像',
+  `be_follow_nickname` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '被关注人昵称',
+  `be_follow_avatar` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '被关注人头像',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `follows_user_id_index`(`user_id`) USING BTREE,
   INDEX `follows_obj_id_index`(`obj_id`) USING BTREE,
   INDEX `follows_created_at_index`(`created_at`) USING BTREE,
   INDEX `follows_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7202 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7348 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for form_ids
@@ -304,7 +308,7 @@ CREATE TABLE `friends`  (
   INDEX `friends_friend_id_index`(`friend_id`) USING BTREE,
   INDEX `friends_created_at_index`(`created_at`) USING BTREE,
   INDEX `friends_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3771 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3939 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for inboxes
@@ -330,7 +334,7 @@ CREATE TABLE `inboxes`  (
   INDEX `inboxes_obj_id_index`(`obj_id`) USING BTREE,
   INDEX `inboxes_created_at_index`(`created_at`) USING BTREE,
   INDEX `inboxes_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25786 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26505 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for location
@@ -395,7 +399,7 @@ CREATE TABLE `message_sessions`  (
   INDEX `message_sessions_receive_phone_index`(`receive_phone`) USING BTREE,
   INDEX `message_sessions_obj_id_index`(`obj_id`) USING BTREE,
   INDEX `message_sessions_created_at_index`(`created_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1177 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1214 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for migrations
@@ -406,7 +410,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 68 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 73 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for part_time_jobs
@@ -469,7 +473,7 @@ CREATE TABLE `posts`  (
   INDEX `posts_college_id_index`(`college_id`) USING BTREE,
   INDEX `posts_created_at_index`(`created_at`) USING BTREE,
   INDEX `posts_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16509 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16851 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for praises
@@ -489,7 +493,7 @@ CREATE TABLE `praises`  (
   INDEX `praises_obj_id_index`(`obj_id`) USING BTREE,
   INDEX `praises_created_at_index`(`created_at`) USING BTREE,
   INDEX `praises_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11045 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11218 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qiniu_tokens
@@ -526,7 +530,7 @@ CREATE TABLE `run_steps`  (
   INDEX `run_steps_run_at_index`(`run_at`) USING BTREE,
   INDEX `run_steps_created_at_index`(`created_at`) USING BTREE,
   INDEX `run_steps_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 174950 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 181218 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sale_friends
@@ -555,7 +559,7 @@ CREATE TABLE `sale_friends`  (
   INDEX `sale_friends_name_index`(`name`) USING BTREE,
   INDEX `sale_friends_created_at_index`(`created_at`) USING BTREE,
   INDEX `sale_friends_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1253 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1316 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for secret_messages
@@ -584,7 +588,7 @@ CREATE TABLE `secret_messages`  (
   INDEX `secret_messages_code_index`(`code`) USING BTREE,
   INDEX `secret_messages_delay_at_index`(`delay_at`) USING BTREE,
   INDEX `secret_messages_created_at_index`(`created_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1174 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1211 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for secret_messages_visit_logs
@@ -711,7 +715,7 @@ CREATE TABLE `topics`  (
   INDEX `topics_user_id_index`(`user_id`) USING BTREE,
   INDEX `topics_created_at_index`(`created_at`) USING BTREE,
   INDEX `topics_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 488 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 503 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for travel_log_pois
@@ -730,7 +734,7 @@ CREATE TABLE `travel_log_pois`  (
   INDEX `travel_log_pois_travel_log_id_index`(`travel_log_id`) USING BTREE,
   INDEX `travel_log_pois_created_at_index`(`created_at`) USING BTREE,
   INDEX `travel_log_pois_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16005 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16270 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for travel_logs
@@ -762,7 +766,7 @@ CREATE TABLE `travel_logs`  (
   INDEX `travel_logs_run_at_index`(`run_at`) USING BTREE,
   INDEX `travel_logs_created_at_index`(`created_at`) USING BTREE,
   INDEX `travel_logs_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9341 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9661 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for travel_plan_points
@@ -785,7 +789,7 @@ CREATE TABLE `travel_plan_points`  (
   INDEX `travel_plan_points_travel_plan_id_index`(`travel_plan_id`) USING BTREE,
   INDEX `travel_plan_points_created_at_index`(`created_at`) USING BTREE,
   INDEX `travel_plan_points_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1908 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1965 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for travel_plans
@@ -804,7 +808,7 @@ CREATE TABLE `travel_plans`  (
   INDEX `travel_plans_user_id_index`(`user_id`) USING BTREE,
   INDEX `travel_plans_created_at_index`(`created_at`) USING BTREE,
   INDEX `travel_plans_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 759 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 783 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_profiles
@@ -867,9 +871,15 @@ CREATE TABLE `users`  (
   `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '用户类型',
   `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '用户状态',
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `active_value` int(11) NOT NULL DEFAULT 0 COMMENT '活跃度',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `personal_signature` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '你在路上随便碰到的一个路人，都是别人做梦都想见到的那人' COMMENT '个性签名',
+  `follow_num` int(11) NOT NULL DEFAULT 0 COMMENT '关注数',
+  `fans_num` int(11) NOT NULL DEFAULT 0 COMMENT '粉丝数',
+  `post_num` int(11) NOT NULL DEFAULT 0 COMMENT '帖子动态数',
+  `clock_num` int(11) NOT NULL DEFAULT 0 COMMENT '打卡天数',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `users_app_id_index`(`app_id`) USING BTREE,
   INDEX `users_mobile_index`(`mobile`) USING BTREE,
@@ -877,7 +887,7 @@ CREATE TABLE `users`  (
   INDEX `users_union_id_index`(`union_id`) USING BTREE,
   INDEX `users_created_at_index`(`created_at`) USING BTREE,
   INDEX `users_updated_at_index`(`updated_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42124 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 42562 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for videos
