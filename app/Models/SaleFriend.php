@@ -94,7 +94,7 @@ class SaleFriend extends BaseModel
 
     public function getGenderAttribute($value)
     {
-        return $gender;
+        return $value;
     }
 
     /**
