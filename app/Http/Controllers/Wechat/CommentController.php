@@ -18,6 +18,7 @@ use App\Http\Service\UserService;
 use App\Models\Comment;
 use App\Models\Inbox;
 use App\Models\Post;
+use App\Models\SaleFriend;
 use App\Models\Topic;
 use App\Models\User;
 use Carbon\Carbon;
@@ -106,8 +107,6 @@ class CommentController extends Controller
 
             $this->comment->incrementComment($type,$objId);
 
-            app(UserService::class)->AddActivityValue($user->id,1);
-
             \DB::commit();
         }catch (Exception $e){
 
@@ -140,17 +139,29 @@ class CommentController extends Controller
             throw new ApiException("评论不存在",5000);
         }
 
+
         $result = Comment::where(Comment::FIELD_ID,$id)->delete();
         if(!$result){
             throw new ApiException("评论删除失败",5000);
         }
 
+        //更新话题到了评论数
         if($comment->{Comment::FIELD_OBJ_TYPE} == Comment::ENUM_OBJ_TYPE_TOPIC){
             $topic = Topic::query()->where(Topic::FIELD_ID, $comment->{Comment::FIELD_ID_OBJ})->first();
             if($topic){
                 $num = Comment::query()->where(Comment::FIELD_ID_OBJ,$topic->id)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_TOPIC)->count();
                 $topic->{Topic::FIELD_COMMENT_NUMBER} = $num;
                 $topic->save();
+            }
+        }
+
+        //更新话题到了评论数
+        if($comment->{Comment::FIELD_OBJ_TYPE} == Comment::ENUM_OBJ_TYPE_SALE_FRIEND){
+            $sale = SaleFriend::query()->where(SaleFriend::FIELD_ID, $comment->{Comment::FIELD_ID_OBJ})->first();
+            if($sale){
+                $num = Comment::query()->where(Comment::FIELD_ID_OBJ,$sale->id)->where(Comment::FIELD_OBJ_TYPE,Comment::ENUM_OBJ_TYPE_SALE_FRIEND)->count();
+                $sale->{SaleFriend::FIELD_COMMENT_NUMBER} = $num;
+                $sale->save();
             }
         }
 

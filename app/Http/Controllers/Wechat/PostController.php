@@ -17,6 +17,7 @@ use App\Http\Service\SendMessageService;
 use App\Http\Service\UserService;
 use App\Models\MessageSession;
 use App\Models\Post;
+use App\Models\SaleFriend;
 use App\Models\User;
 use League\Flysystem\Exception;
 use App\Models\WechatApp;
@@ -72,7 +73,7 @@ class PostController extends Controller
 
             $result = $this->postLogic->save($user, $content, $imageUrls, $location, $private, $topic);
             if($result){
-                app(UserService::class)->AddActivityValue($user->id,1);
+
             }
 
             if($mobile){
@@ -99,6 +100,8 @@ class PostController extends Controller
             \DB::rollBack();
             throw new ApiException($e, 60001);
         }
+
+        app(UserService::class)->updatePostNum($user->id);
 
         return collect($result)->toArray();
     }
@@ -192,6 +195,8 @@ class PostController extends Controller
         }
 
         $result = Post::where(Post::FIELD_ID, $id)->delete();
+
+        app(UserService::class)->updatePostNum($user->id);
 
         return $result;
     }

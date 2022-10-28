@@ -10,6 +10,8 @@ namespace App\Http\Service;
 
 
 use App\Models\BlackList;
+use App\Models\Post;
+use App\Models\SaleFriend;
 use App\Models\User;
 use App\Models\UserProfile;
 
@@ -315,5 +317,16 @@ class UserService
     {
         $result = BlackList::query()->where(BlackList::FIELD_ID_USER,$userId)->delete();
         return $result;
+    }
+
+    public function updatePostNum($userId)
+    {
+        $user = $this->getUserById($userId);
+        if($user){
+            $saleNum = SaleFriend::query()->where(SaleFriend::FIELD_ID_OWNER, $userId)->count();
+            $postNum = Post::query()->where(Post::FIELD_ID_POSTER, $userId)->count();
+            $user->{User::FIELD_POST_NUM} = $saleNum+$postNum;
+            $user->save();
+        }
     }
 }

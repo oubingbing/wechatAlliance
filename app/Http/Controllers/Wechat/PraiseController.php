@@ -72,8 +72,6 @@ class PraiseController extends Controller
 
             app(PraiseService::class)->incrementNumber($objType,$objId);
 
-            app(UserService::class)->AddActivityValue($user->id,1);
-
             \DB::commit();
         }catch (Exception $e){
 
