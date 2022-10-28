@@ -85,6 +85,12 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   ![](http://ww1.sinaimg.cn/large/0079MVdAly1fypwgffxq9j30qq0eogml.jpg)
 
+- 切换为阿里源
+  1. 首先把默认的源给禁用掉
+  composer config -g secure-http false
+
+  2. 再修改镜像源阿里的源
+  composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 ### 搭建网站
 
