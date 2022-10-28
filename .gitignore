@@ -3,3 +3,4 @@ vendor
 storage
 _ide_helper.php
 .env
+composer.lock
