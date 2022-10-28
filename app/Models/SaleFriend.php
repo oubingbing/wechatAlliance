@@ -94,22 +94,6 @@ class SaleFriend extends BaseModel
 
     public function getGenderAttribute($value)
     {
-        $gender = '男';
-        switch ($value){
-            case self::ENUM_GENDER_BOY:
-                $gender = '男';
-                break;
-            case self::ENUM_GENDER_GIRL:
-                $gender = '女';
-                break;
-            case self::ENUM_GENDER_LADY_BOY:
-                $gender = '人妖';
-                break;
-            case self::ENUM_GENDER_UNKNOWN:
-                $gender = '未知生物';
-                break;
-        }
-
         return $gender;
     }
 
