@@ -27,9 +27,9 @@ class Wechat extends BaseMiddleware
             } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
                 throw new ApiException('登录已过期,请重新登录',5000);
             } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-                throw new ApiException('录已过期,请重新登录',5000);
+                throw new ApiException('登录已过期,请重新登录',5000);
             } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-                throw new ApiException('录已过期,请重新登录',5000);
+                throw new ApiException('登录已过期,请重新登录',5000);
             }
 
             if(!$request->isMethod('get')){
