@@ -224,7 +224,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
   ![](http://article.qiuhuiyi.cn/WechatIMG71.png)
 
   日志提示如下
-  ![](hhttp://article.qiuhuiyi.cn/WechatIMG73.png)
+  ![](http://article.qiuhuiyi.cn/WechatIMG73.png)
 
   这是因为你的php有个函数putenv()被禁用了，在PHP中删除即可，操作如下
   ![](http://article.qiuhuiyi.cn/WechatIMG72.png)
