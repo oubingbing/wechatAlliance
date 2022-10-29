@@ -218,3 +218,13 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
 - 确认.env配置参数JWT_SECRET
   有些部署成功了但是在登录的时候出现问题，可能是.env配置文件中JWT_SECRET参数未配置，该参数为jwt的加密串，执行命令php artisan jwt:secret即可生成。
+
+- 登录后台后项目目录下storage/log今天的日志出现错误：Unable to boot ApiServiceProvider, configure an API domain or prefix
+  后台登录报错截图如下
+  ![](http://article.qiuhuiyi.cn/WechatIMG71.png)
+
+  日志提示如下
+  ![](hhttp://article.qiuhuiyi.cn/WechatIMG73.png)
+
+  这是因为你的php有个函数putenv()被禁用了，在PHP中删除即可，操作如下
+  ![](http://article.qiuhuiyi.cn/WechatIMG72.png)
