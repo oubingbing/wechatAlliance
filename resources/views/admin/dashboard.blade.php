@@ -130,7 +130,7 @@
     </div>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
-    <script src="{{asset('css/element-ui-index.js')}}"></script>
+    <script src="{{asset('js/element-ui-index.js')}}"></script>
     <script>
         $(document).ready(function(){
             $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});

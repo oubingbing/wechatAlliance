@@ -4,7 +4,7 @@
     <style>
     </style>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
-    <script src="{{asset('css/element-ui-index.js')}}"></script>
+    <script src="{{asset('js/element-ui-index.js')}}"></script>
     <div class="x-body" id="app">
         <form class="layui-form">
             <div class="layui-form-item">

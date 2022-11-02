@@ -105,7 +105,7 @@
             </el-pagination>
         </div>
     </div>
-    <script src="{{asset('css/element-ui-index.js')}}"></script>
+    <script src="{{asset('js/element-ui-index.js')}}"></script>
     <script>
         "use strict";
         new Vue({
