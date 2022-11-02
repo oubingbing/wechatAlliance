@@ -6,7 +6,7 @@
 </style>
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="{{asset('css/element-ui-index.css')}}">
     <div class="x-body layui-anim layui-anim-up" id="app" v-cloak>
         <blockquote class="layui-elem-quote">你好：{{$user->username}}，欢迎使用小情书后台</blockquote>
         <fieldset class="layui-elem-field">
@@ -130,7 +130,7 @@
     </div>
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="{{asset('css/element-ui-index.js')}}"></script>
     <script>
         $(document).ready(function(){
             $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});

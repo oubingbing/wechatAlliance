@@ -5,7 +5,7 @@
             display: none;
         }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="{{asset('css/element-ui-index.css')}}">
     <link rel="stylesheet" href="{{asset('css/bank.css')}}">
     <div class="x-nav">
       <span class="layui-breadcrumb">
@@ -105,7 +105,7 @@
             </el-pagination>
         </div>
     </div>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="{{asset('css/element-ui-index.js')}}"></script>
     <script>
         "use strict";
         new Vue({
