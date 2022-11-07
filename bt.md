@@ -71,15 +71,15 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
 - 下载Composer
 
-  `$curl -sS https://getcomposer.org/installer | php`
+  `curl -sS https://getcomposer.org/installer | php`
 
 - 设置全局命令
 
-  `$sudo mv composer.phar /usr/local/bin/composer`
+  `sudo mv composer.phar /usr/local/bin/composer`
 
 - 查看安装结果
 
-  `$composer -v`
+  `composer -v`
 
   如果出现下图，则安装成功
 
@@ -98,11 +98,11 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
 - 进入相应目录
 
-`$cd /www/wwwroot`
+`cd /www/wwwroot`
 
 - 使用Git下载后台源代码并且指定下载文件夹为xiaoqingshu
 
-`$git clone https://github.com/oubingbing/wechatAlliance.git xiaoqingshu`
+`git clone https://github.com/oubingbing/wechatAlliance.git xiaoqingshu`
 
 - 进入网站目录
 
@@ -148,7 +148,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   将项目根目录下的.env.example文件重命名为 **.env** 文件
 
-  `$mv .env.example .env`
+  `mv .env.example .env`
 
 - 生成appkey
 
@@ -178,7 +178,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   在终端xiaoqingshu目录下执行以下命令
 
-  `$php artisan jwt:secret`
+  `php artisan jwt:secret`
 
 - 导入数据库表
 

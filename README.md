@@ -20,8 +20,4 @@
 
 ## [宝塔部署（推荐）](https://github.com/oubingbing/wechatAlliance/blob/master/bt.md "宝塔部署（推荐）")
 
-## [手动部署](https://github.com/oubingbing/wechatAlliance/blob/master/manual.md "手动部署")
-
-## [docker部署](https://github.com/oubingbing/wechatAlliance/blob/master/docker.md "docker部署")
-
 ## [微信云部署（网友的重构版本）](https://github.com/lx164/SayLove "微信云部署（网友的重构版本）")
