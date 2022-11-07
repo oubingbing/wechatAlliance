@@ -48,12 +48,12 @@ class CompareFaceService
      * @param $compareResult
      * @return mixed
      */
-    public function create($userId,$image1,$image2,$status,$compareResult)
+    public function create($userId,$image1,$image2,$status,$score,$compareResult)
     {
         $result = CompareFace::create([
             CompareFace::FIELD_ID_USER        => $userId,
             CompareFace::FIELD_ATTACHMENTS    => ['rect_a'=>$image1,'rect_b'=>$image2],
-            CompareFace::FIELD_CONFIDENCE     => $compareResult['Score'],
+            CompareFace::FIELD_CONFIDENCE     => $score,
             CompareFace::FIELD_STATUS         => $status,
             CompareFace::FIELD_COMPARE_RESULT => json_encode($compareResult)
         ]);
@@ -69,10 +69,10 @@ class CompareFaceService
      * @param $compareResult
      * @return array
      */
-    public function report($compareResult)
+    public function report($score)
     {
         $level = 1;
-        $cpResult = $compareResult['Score'];
+        $cpResult = $score;
         if($cpResult >= 0 && $cpResult < 3){
             $keyWorld = '半毛钱脸';
             $level    = 0;
