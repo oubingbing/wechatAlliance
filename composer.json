@@ -20,6 +20,7 @@
         "predis/predis": "^1.1",
         "qiniu/php-sdk": "^7.2",
         "sentry/sentry-laravel": "^0.8.0",
+        "tencentcloud/tencentcloud-sdk-php": "^3.0",
         "tymon/jwt-auth": "1.0.0-rc.1"
     },
     "require-dev": {

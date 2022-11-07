@@ -53,9 +53,9 @@ class CompareFaceService
         $result = CompareFace::create([
             CompareFace::FIELD_ID_USER        => $userId,
             CompareFace::FIELD_ATTACHMENTS    => ['rect_a'=>$image1,'rect_b'=>$image2],
-            CompareFace::FIELD_CONFIDENCE     => $compareResult['Confidence'],
+            CompareFace::FIELD_CONFIDENCE     => $compareResult['Score'],
             CompareFace::FIELD_STATUS         => $status,
-            CompareFace::FIELD_COMPARE_RESULT => $compareResult
+            CompareFace::FIELD_COMPARE_RESULT => json_encode($compareResult)
         ]);
 
         return $result;
@@ -72,7 +72,7 @@ class CompareFaceService
     public function report($compareResult)
     {
         $level = 1;
-        $cpResult = $compareResult['Confidence'];
+        $cpResult = $compareResult['Score'];
         if($cpResult >= 0 && $cpResult < 3){
             $keyWorld = '半毛钱脸';
             $level    = 0;

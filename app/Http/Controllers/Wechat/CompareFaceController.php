@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Wechat;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\CompareFaceService;
-use App\Http\Service\Http;
+use App\Http\Service\TencentService;
 use App\Models\CompareFace;
 
 class CompareFaceController extends Controller
@@ -37,29 +37,12 @@ class CompareFaceController extends Controller
         }
 
         $compareService = app(CompareFaceService::class);
-        $compareResult  = app(Http::class)->compareFace($yourFace,$hisFace);
-
+        $compareResult = app(TencentService::class)->compareFace($yourFace,$hisFace);
         if($compareResult){
-            if(isset($compareResult['RectAList'])){
-                $emptyRectA = $compareService->checkEmptyRect($compareResult['RectAList']);
-                $emptyRectB = $compareService->checkEmptyRect($compareResult['RectBList']);
-
-                if($emptyRectA){
-                    throw new ApiException('图中无人脸！',500);
-                }
-
-                if($emptyRectB){
-                    throw new ApiException('图中无人脸！',500);
-                }
-
-                $result = $compareService->create($user->id,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
-                if($result){
-                    $report = $compareService->report($compareResult);
-                    return $report;
-                }else{
-                    throw new ApiException('比对失败，请稍后再试！',500);
-                }
-
+            $result = $compareService->create($user->id,$yourFace,$hisFace,CompareFace::ENUM_STATUS_SUCCESS,$compareResult);
+            if($result){
+                $report = $compareService->report($compareResult);
+                return $report;
             }else{
                 throw new ApiException('比对失败，请稍后再试！',500);
             }

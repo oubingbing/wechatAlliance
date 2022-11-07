@@ -11,6 +11,7 @@ namespace Tests\Unit;
 
 use App\Friend;
 use App\Http\Service\FormIdService;
+use App\Http\Service\TencentService;
 use Tests\TestCase;
 
 class FollowTest extends TestCase
@@ -22,6 +23,17 @@ class FollowTest extends TestCase
     {
         $result = app(FormIdService::class)->getForIdByUserId(3937);
 
+        dd($result);
+    }
+
+    /**
+     * @test
+     */
+    public function compareface()
+    {
+        $urla = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143345.jpg";
+        $urlb = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143350.jpg";
+        $result = app(TencentService::class)->compareFace($urla,$urlb);
         dd($result);
     }
 
