@@ -189,7 +189,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
   情侣脸的接口可以使用阿里云或腾讯云的人脸1:1对比的套餐包，因为阿里云需要企业认证但是便宜，而腾讯云不需要认证个人也可以用但是比较贵，所以可以自己取舍到底用哪种
   .env文件里配置参数
 
-  ```
+```
 
     # 情侣脸接口商类型，1=阿里云，2=腾讯云
     COMPARE_FACE_TYPE = 1
@@ -203,10 +203,21 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
     # 腾讯云情侣脸配置参数，region最好选择华南地区广州值为ap-guangzhou
     TENCENT_SECRET_ID=
     TENCENT_SECRET_KEY=
+    TENCENT_REGION=ap-guangzhou```json
+    # 情侣脸接口商类型，1=阿里云，2=腾讯云
+    COMPARE_FACE_TYPE = 1
+
+    # 阿里云情侣脸配置参数
+    ALI_ID=
+    ALI_SECRET=
+    ALI_ENDPOINT=
+    ALI_ENDPOINT_ID=cn-shanghai
+
+    # 腾讯云情侣脸配置参数，region最好选择华南地区广州值为ap-guangzhou
+    TENCENT_SECRET_ID=
+    TENCENT_SECRET_KEY=
     TENCENT_REGION=ap-guangzhou
-
-    ```
-
+```
 
 ### 六、常见问题
 
