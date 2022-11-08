@@ -2,7 +2,7 @@
 
 ## 宝塔部署
 
-### 安装宝塔面板
+### 一、安装宝塔面板
 
 了解宝塔所需环境和SSH（远程连接）工具的用法后，就可以正式的开始安装面板。
 
@@ -38,7 +38,7 @@ Fedora安装命令:
 
 ![](http://ww1.sinaimg.cn/large/0079MVdAly1fypxnd2tdgj30lb06i3zo.jpg)
 
-### 安装LNMP
+### 二、安装LNMP
 
 安装完成在浏览上打开面板的地址，登入面板，面板会自动推荐你安装环境套件，这里有两种选择，第一种是LNMP套件，第二种是LAMP套件（如图）：
 
@@ -67,7 +67,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
 
 
-### 安装PHP包管理工具composer
+### 三、安装PHP包管理工具composer
 
 - 下载Composer
 
@@ -92,7 +92,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
   - 再修改镜像源阿里的源
   composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
-### 搭建网站
+### 四、搭建网站
 
 使用SSH远程连接工具（推荐Xshell）连接服务器后执行如下命令
 
@@ -184,7 +184,31 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   在项目根目录上有一个love_wall.sql的文件，导入自己的数据库中即可
 
-### 常见问题
+### 五、关于情侣脸参数配置
+
+  情侣脸的接口可以使用阿里云或腾讯云的人脸1:1对比的套餐包，因为阿里云需要企业认证但是便宜，而腾讯云不需要认证个人也可以用但是比较贵，所以可以自己取舍到底用哪种
+  .env文件里配置参数
+
+  ```
+
+    # 情侣脸接口商类型，1=阿里云，2=腾讯云
+    COMPARE_FACE_TYPE = 1
+
+    # 阿里云情侣脸配置参数
+    ALI_ID=
+    ALI_SECRET=
+    ALI_ENDPOINT=
+    ALI_ENDPOINT_ID=cn-shanghai
+
+    # 腾讯云情侣脸配置参数，region最好选择华南地区广州值为ap-guangzhou
+    TENCENT_SECRET_ID=
+    TENCENT_SECRET_KEY=
+    TENCENT_REGION=ap-guangzhou
+
+    ```
+
+
+### 六、常见问题
 
 ##### 如果您的站点搭建完成后，访问站点跑不起来的话，可以参考以下解决方案。
 
