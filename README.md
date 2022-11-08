@@ -10,7 +10,7 @@
 
 扫码进入体验
 
-![](http://article.qiuhuiyi.cn/Fthvoe308wnXc0vy0IsrY9GKmzx3)
+<img src="http://article.qiuhuiyi.cn/Fthvoe308wnXc0vy0IsrY9GKmzx3"  width="100px" />
 
 #### 功能
 - 表白墙
