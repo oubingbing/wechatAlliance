@@ -27,6 +27,8 @@ class FollowTest extends TestCase
     }
 
     /**
+     * vendor/bin/phpunit tests/unit/FollowTest.php --filter=compareface
+     * 
      * @test
      */
     public function compareface()
@@ -34,6 +36,17 @@ class FollowTest extends TestCase
         $urla = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143345.jpg";
         $urlb = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143350.jpg";
         $result = app(TencentService::class)->compareFace($urla,$urlb);
+        dd($result);
+    }
+
+    /**
+     * vendor/bin/phpunit tests/unit/FollowTest.php --filter=phone
+     * 
+     * @test
+     */
+    public function phone()
+    {
+        $result = validMobile("13425144866");
         dd($result);
     }
 

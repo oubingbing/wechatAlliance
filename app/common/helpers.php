@@ -35,7 +35,7 @@ if( ! function_exists('webResponse') ){
  */
 if( ! function_exists('validMobile') ){
     function validMobile($mobile){
-        return preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[3,4,0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile);
+        return preg_match('/^1(3\d|4[5-9]|5[0-35-9]|6[567]|7[0-8]|8\d|9[0-35-9])\d{8}$/', $mobile);
     }
 }
 
