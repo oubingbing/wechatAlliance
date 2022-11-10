@@ -149,7 +149,7 @@ CREATE TABLE `chat_messages`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `colleges`;
 CREATE TABLE `colleges`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '学校名称',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '无' COMMENT '学校类型',
   `properties` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '无' COMMENT '学校属性',
@@ -158,10 +158,7 @@ CREATE TABLE `colleges`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `colleges_name_unique`(`name`) USING BTREE,
-  INDEX `colleges_created_at_index`(`created_at`) USING BTREE,
-  INDEX `colleges_updated_at_index`(`updated_at`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2574 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
