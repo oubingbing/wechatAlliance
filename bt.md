@@ -137,7 +137,7 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
   规则如下
 
   location / {  
-  ​	try_files $uri $uri/ /index.php$is_args$query_string;  
+    try_files $uri $uri/ /index.php$is_args$query_string;  
   }  
 
   ![](http://ww1.sinaimg.cn/mw690/0079MVdAly1fypx0zc2fgj30mh0gggmj.jpg)
@@ -263,3 +263,24 @@ LNMP和LAMP环境主要的区别在于web服务器上面，一个使用是Apache
 
   这是因为你的php有个函数putenv()被禁用了，在PHP中删除即可，操作如下
   ![](http://article.qiuhuiyi.cn/WechatIMG72.png)
+
+- 执行composer install的时候出现类似的提示
+  
+  [Composer\Downloader\TransportException]                                                                                                                                                 
+  The "https://mirrors.aliyun.com/composer/p/provider-2017%248d3cdf6c9c766724349873e7c49f6a2c26950ea1094916feaf8075a0f802f502.json" file could not be downloaded (HTTP/1.1 404 Not Found)
+
+  如图：
+  ![](http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110112156.jpg)
+
+  是因为composer的版本问题，解决方案如下：
+
+  ```shell
+
+  composer self-update --preview
+
+  composer clearcache
+
+  composer update
+
+  ```
+
