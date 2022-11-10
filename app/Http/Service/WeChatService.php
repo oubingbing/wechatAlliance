@@ -79,10 +79,6 @@ class WeChatService
         {
             throw new ApiException("登录失败，请稍后重试",5000);
         }
-        if( $dataObj->watermark->appid != $this->appKey )
-        {
-            throw new ApiException("登录失败，请稍后重试",5000);
-        }
         $data = $result;
         return $data;
     }
