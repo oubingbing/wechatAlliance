@@ -284,11 +284,24 @@ class UserController extends Controller
     {
         $user       = request()->input('user');
         $signature  = request()->input('signature');
+        $avatar  = request()->input('avatar');
+        $nickname  = request()->input('nickname');
+
+        if(!$avatar){
+            throw new ApiException('头像不能为空', 5005);
+        }
+
+        if(!$nickname){
+            throw new ApiException('昵称不能为空', 5005);
+        }
+
         if(!$signature){
             throw new ApiException('个性签名不能为空', 5005);
         }
 
         $user->{User::FIELD_PERSONAL_SIGNATURE} = $signature;
+        $user->{User::FIELD_NICKNAME} = $nickname;
+        $user->{User::FIELD_AVATAR} = $avatar;
         $result = $user->save();
         if(!$result){
             throw new ApiException('保存失败', 5000);
