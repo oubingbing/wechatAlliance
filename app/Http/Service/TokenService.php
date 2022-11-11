@@ -129,7 +129,7 @@ class TokenService
         }else{
             $user->{User::FIELD_NICKNAME} = $userInfo['nickName'];
             $user->{User::FIELD_AVATAR}   = $userInfo['avatarUrl'];
-            $user->save();
+            //$user->save();
         }
 
         $token = $this->getWecChatToken($user);
