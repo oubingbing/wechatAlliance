@@ -272,12 +272,13 @@ class AppService
                 ]
             ]);
             $result = json_decode((string) $response->getBody(), true);
+            \Log::info($result);
             if($result){
                 if($result["errcode"] == 87014){
                     $n = $key+1;
                     throw new ApiException("图片非法",500);
                 }elseif ($result["errcode"] != 0){
-                    throw new ApiException("图片检测异常");
+                    throw new ApiException("图片检测异常",500);
                 }
             }
         }
