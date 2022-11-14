@@ -572,7 +572,7 @@ CREATE TABLE `secret_messages`  (
   `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '内容',
   `attachments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '附件的内容',
   `status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否已读，1=未读，2=已读',
-  `delay_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '延期发送的时间',
+  `delay_at` timestamp(0) NULL DEFAULT NULL COMMENT '延期发送的时间',
   `send_at` timestamp(0) NULL DEFAULT NULL COMMENT '短信发送的日期',
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
@@ -585,7 +585,7 @@ CREATE TABLE `secret_messages`  (
   INDEX `secret_messages_code_index`(`code`) USING BTREE,
   INDEX `secret_messages_delay_at_index`(`delay_at`) USING BTREE,
   INDEX `secret_messages_created_at_index`(`created_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1240 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1256 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for secret_messages_visit_logs
