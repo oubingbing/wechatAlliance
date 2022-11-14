@@ -271,7 +271,7 @@ class UserController extends Controller
     }
 
     /**
-     * 设置学校
+     * 更新用户信息
      *
      * @author yezi
      *
@@ -284,8 +284,8 @@ class UserController extends Controller
     {
         $user       = request()->input('user');
         $signature  = request()->input('signature');
-        $avatar  = request()->input('avatar');
-        $nickname  = request()->input('nickname');
+        $avatar     = request()->input('avatar');
+        $nickname   = request()->input('nickname');
 
         if(!$avatar){
             throw new ApiException('头像不能为空', 5005);
