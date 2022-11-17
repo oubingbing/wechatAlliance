@@ -194,6 +194,9 @@ $api->version('v1', function ($api) {
                 /** 情侣脸比对 */
                 $api->post('/compare_face',CompareFaceController::class . '@store');
 
+                /** 漫画脸 */
+                $api->post('/anime_face',CompareFaceController::class . '@getAnimeFace');
+
                 /** 获取话题详情 */
                 $api->get('/topic/{id}',TopicController::class . '@topicDetail');
 

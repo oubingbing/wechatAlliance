@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AnimeFaceService;
 use App\Http\Service\CompareFaceService;
 use App\Http\Service\Http;
 use App\Http\Service\TencentService;
@@ -76,5 +77,21 @@ class CompareFaceController extends Controller
             throw new ApiException('比对失败，请稍后再试！',500);
         }
 
+    }
+
+    /**
+     * 获取漫画脸
+     */
+    public function getAnimeFace()
+    {
+        $image = request()->input('image');
+        if(!$image){
+            throw new ApiException('图片不能为空',500);
+        }
+
+        //$result = app(AnimeFaceService::class)->animeFace($image);
+
+        $result = app(TencentService::class)->animeFace($image);
+        return $result["ResultImage"];
     }
 }
