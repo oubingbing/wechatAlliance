@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Service\Baidu;
+namespace App\Http\Service\Baidulib;
 
 /*
 * Copyright (c) 2017 Baidu.com, Inc. All Rights Reserved

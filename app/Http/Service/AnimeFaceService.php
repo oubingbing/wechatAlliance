@@ -9,7 +9,7 @@
 namespace App\Http\Service;
 
 use App\Exceptions\ApiException;
-use App\Http\Service\Baidu\AipImageProcess;
+use App\Http\Service\Baidulib\AipImageProcess;
 
 class AnimeFaceService
 {
