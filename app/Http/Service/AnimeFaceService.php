@@ -23,12 +23,12 @@ class AnimeFaceService
         $options = array("type"=>"anime", "mask_id"=>3);
         $image = file_get_contents($url);
         $result = $client->selfieAnime($image, $options);
-        if($result["error_code"] != 0){
+        if(key_exists("error_code",$result)){
             \Log::error('漫画脸请求失败：'.$result["error_msg"]);            
             throw new ApiException("转化失败，请稍后重试！",500);
         }
 
-        return $result["image"];
+        return $result;
     }
 
 }

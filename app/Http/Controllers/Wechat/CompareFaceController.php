@@ -89,8 +89,13 @@ class CompareFaceController extends Controller
             throw new ApiException('图片不能为空',500);
         }
 
-        //$result = app(AnimeFaceService::class)->animeFace($image);
+        if(env("ANIME_FACE_TYPE") == 2){
+            //百度
+            $result = app(AnimeFaceService::class)->animeFace($image);
+            return $result["image"];
+        }
 
+        //腾讯
         $result = app(TencentService::class)->animeFace($image);
         return $result["ResultImage"];
     }
