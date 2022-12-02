@@ -12,10 +12,13 @@ namespace App\Http\Controllers\Wechat;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Service\AnimeFaceService;
+use App\Http\Service\AppService;
 use App\Http\Service\CompareFaceService;
 use App\Http\Service\Http;
 use App\Http\Service\TencentService;
 use App\Models\CompareFace;
+use App\Models\User;
+use App\Models\WechatApp;
 
 class CompareFaceController extends Controller
 {
@@ -36,6 +39,16 @@ class CompareFaceController extends Controller
 
         if(empty($yourFace) || empty($hisFace)){
             throw new ApiException('照片不能为空',500);
+        }
+        
+        $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            $imageUrls = [$yourFace,$hisFace];
+            app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls,true);
         }
 
         $compareService = app(CompareFaceService::class);
@@ -84,9 +97,20 @@ class CompareFaceController extends Controller
      */
     public function getAnimeFace()
     {
+        $user  = request()->input('user');
         $image = request()->input('image');
         if(!$image){
             throw new ApiException('图片不能为空',500);
+        }
+
+        $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            $imageUrls = [$image];
+            app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},$imageUrls,true);
         }
 
         if(env("ANIME_FACE_TYPE") == 2){

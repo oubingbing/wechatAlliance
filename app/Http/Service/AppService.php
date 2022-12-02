@@ -246,7 +246,7 @@ class AppService
         }
     }
 
-    public function checkImage($appId,$images)
+    public function checkImage($appId,$images,$fullUrl=false)
     {
         $token = app(TokenService::class)->accessToken($appId);
         $domain = env("QI_NIU_DOMAIN");
@@ -255,7 +255,13 @@ class AppService
             $imageName =  str_ireplace("/", "_", $image);
             $saveFilePath = storage_path($imageName);
             $client = new Client(['verify'=>false]);
-            $response = $client->get($domain."/".$image,['save_to'=>$saveFilePath]);
+
+            if(!$fullUrl){
+                $response = $client->get($domain."/".$image,['save_to'=>$saveFilePath]);
+            }else{
+                $response = $client->get($image,['save_to'=>$saveFilePath]);
+            }
+
             if ($response->getStatusCode() != 200){
                 throw new ApiException("上传文件失败",500);
             }
