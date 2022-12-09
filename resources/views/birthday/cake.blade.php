@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>慧怡生日快乐</title>
+    <title>宝连生日快乐</title>
     <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/cake.css')}}" media="screen" type="text/css" />
 </head>
@@ -171,7 +171,7 @@
         <a href="Memories.html" class="lk1">
             <div class="link1">
                 <div class="bt1">
-                    慧怡
+                    宝连
                 </div>
             </div>
         </a>
@@ -205,7 +205,7 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>慧怡生日快乐</title>
+        <title>宝连生日快乐</title>
         <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('css/cake.css')}}" media="screen" type="text/css" />
     </head>
@@ -375,7 +375,7 @@
         <a href="Memories.html" class="lk1">
             <div class="link1">
                 <div class="bt1">
-                    慧怡
+                    宝连
                 </div>
             </div>
         </a>

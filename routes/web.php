@@ -32,3 +32,6 @@ Route::post('/hook', function () {
     Log::info("执行结果：".$result);
     return "ok";
 });
+
+Route::get('birth','BirthdayController@index');
+Route::get('cake','BirthdayController@cake');
