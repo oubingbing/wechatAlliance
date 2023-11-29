@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>慧怡,祝你生日快乐</title>
+    <title>宝连,祝你生日快乐</title>
     <link rel="stylesheet" href="{{asset('css/flower.css')}}">
     <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>

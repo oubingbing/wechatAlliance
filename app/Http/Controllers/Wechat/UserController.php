@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Http\Service\AppService;
 use App\Http\Service\FollowService;
 use App\Http\Service\SendMessageService;
 use App\Http\Service\UserService;
@@ -271,7 +272,7 @@ class UserController extends Controller
     }
 
     /**
-     * 设置学校
+     * 更新用户信息
      *
      * @author yezi
      *
@@ -284,8 +285,8 @@ class UserController extends Controller
     {
         $user       = request()->input('user');
         $signature  = request()->input('signature');
-        $avatar  = request()->input('avatar');
-        $nickname  = request()->input('nickname');
+        $avatar     = request()->input('avatar');
+        $nickname   = request()->input('nickname');
 
         if(!$avatar){
             throw new ApiException('头像不能为空', 5005);
@@ -297,6 +298,17 @@ class UserController extends Controller
 
         if(!$signature){
             throw new ApiException('个性签名不能为空', 5005);
+        }
+
+        $app = app(AppService::class)->getById($user->{User::FIELD_ID_APP});
+        if(!$app){
+            return webResponse('应用不存在！',500);
+        }
+
+        if($app->{WechatApp::FIELD_STATUS} == WechatApp::ENUM_STATUS_TO_BE_AUDIT){
+            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$nickname);
+            app(AppService::class)->checkContent($user->{User::FIELD_ID_APP},$signature);
+            app(AppService::class)->checkImage($user->{User::FIELD_ID_APP},[$avatar],true);
         }
 
         $user->{User::FIELD_PERSONAL_SIGNATURE} = $signature;

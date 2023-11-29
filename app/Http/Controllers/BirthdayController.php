@@ -19,6 +19,10 @@ class BirthdayController
         return view('birthday.flower');
     }
 
+    public function cake()
+    {
+        return view('birthday.cake');
+    }
 
     public function test(){
         $stu_id   = '152011052';

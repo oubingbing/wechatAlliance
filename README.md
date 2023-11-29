@@ -18,6 +18,7 @@
 - 步数旅行
 - 步数排行榜
 - 情侣脸
+- 漫画脸
 - 个人主页
 - 私信
 - 站内消息
@@ -30,6 +31,7 @@
     PHP 7.0以上
     
     MySQL 5.7
+    
 
 ## [宝塔部署（推荐）](https://github.com/oubingbing/wechatAlliance/blob/master/bt.md "宝塔部署（推荐）")
 
