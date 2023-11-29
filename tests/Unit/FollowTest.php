@@ -13,6 +13,7 @@ use App\Friend;
 use App\Http\Service\FormIdService;
 use App\Http\Service\TencentService;
 use Tests\TestCase;
+use App\Http\Service\Http;
 
 class FollowTest extends TestCase
 {
@@ -33,10 +34,12 @@ class FollowTest extends TestCase
      */
     public function compareface()
     {
-        $urla = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143345.jpg";
-        $urlb = "http://article.qiuhuiyi.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221107143350.jpg";
-        $result = app(TencentService::class)->compareFace($urla,$urlb);
-        dd($result);
+        $akId     = env('ALI_ID');
+        $akSecret = env('ALI_SECRET');
+        $image = public_path("images/close.png");
+
+        $img1 = Http::upload($akId, $akSecret, $image);
+        dd($img1);
     }
 
     /**

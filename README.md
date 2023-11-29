@@ -8,9 +8,9 @@
 
 前端源码在这里：https://github.com/oubingbing/school_wechat
 
-扫码进入体验
+#### 效果图
 
-<img src="http://article.qiuhuiyi.cn/Fthvoe308wnXc0vy0IsrY9GKmzx3"  width="100px" />
+![](https://dandan-1304667790.cos.ap-shenzhen-fsi.myqcloud.com/attachments/wechat-tmp.jpeg?imageMogr2/format/webp/thumbnail/1000x)
 
 #### 功能
 - 表白墙
